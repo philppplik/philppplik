@@ -54,7 +54,7 @@ Nebenbei betreibe ich [intelligenz-welt.de](https://intelligenz-welt.de) und sch
 | [intelligenz-welt.de](https://intelligenz-welt.de) | KI-News & Lernportal |
 | [gogure.de](https://gogure.de) | Root-Projekt aller Subprojekte |
 | [finanz-adjust.de](https://finanz-adjust.de) | Finanzportal |
-| [paulik-reisch.de](https://paulik-reisch.de) | Buchreihe "Hallo Welt" mit Max Risch |
+| [paulikreisch.de](https://paulikreisch.de) | Buchreihe "Hallo Welt" mit Max Reisch |
 
 ---
 
