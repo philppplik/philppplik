@@ -53,7 +53,7 @@ Nebenbei betreibe ich [intelligenz-welt.de](https://intelligenz-welt.de) und sch
 > *Setup: [github-stats von jstrieb](https://github.com/jstrieb/github-stats) → Fork → Action aktivieren → Pfade anpassen.*
 
 <section align="center">
-  <img align="center" src="https://github.com/philipp-paulik/philipp-paulik/raw/main/generated/overview.svg" alt="Philipp's GitHub Overview" />
+  <img align="center" src="https://github.com/philppplik/philipp-paulik/raw/main/generated/overview.svg" alt="Philipp's GitHub Overview" />
   &nbsp;
   <img align="center" src="https://github.com/philipp-paulik/philipp-paulik/raw/main/generated/languages.svg" alt="Philipp's GitHub Languages" />
 </section>
