@@ -15,7 +15,7 @@
 
 Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.  
 Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-Design**, **Applied AI** und **Code** — methodisch fundiert durch Systems Thinking und First Principles.  
-Nebenbei betreibe ich [intelligenz-welt.de](https://intelligenz-welt.de) und schreibe an der Buchreihe **Hallo Welt** mit Max Risch.
+Nebenbei betreibe ich [intelligenz-welt.de](https://intelligenz-welt.de) und schreibe an der Buchreihe **Hallo Welt** mit Max Reisch.
 
 ---
 
