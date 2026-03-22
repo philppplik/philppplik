@@ -45,22 +45,6 @@ Nebenbei betreibe ich [intelligenz-welt.de](https://intelligenz-welt.de) und sch
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
----
-
-## 📊 Stats
-
-> ⚙️ *Die animierten Stats-SVGs werden per GitHub Action generiert.*  
-> *Setup: [github-stats von jstrieb](https://github.com/jstrieb/github-stats) → Fork → Action aktivieren → Pfade anpassen.*
-
-<section align="center">
-  <img align="center" src="https://github.com/philppplik/philppplik/raw/main/generated/overview.svg" alt="Philipp's GitHub Overview" />
-  &nbsp;
-  <img align="center" src="https://github.com/philppplik/philppplik/raw/main/generated/languages.svg" alt="Philipp's GitHub Languages" />
-</section>
-
-<br />
-
----
 
 ## 🚀 Projekte
 
