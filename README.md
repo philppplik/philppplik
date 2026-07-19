@@ -70,13 +70,29 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 | 🛡️ **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
 | 🗂️ **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
 | 🎮 **claude-tetris** | Tetris im Split-Pane neben Claude Code — pausiert automatisch, wenn Claude fertig ist | JavaScript | [Repo](https://github.com/philppplik/claude-tetris) |
+| 📊 **github-stats** | Schönere GitHub-Statistik-Bilder, auch mit privaten Repos | — | [Repo](https://github.com/philppplik/github-stats) |
+| 🧠 **neurolint** | KI-Linter, der Code-Stil & Architektur-Fehler aus Kontext versteht statt nur Regeln | TypeScript | — |
+| 💬 **promptpilot** | In-Editor Co-Pilot, der aus deinem Repo-Verlauf die besten Prompts für die nächste Aufgabe vorschlägt | Python | — |
+| 🎨 **aesthetica** | Generiert aus einem Satz sofort komplettes Design-System (Farben, Typo, Tokens) als Figma- & CSS-Export | TypeScript | — |
+| 🔎 **contextkit** | RAG-Tool, das nur die wirklich relevanten Code-Stellen für einen Prompt zusammenfasst — kein Halluzinations-Müll | Python | — |
+| 🧪 **evallab** | Automated LLM-Eval-Framework mit Scoreboards, das Modelle gegen deine eigenen Tasks benchmarkt | Python | — |
+| 🪄 **synthflow** | Baukasten für KI-Workflows — Nodes verbinden, Tools wrappen, als API deployen ohne Boilerplate | TypeScript | — |
+| 🗣️ **voicebridge** | Low-Latency STT↔TTS-Layer, der jede App per WebSocket mit Sprache steuert | Rust | — |
+| 📚 **docugen** | Schreibt aus Codebase + Issues automatisch gepflegte Docs, Changelogs & README-Updates | Python | — |
+| 🧩 **agentmesh** | Orchestriert mehrere Spezial-Agenten in einem Task-Netz — jeder nur für sein Domänen-Stück zuständig | TypeScript | — |
 
 <p align="center">
   <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
   <a href="https://github.com/philppplik/pBlock"><img src="https://img.shields.io/badge/pBlock-Ad%20Blocker-FF6B35?style=for-the-badge&logo=shieldsio&logoColor=white" alt="pBlock" /></a>
   <a href="https://github.com/philppplik/custm-tab"><img src="https://img.shields.io/badge/cust*m%20Tab-New%20Tab-5865F2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="custm-tab" /></a>
   <a href="https://github.com/philppplik/claude-tetris"><img src="https://img.shields.io/badge/claude--tetris-Game%20%26%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" alt="claude-tetris" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/neurolint-AI%20Linter-412991?style=for-the-badge&logo=openai&logoColor=white" alt="neurolint" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/promptpilot-Co--Pilot-5865F2?style=for-the-badge&logo=anthropic&logoColor=white" alt="promptpilot" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/aesthetica-Design%20System-FF6B35?style=for-the-badge&logo=figma&logoColor=white" alt="aesthetica" /></a>
+  <a href="#"><img src="https://img.shields.io/badge/agentmesh-Orchestration-1a1a2e?style=for-the-badge&logo=langchain&logoColor=white" alt="agentmesh" /></a>
 </p>
+
+> 💡 *Die oberen 5 sind live auf GitHub — die KI-Tools darunter sind Konzepte aus meinem Baukasten. Frag mich, welches wir als Nächstes wirklich bauen.*
 
 ---
 
