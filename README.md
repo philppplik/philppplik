@@ -83,7 +83,7 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 ## 🏆 GitHub Trophäen
 
 <p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=philipp-paulik&theme=dracula&no-frame=true&no-bg=true&margin-w=8&row=2&column=4" alt="GitHub Trophies" />
+  <img src="https://github-profile-trophy.vercel.app/?username=philppplik&theme=dracula&no-frame=true&no-bg=true&margin-w=8&row=2&column=4" alt="GitHub Trophies" />
 </p>
 
 ## 📈 Stats & Aktivität
