@@ -8,27 +8,29 @@
 </p>
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&pause=1000&color=5865F2&center=true&vCenter=true&width=600&lines=I+design+systems%2C+shape+AI%2C+write+code.;Mediengestalter+%7C+UX%2FUI+%7C+AI+Engineer;From+First+Principles+to+Final+Product." alt="Typing SVG" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&pause=1000&color=5865F2&center=true&vCenter=true&width=600&lines=I+design+systems%2C+shape+AI%2C+write+code.;Mediengestalter+%7C+UX%2FUI+%7C+AI+Engineer;From+First+Principles+to+Final+Product.;Building+tools+that+do+one+thing+well." alt="Typing SVG" />
 </p>
 
 <br />
 
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=philipp-paulik&style=for-the-badge&color=5865F2" alt="Profile views" />
+</p>
+
 Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.  
-Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-Design**, **Applied AI** und **Code** — methodisch fundiert durch Systems Thinking und First Principles.  
+Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-Design**, **Applied AI** und **Code** — methodisch fundiert durch Systems Thinking und First Principles. Wenn ich ein Tool brauche, das es noch nicht gibt, baue ich es einfach selbst. 🛠️
 
 ---
 
 ## 🛠️ Stack & Tools
 
 **Design**
-
 ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
 ![Adobe Illustrator](https://img.shields.io/badge/Illustrator-FF9A00?style=for-the-badge&logo=adobeillustrator&logoColor=white)
 ![Adobe Photoshop](https://img.shields.io/badge/Photoshop-31A8FF?style=for-the-badge&logo=adobephotoshop&logoColor=white)
 ![Adobe InDesign](https://img.shields.io/badge/InDesign-FF3366?style=for-the-badge&logo=adobeindesign&logoColor=white)
 
 **Development**
-
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E)
@@ -36,14 +38,15 @@ Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-D
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue)
+![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
 
 **AI & Engineering**
-
 ![OpenAI](https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
 ![Anthropic](https://img.shields.io/badge/Anthropic%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
 
+---
 
 ## 🚀 Projekte
 
@@ -57,6 +60,54 @@ Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-D
 
 ---
 
+## 🧩 Tools & kleine Helfer
+
+Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen Suchmaschine.
+
+| Tool | Was es macht | Stack | Link |
+|---|---|---|---|
+| 🔍 **ZWEP** | Self-hosted, kuratierte Suchmaschine — Crawler + Extractor + Meilisearch + Fastify API + OpenAI-styled Web-UI & Admin-Konsole | TypeScript | [Repo](https://github.com/philppplik/zwep) |
+| 🛡️ **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
+| 🗂️ **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
+| 🎮 **claude-tetris** | Tetris im Split-Pane neben Claude Code — pausiert automatisch, wenn Claude fertig ist | JavaScript | [Repo](https://github.com/philppplik/claude-tetris) |
+| 📊 **github-stats** | Schönere GitHub-Statistik-Bilder, auch mit privaten Repos | — | [Repo](https://github.com/philppplik/github-stats) |
+
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=philipp-paulik&style=for-the-badge&color=5865F2" alt="Profile views" />
+  <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
+  <a href="https://github.com/philppplik/pBlock"><img src="https://img.shields.io/badge/pBlock-Ad%20Blocker-FF6B35?style=for-the-badge&logo=shieldsio&logoColor=white" alt="pBlock" /></a>
+  <a href="https://github.com/philppplik/custm-tab"><img src="https://img.shields.io/badge/cust*m%20Tab-New%20Tab-5865F2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="custm-tab" /></a>
+  <a href="https://github.com/philppplik/claude-tetris"><img src="https://img.shields.io/badge/claude--tetris-Game%20%26%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" alt="claude-tetris" /></a>
+</p>
+
+---
+
+## 🏆 GitHub Trophäen
+
+<p align="center">
+  <img src="https://github-profile-trophy.vercel.app/?username=philipp-paulik&theme=dracula&no-frame=true&no-bg=true&margin-w=8&row=2&column=4" alt="GitHub Trophies" />
+</p>
+
+## 📈 Stats & Aktivität
+
+<p align="center">
+  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=philipp-paulik&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" alt="GitHub Stats" />
+  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=philipp-paulik&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" alt="Top Languages" />
+</p>
+
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=philipp-paulik&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
+</p>
+
+<p align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=philipp-paulik&theme=tokyo-night&hide_border=true&area=true" alt="Activity Graph" />
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/philipp-paulik/philipp-paulik/output/assets/snake.svg" alt="Snake animation" />
+</p>
+
+---
+
+<p align="center">
+  <i>Danke fürs Vorbeischauen — immer offen für neue Tools, Ideen und Kollaborationen. ✌️</i>
 </p>
