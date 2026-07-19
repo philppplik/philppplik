@@ -102,10 +102,6 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=philipp-paulik&theme=tokyo-night&hide_border=true&area=true" alt="Activity Graph" />
 </p>
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/philipp-paulik/philipp-paulik/output/assets/snake.svg" alt="Snake animation" />
-</p>
-
 ---
 
 <p align="center">
