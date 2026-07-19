@@ -70,7 +70,6 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 | 🛡️ **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
 | 🗂️ **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
 | 🎮 **claude-tetris** | Tetris im Split-Pane neben Claude Code — pausiert automatisch, wenn Claude fertig ist | JavaScript | [Repo](https://github.com/philppplik/claude-tetris) |
-| 📊 **github-stats** | Schönere GitHub-Statistik-Bilder, auch mit privaten Repos | — | [Repo](https://github.com/philppplik/github-stats) |
 
 <p align="center">
   <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
