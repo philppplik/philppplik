@@ -45,15 +45,15 @@ Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von **UI/UX-D
 ![Anthropic](https://img.shields.io/badge/Anthropic%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white)
 ![LangChain](https://img.shields.io/badge/LangChain-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![HuggingFace](https://img.shields.io/badge/HuggingFace-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
-![neurolint](https://img.shields.io/badge/neurolint-AI%20Linter-412991?style=for-the-badge&logo=openai&logoColor=white)
-![promptpilot](https://img.shields.io/badge/promptpilot-Co--Pilot-5865F2?style=for-the-badge&logo=anthropic&logoColor=white)
-![aesthetica](https://img.shields.io/badge/aesthetica-Design%20System-FF6B35?style=for-the-badge&logo=figma&logoColor=white)
-![contextkit](https://img.shields.io/badge/contextkit-RAG-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
-![evallab](https://img.shields.io/badge/evallab-Eval-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)
-![synthflow](https://img.shields.io/badge/synthflow-Workflows-1a1a2e?style=for-the-badge&logo=githubactions&logoColor=white)
-![voicebridge](https://img.shields.io/badge/voicebridge-STT--TTS-CC785C?style=for-the-badge&logo=anthropic&logoColor=white)
-![docugen](https://img.shields.io/badge/docugen-Docs-5865F2?style=for-the-badge&logo=readthedocs&logoColor=white)
-![agentmesh](https://img.shields.io/badge/agentmesh-Orchestration-412991?style=for-the-badge&logo=openai&logoColor=white)
+![Hermes](https://img.shields.io/badge/Hermes-Agent-1a1a2e?style=for-the-badge&logo=rocket&logoColor=white)
+![Cursor](https://img.shields.io/badge/Cursor-AI%20Editor-000000?style=for-the-badge&logo=cursor&logoColor=white)
+![ChatGPT](https://img.shields.io/badge/ChatGPT-OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white)
+![Perplexity](https://img.shields.io/badge/Perplexity-AI%20Search-20808C?style=for-the-badge&logo=perplexity&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-Local%20LLM-FFFFFF?style=for-the-badge&logo=ollama&logoColor=black)
+![v0](https://img.shields.io/badge/v0-Vercel%20AI-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![ElevenLabs](https://img.shields.io/badge/ElevenLabs-TTS-FF6B35?style=for-the-badge&logo=elevenlabs&logoColor=white)
+![ComfyUI](https://img.shields.io/badge/ComfyUI-Image%20Gen-FF6B35?style=for-the-badge&logo=replicate&logoColor=white)
+![OpenRouter](https://img.shields.io/badge/OpenRouter-Multi%20LLM-FF6B35?style=for-the-badge&logo=openrouter&logoColor=white)
 
 ---
 
@@ -87,7 +87,7 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
   <a href="https://github.com/philppplik/claude-tetris"><img src="https://img.shields.io/badge/claude--tetris-Game%20%26%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" alt="claude-tetris" /></a>
 </p>
 
-> 💡 *Meine 4 live Tools oben — plus 9 KI-Konzepte in meiner AI & Engineering-Leiste. Frag mich, welches wir als Nächstes wirklich bauen.*
+> 💡 *Meine 4 live Tools oben — plus 9 echte AI-Tools, die ich täglich nutze, in meiner AI & Engineering-Leiste.*
 
 ---
 
