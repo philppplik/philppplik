@@ -122,8 +122,6 @@ Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst. 🛠️
   <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=DEIN-5-REPO&theme=tokyonight&hide_border=true" alt="5. Repo" />
 </p>
 
-> Tipp: Diese Cards ziehen sich Stars/Forks live von GitHub — du musst nur den Repo-Namen im `repo=`-Parameter pflegen, sobald sich dein aktivstes Projekt ändert. Alternativ kannst du GitHubs natives **„Pin repositories“**-Feature (Profil → Customize your pins) nutzen, dann tauchen die Repos automatisch oberhalb dieser README auf.
-
 ---
 
 ## Eigene Tools & Side Projects
@@ -145,24 +143,6 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 </p>
 
 ---
-
-## GitHub Trophäen
-
-<p align="center">
-  <img src="https://github-profile-trophy.vercel.app/?username=philppplik&theme=dracula&no-frame=true&no-bg=true&margin-w=8&row=2&column=4" alt="GitHub Trophies" />
-</p>
-
-## Stats & Aktivität
-
-<p align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=philppplik&show_icons=true&theme=tokyonight&hide_border=true&include_all_commits=true&count_private=true" alt="GitHub Stats" />
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=philppplik&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" alt="Top Languages" />
-</p>
-
-<p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=philppplik&theme=tokyonight&hide_border=true" alt="GitHub Streak" />
-</p>
-
 <p align="center">
   <img src="https://github-readme-activity-graph.vercel.app/graph?username=philppplik&theme=tokyo-night&hide_border=true&area=true" alt="Activity Graph" />
 </p>
