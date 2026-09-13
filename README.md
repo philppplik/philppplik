@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="#stack--tools">Stack</a> •
-  <a href="#eigene-tools--side-projects">Tools</a> •
+  <a href="#eigene-tools--side-projects">Tools</a>
 </p>
 
 <p align="center">
