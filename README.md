@@ -104,22 +104,6 @@ Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst. 🛠️
 
 ---
 
-## Top 5 Repositories
-
-<p align="center">
-  <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=zwep&theme=tokyonight&hide_border=true" alt="zwep" />
-  <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=pBlock&theme=tokyonight&hide_border=true" alt="pBlock" />
-</p>
-<p align="center">
-  <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=custm-tab&theme=tokyonight&hide_border=true" alt="custm-tab" />
-  <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=true-code&theme=tokyonight&hide_border=true" alt="true-code" />
-</p>
-<p align="center">
-  <img width="420" src="https://github-readme-stats.vercel.app/api/pin/?username=philppplik&repo=plane&theme=tokyonight&hide_border=true" alt="plane" />
-</p>
-
----
-
 ## Eigene Tools & Side Projects
 
 Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen Suchmaschine.
@@ -129,8 +113,9 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 | **ZWEP** | Self-hosted, kuratierte Suchmaschine — Crawler + Extractor + Meilisearch + Fastify API + OpenAI-styled Web-UI & Admin-Konsole | TypeScript | [Repo](https://github.com/philppplik/zwep) |
 | **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
 | **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
-| **true-code** | _⚠️ Kurzbeschreibung fehlt – bitte 1 Satz + Stack schicken_ | — | [Repo](https://github.com/philppplik/true-code) |
-| **plane** | _⚠️ Kurzbeschreibung fehlt – eigenes Setup/Fork? Was ist der Twist?_ | — | [Repo](https://github.com/philppplik/plane) |
+| **true-code** | # | — | [Repo](https://github.com/philppplik/true-code) |
+| **plane** | # | — | [Repo](https://github.com/philppplik/plane) |
+| **claude-tetris** | # | — | [Repo](https://github.com/philppplik/claude-tetris) |
 
 <p align="center">
   <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
@@ -138,10 +123,4 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
   <a href="https://github.com/philppplik/custm-tab"><img src="https://img.shields.io/badge/cust*m%20Tab-New%20Tab-5865F2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="custm-tab" /></a>
   <a href="https://github.com/philppplik/true-code"><img src="https://img.shields.io/badge/true--code-Project-3E92CC?style=for-the-badge&logo=github&logoColor=white" alt="true-code" /></a>
   <a href="https://github.com/philppplik/plane"><img src="https://img.shields.io/badge/plane-Project%20Management-3E92CC?style=for-the-badge&logo=github&logoColor=white" alt="plane" /></a>
-</p>
-
----
-
-<p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=philppplik&theme=tokyo-night&hide_border=true&area=true" alt="Activity Graph" />
 </p>
