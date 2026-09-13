@@ -113,14 +113,15 @@ Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen
 | **ZWEP** | Self-hosted, kuratierte Suchmaschine — Crawler + Extractor + Meilisearch + Fastify API + OpenAI-styled Web-UI & Admin-Konsole | TypeScript | [Repo](https://github.com/philppplik/zwep) |
 | **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
 | **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
-| **true-code** | # | — | [Repo](https://github.com/philppplik/true-code) |
-| **plane** | # | — | [Repo](https://github.com/philppplik/plane) |
-| **claude-tetris** | # | — | [Repo](https://github.com/philppplik/claude-tetris) |
+| **true-code** | Agentic Coding Harness, der zeigt, was der Agent getan hat — und was es gekostet hat. Windows-first, model-neutral | Rust (ratatui TUI) | [Repo](https://github.com/philppplik/true-code) |
+| **plane** | Schlanker PC-Cleaner für Windows — lokal, schnell, ohne Datenübertragung. Mit GUI, CLI und TUI | Rust | [Repo](https://github.com/philppplik/plane) |
+| **claude-tetris** | Tetris im Split-Pane neben Claude Code — pausiert automatisch, wenn Claude fertig ist, läuft beim nächsten Prompt weiter | JavaScript | [Repo](https://github.com/philppplik/claude-tetris) |
 
 <p align="center">
   <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
   <a href="https://github.com/philppplik/pBlock"><img src="https://img.shields.io/badge/pBlock-Ad%20Blocker-FF6B35?style=for-the-badge&logo=shieldsio&logoColor=white" alt="pBlock" /></a>
   <a href="https://github.com/philppplik/custm-tab"><img src="https://img.shields.io/badge/cust*m%20Tab-New%20Tab-5865F2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="custm-tab" /></a>
-  <a href="https://github.com/philppplik/true-code"><img src="https://img.shields.io/badge/true--code-Project-3E92CC?style=for-the-badge&logo=github&logoColor=white" alt="true-code" /></a>
-  <a href="https://github.com/philppplik/plane"><img src="https://img.shields.io/badge/plane-Project%20Management-3E92CC?style=for-the-badge&logo=github&logoColor=white" alt="plane" /></a>
+  <a href="https://github.com/philppplik/true-code"><img src="https://img.shields.io/badge/true--code-Agentic%20CLI-CE422B?style=for-the-badge&logo=rust&logoColor=white" alt="true-code" /></a>
+  <a href="https://github.com/philppplik/plane"><img src="https://img.shields.io/badge/plane-PC%20Cleaner-CE422B?style=for-the-badge&logo=rust&logoColor=white" alt="plane" /></a>
+  <a href="https://github.com/philppplik/claude-tetris"><img src="https://img.shields.io/badge/claude--tetris-Game%20%26%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" alt="claude-tetris" /></a>
 </p>
