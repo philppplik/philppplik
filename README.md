@@ -10,9 +10,7 @@
 
 <p align="center">
   <a href="#stack--tools">Stack</a> •
-  <a href="#top-5-repositories">Top Repos</a> •
   <a href="#eigene-tools--side-projects">Tools</a> •
-  <a href="#stats--aktivität">Stats</a>
 </p>
 
 <p align="center">
