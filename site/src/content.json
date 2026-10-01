@@ -12,7 +12,6 @@
       "youtube": "https://www.youtube.com/@philppplik",
       "linkedin": "https://de.linkedin.com/in/philipp-paulik-7967753aa",
       "npm": "https://www.npmjs.com/~philppplik",
-      "spotify": "https://open.spotify.com/album/0gEmHigNU3Ob23iSQRryqR",
       "book": "https://paulik-reisch.de"
     }
   },
@@ -36,7 +35,7 @@
         { "n": "03", "title": "Engineering", "text": "Saubere Frontends und schlanke Backends. Semantisches HTML, modernes CSS, TypeScript, Rust und Python. Software Engineering als Hobby mit Hang zum Perfektionismus.", "tags": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Rust", "Python", "Vite"] }
       ] },
       "writing": { "kicker": "Abseits vom Code", "title": "Hallo Welt", "subtitle": "Eine Abrechnung mit der Schule.", "text": "Als Autor schreibe ich satirische Bücher und ein Online-Magazin. Der erste Band heißt \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". Dazu gibt es Worthaft, ein tägliches Fünf-Buchstaben-Ratespiel.", "cta": "paulik-reisch.de besuchen", "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S" },
-      "music": { "kicker": "Sound", "title": "KI-Musik", "text": "Ich produziere Songs mit KI. Einer davon läuft in zwei Malediven-Vlogs des tschechischen Vloggers ANEMÍ.", "cta": "Auf Spotify hören" },
+      "music": { "kicker": "Sound", "title": "KI-Musik", "text": "Ich produziere Songs mit KI. Einer davon läuft in zwei Malediven-Vlogs des tschechischen Vloggers ANEMÍ." },
       "faqTitle": "Kurz gefragt",
       "faq": [
         { "q": "Wer ist Philipp Paulik?", "a": "Philipp Paulik (philppplik) ist KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer und Software Engineer aus Bonn. Er macht eine Ausbildung zum Mediengestalter, baut eigene KI-Tools und ist Autor." },
@@ -67,7 +66,7 @@
         { "n": "03", "title": "Engineering", "text": "Clean frontends and lean backends. Semantic HTML, modern CSS, TypeScript, Rust and Python. Software engineering as a hobby, with a taste for perfectionism.", "tags": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Rust", "Python", "Vite"] }
       ] },
       "writing": { "kicker": "Beyond code", "title": "Hallo Welt", "subtitle": "A reckoning with school.", "text": "As an author I write satirical books and an online magazine, in German. The first volume is called \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". There is also Worthaft, a daily five-letter word game.", "cta": "Visit paulik-reisch.de", "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S" },
-      "music": { "kicker": "Sound", "title": "AI music", "text": "I produce songs with AI. One of them plays in two Maldives vlogs by Czech vlogger ANEMÍ.", "cta": "Listen on Spotify" },
+      "music": { "kicker": "Sound", "title": "AI music", "text": "I produce songs with AI. One of them plays in two Maldives vlogs by Czech vlogger ANEMÍ." },
       "faqTitle": "Quick answers",
       "faq": [
         { "q": "Who is Philipp Paulik?", "a": "Philipp Paulik (philppplik) is an AI pioneer and strategist, web designer, UI/UX designer and software engineer from Bonn, Germany. He is training as a media designer, builds his own AI tools and is an author." },
