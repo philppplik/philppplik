@@ -24,9 +24,9 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .cursor.big span{width:84px;height:84px;margin:-42px 0 0 -42px}
 @media(hover:hover) and (pointer:fine){.cursor{display:block}}
 /* hero */
-.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:120px var(--pad) 32px;overflow:hidden}
+.hero{position:relative;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-end;padding:96px var(--pad) 28px;overflow:hidden}
 .glow{position:absolute;width:60vmax;height:60vmax;left:50%;top:40%;translate:-50% -50%;background:radial-gradient(closest-side,rgba(255,91,46,.28),rgba(255,91,46,.06) 55%,transparent);filter:blur(30px);pointer-events:none}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(5rem,min(23vw,21vh),22rem);line-height:.84;letter-spacing:-.045em;position:relative;margin:1rem 0 2.5rem}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(5rem,min(23vw,18vh),22rem);line-height:.84;letter-spacing:-.045em;position:relative;margin:1rem 0 2.5rem}
 .line{display:block;overflow:hidden;padding:.04em 0 .24em;margin-bottom:-.22em}.line-in{display:block;will-change:transform}
 .hero h1 .it{color:var(--acc);padding-left:.4em}
 .hero-foot{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr) auto;gap:2rem;align-items:end;border-top:1px solid var(--line);padding-top:1.4rem}
