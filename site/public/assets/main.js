@@ -79,3 +79,49 @@
   }
   addEventListener('load', () => ScrollTrigger.refresh());
 })();
+
+// ASCII hero field: flowing density waves rendered as monospace characters. Cheap: one fillText per row, paused offscreen.
+(() => {
+  const cv = document.querySelector('.ascii'); if (!cv) return;
+  const ctx = cv.getContext('2d'); if (!ctx) return;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ramp = ' .·:-=+*#%@';
+  let W = 0, H = 0, cols = 0, rows = 0, cw = 0, ch = 0, dpr = 1, running = false, raf = 0, last = 0;
+  const mouse = { x: 0.7, y: 0.4, tx: 0.7, ty: 0.4 };
+  function size() {
+    const r = cv.getBoundingClientRect(); dpr = Math.min(devicePixelRatio || 1, 2);
+    W = r.width; H = r.height; cv.width = W * dpr; cv.height = H * dpr;
+    const fs = W < 700 ? 11 : 14; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = `${fs}px "JetBrains Mono", ui-monospace, monospace`; ctx.textBaseline = 'top';
+    cw = ctx.measureText('M').width; ch = fs * 1.15; cols = Math.ceil(W / cw); rows = Math.ceil(H / ch);
+  }
+  function frame(t) {
+    mouse.x += (mouse.tx - mouse.x) * 0.06; mouse.y += (mouse.ty - mouse.y) * 0.06;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = '#ff5b2e';
+    const s = t * 0.00035;
+    for (let y = 0; y < rows; y++) {
+      let line = '';
+      const ny = y / rows;
+      for (let x = 0; x < cols; x++) {
+        const nx = x / cols;
+        let v = Math.sin(nx * 7 + s * 3 + Math.sin(ny * 5 - s * 2) * 1.6) + Math.sin(ny * 9 - s * 2.4 + nx * 3) + Math.sin((nx + ny) * 6 + s * 2);
+        const dx = (nx - mouse.x) * (W / H), dy = ny - mouse.y;
+        v += 2.2 * Math.exp(-(dx * dx + dy * dy) * 9) * Math.sin(Math.sqrt(dx * dx + dy * dy) * 30 - s * 22);
+        const d = Math.max(0, Math.min(0.999, (v + 3) / 6.4));
+        line += ramp[(d * ramp.length) | 0];
+      }
+      ctx.fillText(line, 0, y * ch);
+    }
+  }
+  function loop(t) { if (!running) return; if (t - last > 42) { last = t; frame(t); } raf = requestAnimationFrame(loop); }
+  function start() { if (running || reduce) return; running = true; raf = requestAnimationFrame(loop); }
+  function stop() { running = false; cancelAnimationFrame(raf); }
+  size(); frame(2000);
+  addEventListener('resize', () => { size(); frame(2000); });
+  if (!reduce) {
+    new IntersectionObserver((e) => (e[0].isIntersecting ? start() : stop())).observe(cv);
+    document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()));
+    addEventListener('pointermove', (e) => { const r = cv.getBoundingClientRect(); mouse.tx = (e.clientX - r.left) / r.width; mouse.ty = (e.clientY - r.top) / r.height; }, { passive: true });
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { size(); frame(2000); });
+})();
