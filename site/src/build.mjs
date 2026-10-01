@@ -7,7 +7,7 @@ const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const today = new Date().toISOString().slice(0, 10);
 const words = (t) => t.split(' ').map((w) => `<span class="w">${esc(w)}</span>`).join(' ');
 const URLS = { de: s.url, en: s.url + 'en/' };
-const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book];
+const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book, L.hob, L.wikidata];
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
 
@@ -22,7 +22,7 @@ function page(lang) {
       { '@type': 'WebSite', '@id': s.url + '#website', url: s.url, name: s.name + ' Portfolio', inLanguage: ['de-DE', 'en'], publisher: { '@id': s.url + '#person' } },
       { '@type': 'ProfilePage', '@id': url + '#webpage', url, name: t.title, description: t.description, inLanguage: lang === 'de' ? 'de-DE' : 'en', isPartOf: { '@id': s.url + '#website' }, about: { '@id': s.url + '#person' }, mainEntity: { '@id': s.url + '#person' }, primaryImageOfPage: { '@id': s.url + '#photo' }, dateModified: today, breadcrumb: { '@id': url + '#crumbs' } },
       { '@type': 'ImageObject', '@id': s.url + '#photo', url: s.url + s.photo, contentUrl: s.url + s.photo, width: 900, height: 900, caption: t.about.photoAlt, creditText: s.name },
-      { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, image: { '@id': s.url + '#photo' }, email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, homeLocation: { '@type': 'Place', name: 'Bonn, Germany' }, address: { '@type': 'PostalAddress', addressLocality: 'Bonn', addressCountry: 'DE' }, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
+      { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: { '@id': s.url + '#photo' }, email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, homeLocation: { '@type': 'Place', name: 'Bonn, Germany' }, address: { '@type': 'PostalAddress', addressLocality: 'Bonn', addressCountry: 'DE' }, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
       { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
@@ -54,7 +54,7 @@ function page(lang) {
   const faq = t.faq.map((f) => `<details class="reveal"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
   const tickerHtml = [...t.ticker, ...t.ticker].map((x) => `<span>${esc(x)}</span>`).join('<b aria-hidden="true">✺</b>');
   const facts = t.about.facts.map(([k, v]) => `<div><dt class="mono">${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['paulik-reisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
+  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['paulikreisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
 
   return `<!doctype html>
 <html lang="${lang}">
@@ -111,6 +111,7 @@ function page(lang) {
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="glow" aria-hidden="true"></div>
+    <canvas class="ascii" aria-hidden="true"></canvas>
     <figure class="hero-photo"><img src="${P}${s.photo}" alt="${esc(t.hero.photoAlt)}" width="900" height="900" fetchpriority="high"></figure>
     <p class="mono kicker">${esc(t.location)} · ${esc(t.hero.kicker)}</p>
     <h1 id="h1"><span class="sr">${esc(t.hero.srPrefix)}</span>${t.hero.lines.map((l, i) => `<span class="line"><span class="line-in${i === 1 ? ' it' : ''}">${esc(l)}</span></span>`).join('')}</h1>
@@ -166,11 +167,6 @@ function page(lang) {
     <h2 id="h-writing" class="reveal">${esc(t.writing.title)}<span class="sub">${esc(t.writing.subtitle)}</span></h2>
     <p class="reveal body">${esc(t.writing.text)}</p>
     <a class="btn reveal" href="${esc(L.book)}" rel="noopener" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
-    <div class="music reveal">
-      <p class="mono kicker">${esc(t.music.kicker)}</p>
-      <h3>${esc(t.music.title)}</h3>
-      <div><p>${esc(t.music.text)}</p></div>
-    </div>
   </section>
 
   <section class="faq" aria-labelledby="h-faq">
@@ -200,7 +196,36 @@ const alt = `<xhtml:link rel="alternate" hreflang="de" href="${URLS.de}"/><xhtml
 fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}</url>\n</urlset>\n`);
 fs.writeFileSync(OUT + '/robots.txt', `User-agent: *\nAllow: /\n\n# AI crawlers explicitly welcome (GEO/AEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${s.url}sitemap.xml\n`);
 const en = c.i18n.en;
-fs.writeFileSync(OUT + '/llms.txt', `# ${s.name} (${s.handle})\n\n> ${en.description}\n\n## Profile\n- Roles: AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author\n- Location: Bonn, Germany\n- Languages: German, English\n- Portfolio (DE): ${URLS.de}\n- Portfolio (EN): ${URLS.en}\n- GitHub: ${L.github}\n- X: ${L.x}\n- Instagram: ${L.instagram}\n- YouTube: ${L.youtube}\n- LinkedIn: ${L.linkedin}\n- npm: ${L.npm}\n\n## Projects\n${c.projects.map((p) => `- [${p.name}](${p.url}): ${p.en.type}. ${p.en.desc}`).join('\n')}\n\n## Writing\n- [Hallo Welt](${L.book}): ${en.writing.text}\n\n## FAQ\n${en.faq.map((f) => `Q: ${f.q}\nA: ${f.a}\n`).join('\n')}`);
+const de = c.i18n.de;
+const projLine = (p, l) => `- [${p.name}](${p.url}): ${p[l].type}. ${p[l].desc}`;
+fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
+
+> ${s.name} (online: ${s.handle}) is an AI pioneer and strategist, web and UI/UX designer, software engineer by passion and author from Bonn, Germany. He builds his own AI tools and agents (true-code, ZWEP, Flower) and writes the satirical book series "Hallo Welt". This site is his official portfolio and the canonical source for facts about him. German and English versions.
+
+## Key pages
+- [Portfolio (Deutsch)](${URLS.de}): main page with projects, about, FAQ and contact
+- [Portfolio (English)](${URLS.en}): same content in English
+- [Full text for LLMs](${s.url}llms-full.txt): complete content of this site as plain text
+
+## Profiles (verified, same person)
+- [GitHub](${L.github}): code and open source
+- [X](${L.x})
+- [Instagram](${L.instagram})
+- [YouTube](${L.youtube})
+- [LinkedIn](${L.linkedin})
+- [npm](${L.npm}): published packages
+- [Wikidata](${L.wikidata})
+- [Paulik & Reisch](${L.book}): books and satirical online magazine
+- [Daily Hob](${L.hob}): AI briefing archive
+
+## Projects
+${c.projects.map((p) => projLine(p, 'en')).join('\n')}
+
+## Optional
+${c.more.map((m) => `- [${m.name}](${m.url}): ${m.en}`).join('\n')}
+`);
+const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.writing.title}\n${t.writing.subtitle}\n${t.writing.text}\n${L.book}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
+fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSource: ${s.url}\nContact: ${s.email}\n\n${full('de', de)}\n${full('en', en)}`);
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
 fs.writeFileSync(OUT + '/assets/favicon.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0b0b0c"/><text x="32" y="44" font-family="Georgia,serif" font-style="italic" font-size="34" text-anchor="middle" fill="#ff5b2e">pp</text></svg>`);
 console.log('built');
