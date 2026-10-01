@@ -394,7 +394,7 @@
       "featured": true,
       "year": "2026",
       "stack": "TypeScript · Meilisearch · MCP",
-      "url": "https://github.com/philppplik/zwep",
+      "url": "https://zwep.philipp-paulik.de/",
       "npm": "https://www.npmjs.com/package/zwep",
       "color": "#c8ff3d",
       "lang": "TypeScript",
@@ -405,14 +405,16 @@
       "en": {
         "type": "Self-hosted search engine",
         "desc": "You pick the sources, ZWEP crawls and indexes them locally and answers searches in milliseconds. Usable by AI agents over MCP. No ads, no tracking."
-      }
+      },
+      "live": true,
+      "repo": "https://github.com/philppplik/zwep"
     },
     {
       "name": "Flower",
       "featured": true,
       "year": "2026",
       "stack": "Vanilla JS · Canvas",
-      "url": "https://philppplik.github.io/flower/",
+      "url": "https://flower.philipp-paulik.de/",
       "repo": "https://github.com/philppplik/flower",
       "color": "#ff8fd1",
       "lang": "JavaScript",
@@ -430,7 +432,7 @@
       "name": "Daily Hob",
       "year": "2026",
       "stack": "Python · GitHub Pages",
-      "url": "https://philppplik.github.io/daily-hob/",
+      "url": "https://hob.philipp-paulik.de/",
       "repo": "https://github.com/philppplik/daily-hob",
       "color": "#ffd23d",
       "lang": "Python",
@@ -513,6 +515,30 @@
     }
   ],
   "more": [
+    {
+      "name": "Claude Tetris",
+      "url": "https://ct.philipp-paulik.de/",
+      "de": "Tetris im Split-Pane neben Claude Code: pausiert automatisch, wenn Claude fertig ist.",
+      "en": "Tetris in a split pane beside Claude Code: auto-pauses when Claude is done."
+    },
+    {
+      "name": "Plane",
+      "url": "https://plane.philipp-paulik.de/",
+      "de": "Schlanker PC-Cleaner für Windows mit GUI, CLI und TUI. Lokal, ohne Datenübertragung.",
+      "en": "Lean PC cleaner for Windows with GUI, CLI and TUI. Local, no data leaves your PC."
+    },
+    {
+      "name": "pBlock",
+      "url": "https://pblock.philipp-paulik.de/",
+      "de": "Chrome-Adblocker mit 3-stufigem Filtersystem, Element-Picker und Kosmetikfiltern.",
+      "en": "Chrome ad blocker with a 3-tier filter system, element picker and cosmetic filters."
+    },
+    {
+      "name": "cust*m Tab",
+      "url": "https://custmtab.philipp-paulik.de/",
+      "de": "Eigene New-Tab-Seite für Chrome (MV3). Privacy-first, Dashboard oder deine eigene URL.",
+      "en": "A custom new-tab page for Chrome (MV3). Privacy-first, dashboard or your own URL."
+    },
     {
       "name": "autonnel",
       "url": "https://github.com/philppplik/autonnel",
