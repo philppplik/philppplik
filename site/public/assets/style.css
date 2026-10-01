@@ -110,3 +110,15 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7vw,7rem);lin
 .contact .mail{margin-top:2.2rem}.contact .mail a{border-bottom:1px solid var(--acc);padding-bottom:3px;color:var(--fg)}
 .writing .music>div p+p{margin-top:.4rem}
 @media(max-width:900px){.hero-photo{display:none}.about{grid-template-columns:1fr}.about-photo{aspect-ratio:1/1}.top nav a:nth-child(1),.top nav a:nth-child(2),.top nav a:nth-child(3){display:none}}
+/* v3: liquid glass nav, ascii hero */
+.top{mix-blend-mode:normal;color:#fff;inset:14px 0 auto 0;margin-inline:auto;width:min(1180px,calc(100% - 2*var(--pad)));padding:10px 14px 10px 20px;border-radius:999px;
+ background:rgba(30,30,34,.72);border:1px solid rgba(255,255,255,.14);box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -1px 0 rgba(255,255,255,.05);isolation:isolate;overflow:hidden}
+@supports((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .top{background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.04) 55%,rgba(255,255,255,.08)),rgba(24,24,28,.38);-webkit-backdrop-filter:blur(22px) saturate(190%) brightness(1.08);backdrop-filter:blur(22px) saturate(190%) brightness(1.08)}
+}
+.top::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(120% 220% at 15% -60%,rgba(255,255,255,.28),transparent 55%);pointer-events:none;z-index:-1}
+.top nav .lang{border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.08)}
+.ascii{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.34;-webkit-mask-image:radial-gradient(75% 85% at 62% 45%,#000 20%,transparent 78%);mask-image:radial-gradient(75% 85% at 62% 45%,#000 20%,transparent 78%)}
+@media(prefers-reduced-motion:reduce){.ascii{opacity:.3}}
+@media(max-width:900px){.top{inset-block-start:10px;padding:8px 12px 8px 16px}.ascii{opacity:.3}}
+.hero .kicker{position:relative;z-index:2}.ascii{z-index:0}
