@@ -1,0 +1,113 @@
+{
+  "site": {
+    "url": "https://philppplik.github.io/philppplik/",
+    "name": "Philipp Paulik",
+    "handle": "philppplik",
+    "email": "philipp.l.paulik@gmail.com",
+    "photo": "assets/philipp-paulik.jpg",
+    "links": {
+      "github": "https://github.com/philppplik",
+      "x": "https://x.com/philppplik",
+      "instagram": "https://instagram.com/philpplik",
+      "youtube": "https://www.youtube.com/@philppplik",
+      "linkedin": "https://de.linkedin.com/in/philipp-paulik-7967753aa",
+      "npm": "https://www.npmjs.com/~philppplik",
+      "spotify": "https://open.spotify.com/album/0gEmHigNU3Ob23iSQRryqR",
+      "book": "https://paulik-reisch.de"
+    }
+  },
+  "i18n": {
+    "de": {
+      "title": "Philipp Paulik - KI-Pionier & Strategie, Webdesign, UI/UX",
+      "description": "Philipp Paulik (philppplik) aus Bonn: KI-Pionier und -Stratege, Webdesigner, UI/UX-Designer und Software Engineer aus Leidenschaft. Baut eigene KI-Tools wie true-code, ZWEP und Flower. Autor.",
+      "ogLocale": "de_DE", "ogAlt": "Philipp Paulik: KI, Strategie, Design",
+      "role": "AI Pioneer · Webdesign · UI/UX · Autor",
+      "location": "Bonn, Deutschland",
+      "nav": { "work": "Projekte", "about": "Über mich", "books": "Bücher", "contact": "Kontakt", "aria": "Hauptnavigation", "top": "nach oben", "skip": "Zum Inhalt springen", "switch": "English", "switchHref": "en/", "switchLang": "en" },
+      "hero": { "kicker": "Portfolio 2026", "lines": ["KI.", "Strategie.", "Design."], "srPrefix": "Philipp Paulik, AI Pioneer: ", "sub": "Ich entwickle KI-Strategien und baue die Tools dazu. Als Webdesigner und UI/UX-Designer sorge ich dafür, dass sie sich gut anfühlen.", "photoAlt": "Porträt von Philipp Paulik, lächelnd auf einem Sofa vor einer Pflanze", "scroll": "Scroll" },
+      "manifestoLabel": "Haltung",
+      "manifesto": "KI ist meine Welt. Ich denke in Systemen, starte bei First Principles und baue, was fehlt: Tools, die genau eine Sache gut machen, lokal laufen und offen zeigen, was sie tun.",
+      "work": { "kicker": "Ausgewählte Projekte", "title": "Dinge, die ich <em>gebaut</em> habe", "hint": "Weiter scrollen →", "featured": "Top Projekt", "live": "Live ansehen", "github": "Auf GitHub", "open": "Öffnen" },
+      "more": { "title": "Außerdem" },
+      "about": { "kicker": "Über mich", "title": "Pionier mit <em>Gestaltungswillen</em>", "paras": ["Ich bin Philipp, komme aus Bonn und mache gerade meine Ausbildung zum Mediengestalter (Digital und Print). Meine Leidenschaft ist künstliche Intelligenz: Ich entwickle KI-Strategien, baue eigene Agents und Tools und veröffentliche sie als Open Source und als npm-Pakete.", "Webdesign und UI/UX sind mein Handwerk, Software Engineering mein liebstes Hobby. Dazu schreibe ich Bücher und mache KI-Musik. Wenn ein Tool fehlt, das es geben sollte, baue ich es selbst."], "facts": [["Fokus", "KI-Strategie und Agents"], ["Handwerk", "Webdesign, UI/UX"], ["Code", "TypeScript, Rust, Python"], ["Ort", "Bonn, Deutschland"]], "photoAlt": "Philipp Paulik lächelt in die Kamera, weißes T-Shirt, Jeans, Sofa mit Zimmerpflanze" },
+      "skills": { "kicker": "Wie ich arbeite", "title": "Drei Disziplinen, <em>ein</em> System", "toolsLabel": "Werkzeuge", "items": [
+        { "n": "01", "title": "KI & Strategie", "text": "Wo hilft KI wirklich? Ich entwickle Strategien, Agents und MCP-Server und prüfe, was sie leisten und was sie kosten.", "tags": ["KI-Strategie", "Agents", "MCP", "OpenAI", "Claude", "RAG", "Automation"] },
+        { "n": "02", "title": "Design", "text": "Webdesign, UI/UX, Layout, Typografie und Motion. Von Figma über Illustrator, Photoshop und InDesign bis After Effects und Blender.", "tags": ["Figma", "Illustrator", "Photoshop", "InDesign", "After Effects", "Blender", "Framer", "Webflow"] },
+        { "n": "03", "title": "Engineering", "text": "Saubere Frontends und schlanke Backends. Semantisches HTML, modernes CSS, TypeScript, Rust und Python. Software Engineering als Hobby mit Hang zum Perfektionismus.", "tags": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Rust", "Python", "Vite"] }
+      ] },
+      "writing": { "kicker": "Abseits vom Code", "title": "Hallo Welt", "subtitle": "Eine Abrechnung mit der Schule.", "text": "Als Autor schreibe ich satirische Bücher und ein Online-Magazin. Der erste Band heißt \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". Dazu gibt es Worthaft, ein tägliches Fünf-Buchstaben-Ratespiel.", "cta": "paulik-reisch.de besuchen", "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S" },
+      "music": { "kicker": "Sound", "title": "KI-Musik", "text": "Ich produziere Songs mit KI. Einer davon läuft in zwei Malediven-Vlogs des tschechischen Vloggers ANEMÍ.", "cta": "Auf Spotify hören" },
+      "faqTitle": "Kurz gefragt",
+      "faq": [
+        { "q": "Wer ist Philipp Paulik?", "a": "Philipp Paulik (philppplik) ist KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer und Software Engineer aus Bonn. Er macht eine Ausbildung zum Mediengestalter, baut eigene KI-Tools und ist Autor." },
+        { "q": "Welche Projekte hat Philipp Paulik gebaut?", "a": "Die wichtigsten sind true-code (Agentic Coding Harness in Rust), ZWEP (self-hosted Suchmaschine mit MCP für KI-Agents) und Flower (ASCII Image Studio im Browser). Dazu kommen Daily Hob, cust*m Tab, pBlock, claude-tetris und plane." },
+        { "q": "Was macht Philipp Paulik neben KI und Design?", "a": "Er schreibt satirische Bücher und ein Online-Magazin (paulik-reisch.de) und produziert Musik mit KI." },
+        { "q": "Wo finde ich Philipp Paulik online?", "a": "Auf GitHub (github.com/philppplik), X (@philppplik), Instagram (philpplik), YouTube (@philppplik), LinkedIn und npm (npmjs.com/~philppplik)." }
+      ],
+      "contact": { "kicker": "Offen für spannende Projekte und Gespräche", "l1": "Lass uns", "l2": "reden.", "mail": "Mail schreiben", "cursor": "Hallo" },
+      "foot": { "made": "Handgebaut mit HTML, CSS und GSAP · ohne Tracking", "up": "Nach oben ↑" },
+      "ticker": ["KI-Strategie", "Agents", "MCP", "Webdesign", "UI/UX", "Rust", "TypeScript", "Motion", "Open Source", "Systems Thinking"]
+    },
+    "en": {
+      "title": "Philipp Paulik - AI Pioneer & Strategist, Web Design, UI/UX",
+      "description": "Philipp Paulik (philppplik) from Bonn, Germany: AI pioneer and strategist, web designer, UI/UX designer and passionate software engineer. Builds his own AI tools like true-code, ZWEP and Flower. Author.",
+      "ogLocale": "en_US", "ogAlt": "Philipp Paulik: AI, strategy, design",
+      "role": "AI Pioneer · Web Design · UI/UX · Author",
+      "location": "Bonn, Germany",
+      "nav": { "work": "Work", "about": "About", "books": "Books", "contact": "Contact", "aria": "Main navigation", "top": "back to top", "skip": "Skip to content", "switch": "Deutsch", "switchHref": "../", "switchLang": "de" },
+      "hero": { "kicker": "Portfolio 2026", "lines": ["AI.", "Strategy.", "Design."], "srPrefix": "Philipp Paulik, AI Pioneer: ", "sub": "I develop AI strategies and build the tools to match. As a web and UI/UX designer, I make sure they feel right.", "photoAlt": "Portrait of Philipp Paulik, smiling on a sofa in front of a plant", "scroll": "Scroll" },
+      "manifestoLabel": "Approach",
+      "manifesto": "AI is my world. I think in systems, start from first principles and build what is missing: tools that do one thing well, run locally and show openly what they do.",
+      "work": { "kicker": "Selected work", "title": "Things I have <em>built</em>", "hint": "Keep scrolling →", "featured": "Top project", "live": "View live", "github": "On GitHub", "open": "Open" },
+      "more": { "title": "Also" },
+      "about": { "kicker": "About", "title": "A pioneer with an <em>eye for design</em>", "paras": ["I am Philipp, based in Bonn, Germany, and currently training as a media designer (digital and print). My passion is artificial intelligence: I develop AI strategies, build my own agents and tools and release them as open source and npm packages.", "Web design and UI/UX are my craft, software engineering is my favorite hobby. I also write books and make AI music. When a tool is missing that should exist, I build it myself."], "facts": [["Focus", "AI strategy and agents"], ["Craft", "Web design, UI/UX"], ["Code", "TypeScript, Rust, Python"], ["Based in", "Bonn, Germany"]], "photoAlt": "Philipp Paulik smiling at the camera, white t-shirt and jeans, sofa with a houseplant" },
+      "skills": { "kicker": "How I work", "title": "Three disciplines, <em>one</em> system", "toolsLabel": "tools", "items": [
+        { "n": "01", "title": "AI & Strategy", "text": "Where does AI really help? I develop strategies, agents and MCP servers, and measure what they deliver and what they cost.", "tags": ["AI strategy", "Agents", "MCP", "OpenAI", "Claude", "RAG", "Automation"] },
+        { "n": "02", "title": "Design", "text": "Web design, UI/UX, layout, typography and motion. From Figma, Illustrator, Photoshop and InDesign to After Effects and Blender.", "tags": ["Figma", "Illustrator", "Photoshop", "InDesign", "After Effects", "Blender", "Framer", "Webflow"] },
+        { "n": "03", "title": "Engineering", "text": "Clean frontends and lean backends. Semantic HTML, modern CSS, TypeScript, Rust and Python. Software engineering as a hobby, with a taste for perfectionism.", "tags": ["HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Node.js", "Rust", "Python", "Vite"] }
+      ] },
+      "writing": { "kicker": "Beyond code", "title": "Hallo Welt", "subtitle": "A reckoning with school.", "text": "As an author I write satirical books and an online magazine, in German. The first volume is called \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". There is also Worthaft, a daily five-letter word game.", "cta": "Visit paulik-reisch.de", "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S" },
+      "music": { "kicker": "Sound", "title": "AI music", "text": "I produce songs with AI. One of them plays in two Maldives vlogs by Czech vlogger ANEMÍ.", "cta": "Listen on Spotify" },
+      "faqTitle": "Quick answers",
+      "faq": [
+        { "q": "Who is Philipp Paulik?", "a": "Philipp Paulik (philppplik) is an AI pioneer and strategist, web designer, UI/UX designer and software engineer from Bonn, Germany. He is training as a media designer, builds his own AI tools and is an author." },
+        { "q": "What has Philipp Paulik built?", "a": "The main ones are true-code (an agentic coding harness in Rust), ZWEP (a self-hosted search engine with MCP for AI agents) and Flower (an ASCII image studio in the browser). Others include Daily Hob, cust*m Tab, pBlock, claude-tetris and plane." },
+        { "q": "What does Philipp Paulik do besides AI and design?", "a": "He writes satirical books and an online magazine in German (paulik-reisch.de) and produces music with AI." },
+        { "q": "Where can I find Philipp Paulik online?", "a": "On GitHub (github.com/philppplik), X (@philppplik), Instagram (philpplik), YouTube (@philppplik), LinkedIn and npm (npmjs.com/~philppplik)." }
+      ],
+      "contact": { "kicker": "Open to exciting projects and conversations", "l1": "Let's", "l2": "talk.", "mail": "Send an email", "cursor": "Hello" },
+      "foot": { "made": "Handbuilt with HTML, CSS and GSAP · no tracking", "up": "Back to top ↑" },
+      "ticker": ["AI strategy", "Agents", "MCP", "Web design", "UI/UX", "Rust", "TypeScript", "Motion", "Open source", "Systems thinking"]
+    }
+  },
+  "projects": [
+    { "name": "true-code", "featured": true, "year": "2026", "stack": "Rust · ratatui", "url": "https://github.com/philppplik/true-code", "color": "#ff5b2e", "lang": "Rust",
+      "de": { "type": "Agentic Coding Harness", "desc": "Zeigt, was der Coding-Agent getan hat und was es gekostet hat: Kosten pro Turn, Budget-Limits, ein LEARN-Modus und Belege statt bloßer Erfolgsmeldungen. Modellneutral, mit TUI." },
+      "en": { "type": "Agentic coding harness", "desc": "Shows what the coding agent did and what it cost: live cost per turn, budget caps, a LEARN mode and evidence instead of claimed success. Model-neutral, with a TUI." } },
+    { "name": "ZWEP", "featured": true, "year": "2026", "stack": "TypeScript · Meilisearch · MCP", "url": "https://github.com/philppplik/zwep", "npm": "https://www.npmjs.com/package/zwep", "color": "#c8ff3d", "lang": "TypeScript",
+      "de": { "type": "Self-hosted Suchmaschine", "desc": "Du wählst die Quellen, ZWEP crawlt und indexiert sie lokal und beantwortet Suchen in Millisekunden. Per MCP nutzbar für KI-Agents. Keine Werbung, kein Tracking." },
+      "en": { "type": "Self-hosted search engine", "desc": "You pick the sources, ZWEP crawls and indexes them locally and answers searches in milliseconds. Usable by AI agents over MCP. No ads, no tracking." } },
+    { "name": "Flower", "featured": true, "year": "2026", "stack": "Vanilla JS · Canvas", "url": "https://philppplik.github.io/flower/", "repo": "https://github.com/philppplik/flower", "color": "#ff8fd1", "lang": "JavaScript", "live": true,
+      "de": { "type": "ASCII Image Studio", "desc": "Ein privates Studio im Browser, das Fotos in ASCII-Kunst verwandelt. Schutzmasken, Looks, Export als PNG, SVG oder Text. Ohne Account, nichts verlässt dein Gerät." },
+      "en": { "type": "ASCII image studio", "desc": "A private studio in the browser that turns photos into ASCII art. Protection masks, looks, export as PNG, SVG or text. No account, nothing leaves your device." } },
+    { "name": "Daily Hob", "year": "2026", "stack": "Python · GitHub Pages", "url": "https://philppplik.github.io/daily-hob/", "repo": "https://github.com/philppplik/daily-hob", "color": "#ffd23d", "lang": "Python", "live": true,
+      "de": { "type": "KI-Briefing-Archiv", "desc": "Weniger Rauschen, mehr Aha: ein helles, mobiles Archiv für KI, Open Source und Design mit Quellen und Audio. Statisch gebaut, ohne Tracking." },
+      "en": { "type": "AI briefing archive", "desc": "Less noise, more aha: a bright, mobile-first archive on AI, open source and design, with sources and audio. Statically built, no tracking." } },
+    { "name": "cust*m Tab", "year": "2026", "stack": "JavaScript · Chrome MV3", "url": "https://philppplik.github.io/custm-tab/", "repo": "https://github.com/philppplik/custm-tab", "color": "#6ea8ff", "lang": "JavaScript", "live": true,
+      "de": { "type": "New-Tab-Erweiterung", "desc": "Dein Tab, deine Regeln: konfigurierbares Dashboard oder eigene URL, 26 Suchmaschinen, kein Account, keine Telemetrie. Läuft in Chrome und Firefox." },
+      "en": { "type": "New-tab extension", "desc": "Your tab, your rules: a configurable dashboard or your own URL, 26 search engines, no account, no telemetry. Runs in Chrome and Firefox." } },
+    { "name": "pBlock", "year": "2026", "stack": "JavaScript", "url": "https://github.com/philppplik/pBlock", "color": "#9d7bff", "lang": "JavaScript",
+      "de": { "type": "Chrome Ad-Blocker", "desc": "Blockiert Werbung, Tracker und Social-Media-Widgets mit dreistufigem Filtersystem, Element-Picker und Kosmetikfiltern." },
+      "en": { "type": "Chrome ad blocker", "desc": "Blocks ads, trackers and social widgets with a three-tier filter system, element picker and cosmetic filters." } },
+    { "name": "claude-tetris", "year": "2026", "stack": "JavaScript · npm", "url": "https://github.com/philppplik/claude-tetris", "npm": "https://www.npmjs.com/package/claude-tetris", "color": "#3dffb8", "lang": "JavaScript",
+      "de": { "type": "Claude-Code-Plugin", "desc": "Tetris im Split-Pane neben Claude Code. Pausiert automatisch, sobald Claude fertig ist, und läuft beim nächsten Prompt weiter." },
+      "en": { "type": "Claude Code plugin", "desc": "Tetris in a split pane next to Claude Code. Auto-pauses the moment Claude is done and resumes on your next prompt." } },
+    { "name": "plane", "year": "2026", "stack": "Rust · GUI, CLI, TUI", "url": "https://github.com/philppplik/plane", "color": "#ff6b6b", "lang": "Rust",
+      "de": { "type": "PC-Cleaner für Windows", "desc": "Schlank, lokal und schnell, ohne Datenübertragung. Als GUI, CLI und TUI." },
+      "en": { "type": "PC cleaner for Windows", "desc": "Lean, local and fast, with no data transfer. As a GUI, CLI and TUI." } }
+  ],
+  "more": [
+    { "name": "autonnel", "url": "https://github.com/philppplik/autonnel", "de": "Open-Source-, KI-native Alternative zu ClickFunnels mit Checkout, Upsells und Ad-Attribution.", "en": "Open-source, AI-native alternative to ClickFunnels with checkout, upsells and ad attribution." },
+    { "name": "ETS2-Trainer", "url": "https://github.com/philppplik/ETS2-Trainer", "de": "Mod-Menü für den Euro Truck Simulator 2 per SCS-SDK-Plugin, nur Singleplayer.", "en": "Mod menu for Euro Truck Simulator 2 via SCS SDK plugin, singleplayer only." }
+  ]
+}
