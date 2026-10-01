@@ -7,7 +7,7 @@ const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const today = new Date().toISOString().slice(0, 10);
 const words = (t) => t.split(' ').map((w) => `<span class="w">${esc(w)}</span>`).join(' ');
 const URLS = { de: s.url, en: s.url + 'en/' };
-const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.spotify, L.book];
+const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book];
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
 
@@ -25,7 +25,6 @@ function page(lang) {
       { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, image: { '@id': s.url + '#photo' }, email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, homeLocation: { '@type': 'Place', name: 'Bonn, Germany' }, address: { '@type': 'PostalAddress', addressLocality: 'Bonn', addressCountry: 'DE' }, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
       { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
-      { '@type': 'MusicAlbum', name: 'Living in a Lego World', url: L.spotify, byArtist: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
       { '@type': 'BreadcrumbList', '@id': url + '#crumbs', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Portfolio', item: url }] }
     ]
@@ -55,7 +54,7 @@ function page(lang) {
   const faq = t.faq.map((f) => `<details class="reveal"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
   const tickerHtml = [...t.ticker, ...t.ticker].map((x) => `<span>${esc(x)}</span>`).join('<b aria-hidden="true">✺</b>');
   const facts = t.about.facts.map(([k, v]) => `<div><dt class="mono">${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['Spotify', L.spotify], ['paulik-reisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
+  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['paulik-reisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
 
   return `<!doctype html>
 <html lang="${lang}">
@@ -170,7 +169,7 @@ function page(lang) {
     <div class="music reveal">
       <p class="mono kicker">${esc(t.music.kicker)}</p>
       <h3>${esc(t.music.title)}</h3>
-      <div><p>${esc(t.music.text)}</p><p><a class="btn sm" href="${esc(L.spotify)}" rel="noopener">${esc(t.music.cta)} ${arrow}</a></p></div>
+      <div><p>${esc(t.music.text)}</p></div>
     </div>
   </section>
 
