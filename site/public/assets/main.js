@@ -97,7 +97,7 @@
   }
   function frame(t) {
     mouse.x += (mouse.tx - mouse.x) * 0.06; mouse.y += (mouse.ty - mouse.y) * 0.06;
-    ctx.clearRect(0, 0, W, H); ctx.fillStyle = '#ff5b2e';
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = '#4c8df6';
     const s = t * 0.00035;
     for (let y = 0; y < rows; y++) {
       let line = '';
@@ -151,11 +151,11 @@
     const SH = [[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[0,1,1],[1,1,0]],[[1,1,0],[0,1,1]]];
     const root = document.createElement('div');
     root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-label', 'Secret: ASCII Tetris');
-    root.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(8,8,9,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:"JetBrains Mono",ui-monospace,monospace;color:#efeae2;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);touch-action:none;overscroll-behavior:contain';
-    root.innerHTML = '<pre id="tt" style="margin:0;font-size:min(3.4vh,22px,6vw);line-height:1.15;color:#ff5b2e;text-shadow:0 0 14px rgba(255,91,46,.45)"></pre>' +
-      '<div id="tth" style="font-size:12px;letter-spacing:.08em;color:#8d8a84;text-align:center;text-transform:uppercase"></div>' +
+    root.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(6,20,40,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:"JetBrains Mono",ui-monospace,monospace;color:#efeae2;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);touch-action:none;overscroll-behavior:contain';
+    root.innerHTML = '<pre id="tt" style="margin:0;font-size:min(3.4vh,22px,6vw);line-height:1.15;color:#4c8df6;text-shadow:0 0 14px rgba(76,141,246,.45)"></pre>' +
+      '<div id="tth" style="font-size:12px;letter-spacing:.08em;color:#93a8c6;text-align:center;text-transform:uppercase"></div>' +
       '<div id="ttc" style="display:flex;gap:10px"></div>' +
-      '<a href="https://github.com/philppplik/claude-tetris" target="_blank" rel="noopener" style="font-size:12px;color:#c8ff3d;letter-spacing:.06em">github.com/philppplik/claude-tetris ↗</a>';
+      '<a href="https://github.com/philppplik/claude-tetris" target="_blank" rel="noopener" style="font-size:12px;color:#9cc3ff;letter-spacing:.06em">github.com/philppplik/claude-tetris ↗</a>';
     document.body.appendChild(root);
     const prevOv = document.documentElement.style.overflow; document.documentElement.style.overflow = 'hidden';
     const pre = root.querySelector('#tt');
