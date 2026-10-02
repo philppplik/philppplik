@@ -378,7 +378,7 @@
       "year": "2026",
       "stack": "Rust · ratatui",
       "url": "https://github.com/philppplik/true-code",
-      "color": "#4c8df6",
+      "color": "#ff5b2e",
       "lang": "Rust",
       "de": {
         "type": "Agentic Coding Harness",
@@ -520,24 +520,6 @@
       "url": "https://ct.philipp-paulik.de/",
       "de": "Tetris im Split-Pane neben Claude Code: pausiert automatisch, wenn Claude fertig ist.",
       "en": "Tetris in a split pane beside Claude Code: auto-pauses when Claude is done."
-    },
-    {
-      "name": "Plane",
-      "url": "https://plane.philipp-paulik.de/",
-      "de": "Schlanker PC-Cleaner für Windows mit GUI, CLI und TUI. Lokal, ohne Datenübertragung.",
-      "en": "Lean PC cleaner for Windows with GUI, CLI and TUI. Local, no data leaves your PC."
-    },
-    {
-      "name": "pBlock",
-      "url": "http://pblock.philipp-paulik.de/",
-      "de": "Chrome-Adblocker mit 3-stufigem Filtersystem, Element-Picker und Kosmetikfiltern.",
-      "en": "Chrome ad blocker with a 3-tier filter system, element picker and cosmetic filters."
-    },
-    {
-      "name": "cust*m Tab",
-      "url": "http://custmtab.philipp-paulik.de/",
-      "de": "Eigene New-Tab-Seite für Chrome (MV3). Privacy-first, Dashboard oder deine eigene URL.",
-      "en": "A custom new-tab page for Chrome (MV3). Privacy-first, dashboard or your own URL."
     },
     {
       "name": "autonnel",
