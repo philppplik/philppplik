@@ -73,6 +73,8 @@ function page(lang) {
 <link rel="alternate" hreflang="x-default" href="${URLS.de}">
 <link rel="alternate" type="text/plain" href="${s.url}llms.txt" title="LLM-readable summary">
 <link rel="icon" href="${P}assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="${P}favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="${P}assets/apple-touch-icon.png">
 <link rel="sitemap" type="application/xml" href="${s.url}sitemap.xml">
 <meta property="og:type" content="profile">
 <meta property="og:locale" content="${t.ogLocale}">
@@ -105,7 +107,7 @@ function page(lang) {
 <div class="progress" aria-hidden="true"><i></i></div>
 <div class="cursor" aria-hidden="true"><span></span></div>
 <header class="top">
-  <a class="brand" href="#top" aria-label="${esc(s.name)} - ${esc(t.nav.top)}">PP<span aria-hidden="true">®</span></a>
+  <a class="brand" href="#top" aria-label="${esc(s.name)} - ${esc(t.nav.top)}"><img src="${P}assets/logo.svg" alt="" width="34" height="34"></a>
   <nav aria-label="${esc(t.nav.aria)}"><a href="#projekte">${esc(t.nav.work)}</a><a href="#about">${esc(t.nav.about)}</a><a href="#hallo-welt">${esc(t.nav.books)}</a><a href="#kontakt">${esc(t.nav.contact)}</a><a class="lang" href="${t.nav.switchHref}" hreflang="${t.nav.switchLang}" lang="${t.nav.switchLang}">${esc(t.nav.switch)}</a></nav>
 </header>
 <main id="main">
@@ -227,5 +229,4 @@ ${c.more.map((m) => `- [${m.name}](${m.url}): ${m.en}`).join('\n')}
 const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.writing.title}\n${t.writing.subtitle}\n${t.writing.text}\n${L.book}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
 fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSource: ${s.url}\nContact: ${s.email}\n\n${full('de', de)}\n${full('en', en)}`);
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
-fs.writeFileSync(OUT + '/assets/favicon.svg', `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0b2545"/><text x="32" y="44" font-family="Georgia,serif" font-style="italic" font-size="34" text-anchor="middle" fill="#4c8df6">pp</text></svg>`);
 console.log('built');
