@@ -123,3 +123,9 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7vw,7rem);lin
 @media(max-width:900px){.top{inset-block-start:10px;padding:8px 12px 8px 16px}.ascii{opacity:.3}}
 .hero .kicker{position:relative;z-index:2}.ascii{z-index:0}
 .brand{display:inline-flex;align-items:center;line-height:0}.brand img{display:block;width:34px;height:34px}
+/* somnia */
+.somnia{background:var(--cream);color:var(--ink);padding:0 var(--pad) clamp(60px,8vw,120px)}
+.somnia-card{background:var(--ink);color:var(--cream);border-radius:clamp(20px,3vw,40px);padding:clamp(36px,6vw,96px);background-image:radial-gradient(90% 120% at 100% 0,rgba(76,141,246,.35),transparent 60%),linear-gradient(160deg,#0b2545,#10305a);border:1px solid rgba(76,141,246,.35)}
+.somnia .kicker{color:#9cc3ff}.somnia h2{font-size:clamp(3.5rem,11vw,10rem);line-height:.9}
+.somnia h2 .sub{display:block;font-family:var(--sans);font-size:clamp(1rem,1.6vw,1.5rem);letter-spacing:0;margin-top:1.2rem;font-weight:500;color:#4c8df6}
+.somnia .body{max-width:60ch;margin:2.2rem 0 2rem;font-size:clamp(1.05rem,1.5vw,1.35rem);line-height:1.45;color:rgba(239,234,226,.85)}
