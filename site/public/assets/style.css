@@ -122,3 +122,4 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7vw,7rem);lin
 @media(prefers-reduced-motion:reduce){.ascii{opacity:.3}}
 @media(max-width:900px){.top{inset-block-start:10px;padding:8px 12px 8px 16px}.ascii{opacity:.3}}
 .hero .kicker{position:relative;z-index:2}.ascii{z-index:0}
+.brand{display:inline-flex;align-items:center;line-height:0}.brand img{display:block;width:34px;height:34px}
