@@ -115,7 +115,6 @@ function page(lang) {
     <div class="glow" aria-hidden="true"></div>
     <canvas class="ascii" aria-hidden="true"></canvas>
     <figure class="hero-photo"><img src="${P}${s.photo}" alt="${esc(t.hero.photoAlt)}" width="900" height="900" fetchpriority="high"></figure>
-    <p class="mono kicker">${esc(t.location)} · ${esc(t.hero.kicker)}</p>
     <h1 id="h1"><span class="sr">${esc(t.hero.srPrefix)}</span>${t.hero.lines.map((l, i) => `<span class="line"><span class="line-in${i === 1 ? ' it' : ''}">${esc(l)}</span></span>`).join('')}</h1>
     <div class="hero-foot">
       <p class="lead">${esc(t.hero.sub)}</p>
