@@ -516,12 +516,6 @@
   ],
   "more": [
     {
-      "name": "Claude Tetris",
-      "url": "https://ct.philipp-paulik.de/",
-      "de": "Tetris im Split-Pane neben Claude Code: pausiert automatisch, wenn Claude fertig ist.",
-      "en": "Tetris in a split pane beside Claude Code: auto-pauses when Claude is done."
-    },
-    {
       "name": "autonnel",
       "url": "https://github.com/philppplik/autonnel",
       "de": "Open-Source-, KI-native Alternative zu ClickFunnels mit Checkout, Upsells und Ad-Attribution.",
