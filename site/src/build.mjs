@@ -171,6 +171,15 @@ function page(lang) {
     <a class="btn reveal" href="${esc(L.book)}" rel="noopener" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
   </section>
 
+  <section class="somnia" id="somnia" aria-labelledby="h-somnia">
+    <div class="somnia-card">
+      <p class="mono kicker reveal">${esc(t.somnia.kicker)}</p>
+      <h2 id="h-somnia" class="reveal">${esc(t.somnia.title)}<span class="sub">${esc(t.somnia.subtitle)}</span></h2>
+      <p class="reveal body">${esc(t.somnia.text)}</p>
+      <a class="btn reveal" href="${esc(L.somnia)}" rel="noopener" data-cursor="${esc(t.work.open)}">${esc(t.somnia.cta)} ${arrow}</a>
+    </div>
+  </section>
+
   <section class="faq" aria-labelledby="h-faq">
     <h2 id="h-faq" class="mono kicker">${esc(t.faqTitle)}</h2>
     ${faq}
