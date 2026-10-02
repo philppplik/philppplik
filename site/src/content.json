@@ -14,7 +14,8 @@
       "npm": "https://www.npmjs.com/~philppplik",
       "book": "https://paulikreisch.de",
       "hob": "https://hob.philipp-paulik.de",
-      "wikidata": "https://www.wikidata.org/wiki/Q137996883"
+      "wikidata": "https://www.wikidata.org/wiki/Q137996883",
+      "somnia": "https://somnia.philipp-paulik.de/"
     }
   },
   "i18n": {
@@ -192,7 +193,14 @@
         "Motion",
         "Open Source",
         "Systems Thinking"
-      ]
+      ],
+      "somnia": {
+        "kicker": "Neues Projekt · in Entwicklung",
+        "title": "Somnia",
+        "subtitle": "Design beyond code.",
+        "text": "Ein visuelles Web-Design-Studio, das deinen Quelltext respektiert: Elemente per Drag & Drop setzen, direkt im Canvas bearbeiten, und das HTML und CSS dahinter bleibt sauber und lesbar. Für Web und Desktop, mit hellem und dunklem Theme. Noch in Entwicklung.",
+        "cta": "Somnia ansehen"
+      }
     },
     "en": {
       "title": "Philipp Paulik - AI Pioneer & Strategist, Web Design, UI/UX",
@@ -368,7 +376,14 @@
         "Motion",
         "Open source",
         "Systems thinking"
-      ]
+      ],
+      "somnia": {
+        "kicker": "New project · in development",
+        "title": "Somnia",
+        "subtitle": "Design beyond code.",
+        "text": "A visual web design studio that respects your source code: drop elements in with drag and drop, edit right on the canvas, and the HTML and CSS behind it stay clean and readable. For web and desktop, with light and dark themes. Still in development.",
+        "cta": "Visit Somnia"
+      }
     }
   },
   "projects": [
@@ -450,7 +465,7 @@
       "name": "cust*m Tab",
       "year": "2026",
       "stack": "JavaScript · Chrome MV3",
-      "url": "https://philppplik.github.io/custm-tab/",
+      "url": "http://custmtab.philipp-paulik.de/",
       "repo": "https://github.com/philppplik/custm-tab",
       "color": "#6ea8ff",
       "lang": "JavaScript",
@@ -468,7 +483,7 @@
       "name": "pBlock",
       "year": "2026",
       "stack": "JavaScript",
-      "url": "https://github.com/philppplik/pBlock",
+      "url": "http://pblock.philipp-paulik.de/",
       "color": "#9d7bff",
       "lang": "JavaScript",
       "de": {
@@ -478,13 +493,15 @@
       "en": {
         "type": "Chrome ad blocker",
         "desc": "Blocks ads, trackers and social widgets with a three-tier filter system, element picker and cosmetic filters."
-      }
+      },
+      "repo": "https://github.com/philppplik/pBlock",
+      "live": true
     },
     {
       "name": "claude-tetris",
       "year": "2026",
       "stack": "JavaScript · npm",
-      "url": "https://github.com/philppplik/claude-tetris",
+      "url": "https://ct.philipp-paulik.de/",
       "npm": "https://www.npmjs.com/package/claude-tetris",
       "color": "#3dffb8",
       "lang": "JavaScript",
@@ -495,13 +512,15 @@
       "en": {
         "type": "Claude Code plugin",
         "desc": "Tetris in a split pane next to Claude Code. Auto-pauses the moment Claude is done and resumes on your next prompt."
-      }
+      },
+      "repo": "https://github.com/philppplik/claude-tetris",
+      "live": true
     },
     {
       "name": "plane",
       "year": "2026",
       "stack": "Rust · GUI, CLI, TUI",
-      "url": "https://github.com/philppplik/plane",
+      "url": "https://plane.philipp-paulik.de/",
       "color": "#ff6b6b",
       "lang": "Rust",
       "de": {
@@ -511,7 +530,9 @@
       "en": {
         "type": "PC cleaner for Windows",
         "desc": "Lean, local and fast, with no data transfer. As a GUI, CLI and TUI."
-      }
+      },
+      "repo": "https://github.com/philppplik/plane",
+      "live": true
     }
   ],
   "more": [
