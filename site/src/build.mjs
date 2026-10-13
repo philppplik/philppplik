@@ -40,10 +40,10 @@ function page(lang) {
             <h3 id="p${i}">${esc(p.name)}</h3>
             <p>${esc(p.desc)}</p>
             <p class="mono stack">${esc(p.stack)}</p>
-            <p class="links"><a href="${esc(p.url)}" rel="noopener" data-cursor="${esc(t.work.open)}">${p.live ? t.work.live : t.work.github} ${arrow}</a>${p.npm ? ` <a href="${esc(p.npm)}" rel="noopener">npm ${arrow}</a>` : ''}${p.repo ? ` <a href="${esc(p.repo)}" rel="noopener">Repo ${arrow}</a>` : ''}</p>
+            <p class="links"><a href="${esc(p.url)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${p.live ? t.work.live : t.work.github} ${arrow}</a>${p.npm ? ` <a href="${esc(p.npm)}" target="_blank" rel="noopener noreferrer">npm ${arrow}</a>` : ''}${p.repo ? ` <a href="${esc(p.repo)}" target="_blank" rel="noopener noreferrer">Repo ${arrow}</a>` : ''}</p>
           </div>
         </article>`).join('');
-  const more = c.more.map((m) => `<li class="reveal"><a href="${esc(m.url)}" rel="noopener"><strong>${esc(m.name)}</strong><span>${esc(m[lang])}</span><i aria-hidden="true">↗</i></a></li>`).join('');
+  const more = c.more.map((m) => `<li class="reveal"><a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(m.name)}</strong><span>${esc(m[lang])}</span><i aria-hidden="true">↗</i></a></li>`).join('');
   const disc = t.skills.items.map((d) => `
         <article class="disc reveal">
           <span class="mono">${d.n}</span>
@@ -167,7 +167,7 @@ function page(lang) {
     <p class="mono kicker reveal">${esc(t.writing.kicker)}</p>
     <h2 id="h-writing" class="reveal">${esc(t.writing.title)}<span class="sub">${esc(t.writing.subtitle)}</span></h2>
     <p class="reveal body">${esc(t.writing.text)}</p>
-    <a class="btn reveal" href="${esc(L.book)}" rel="noopener" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
+    <a class="btn reveal" href="${esc(L.book)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
   </section>
 
   <section class="somnia" id="somnia" aria-labelledby="h-somnia">
@@ -175,7 +175,7 @@ function page(lang) {
       <p class="mono kicker reveal">${esc(t.somnia.kicker)}</p>
       <h2 id="h-somnia" class="reveal">${esc(t.somnia.title)}<span class="sub">${esc(t.somnia.subtitle)}</span></h2>
       <p class="reveal body">${esc(t.somnia.text)}</p>
-      <a class="btn reveal" href="${esc(L.somnia)}" rel="noopener" data-cursor="${esc(t.work.open)}">${esc(t.somnia.cta)} ${arrow}</a>
+      <a class="btn reveal" href="${esc(L.somnia)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${esc(t.somnia.cta)} ${arrow}</a>
     </div>
   </section>
 
