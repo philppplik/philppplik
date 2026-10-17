@@ -191,7 +191,7 @@ function page(lang) {
     <ul class="social mono">${social}</ul>
   </section>
 </main>
-<footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${esc(t.foot.made)}</span><a href="#top">${esc(t.foot.up)}</a></footer>
+<footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${esc(t.foot.made)}</span><a href="${s.url}impressum/">Impressum</a><a href="#top">${esc(t.foot.up)}</a></footer>
 <script src="${P}assets/vendor/gsap.min.js"></script>
 <script src="${P}assets/vendor/ScrollTrigger.min.js"></script>
 <script src="${P}assets/vendor/lenis.min.js"></script>
@@ -203,7 +203,7 @@ function page(lang) {
 fs.writeFileSync(OUT + '/index.html', page('de'));
 fs.writeFileSync(OUT + '/en/index.html', page('en'));
 const alt = `<xhtml:link rel="alternate" hreflang="de" href="${URLS.de}"/><xhtml:link rel="alternate" hreflang="en" href="${URLS.en}"/><xhtml:link rel="alternate" hreflang="x-default" href="${URLS.de}"/>`;
-fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}</url>\n</urlset>\n`);
+fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}</url>\n  <url><loc>${s.url}impressum/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>\n</urlset>\n`);
 fs.writeFileSync(OUT + '/robots.txt', `User-agent: *\nAllow: /\n\n# AI crawlers explicitly welcome (GEO/AEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${s.url}sitemap.xml\n`);
 const en = c.i18n.en;
 const de = c.i18n.de;
@@ -237,4 +237,7 @@ ${c.more.map((m) => `- [${m.name}](${m.url}): ${m.en}`).join('\n')}
 const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.writing.title}\n${t.writing.subtitle}\n${t.writing.text}\n${L.book}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
 fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSource: ${s.url}\nContact: ${s.email}\n\n${full('de', de)}\n${full('en', en)}`);
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
+
+fs.mkdirSync(OUT + '/impressum', { recursive: true });
+fs.writeFileSync(OUT + '/impressum/index.html', `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b2545"><title>Impressum - ${esc(s.name)}</title><meta name="description" content="Impressum von ${esc(s.name)}."><link rel="canonical" href="${s.url}impressum/"><link rel="icon" href="${s.url}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="legal"><p class="mono kicker"><a href="${s.url}">← ${esc(s.name)}</a></p><h1>Impressum</h1><p class="mut">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p><h2>Anbieter</h2><p>${esc(s.name)}<br>Mozartstraße 1<br>53819 Neunkirchen-Seelscheid<br>Deutschland</p><h2>Kontakt</h2><p>E-Mail: <a href="mailto:${s.email}">${s.email}</a></p><h2>Urheberrecht</h2><p>Die vom Betreiber dieser Seite erstellten Inhalte und Werke unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.</p></main><footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><a href="${s.url}">Portfolio</a></footer></body></html>`);
 console.log('built');
