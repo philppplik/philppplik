@@ -132,3 +132,5 @@ h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.6rem,7vw,7rem);lin
 .somnia .body{max-width:60ch;margin:3rem 0 2rem;font-size:clamp(1.05rem,1.6vw,1.45rem);line-height:1.4;color:rgba(239,234,226,.88)}
 .somnia .btn{background:#4c8df6;color:#fff}.somnia .btn:hover{background:#9cc3ff;color:#0b2545}
 .faq{border-radius:clamp(24px,4vw,64px) clamp(24px,4vw,64px) 0 0;position:relative;z-index:2;padding-top:clamp(70px,9vw,130px)}
+
+.legal{max-width:640px;margin:0 auto;padding:12vh var(--pad) 8vh;line-height:1.6}.legal h1{font-size:clamp(2.2rem,6vw,3.6rem);margin:.4em 0 .2em}.legal h2{font-size:1.1rem;margin:2em 0 .4em}.legal a{color:inherit;text-underline-offset:3px}.legal .mut{color:var(--mut)}
