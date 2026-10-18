@@ -11,6 +11,7 @@ const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
 
+const imageVariant = (image, width) => image.replace(/\.jpg$/, `-${width}.jpg`);
 function page(lang) {
   const t = c.i18n[lang], P = lang === 'de' ? '' : '../', url = URLS[lang], other = lang === 'de' ? 'en' : 'de';
   const proj = (p) => ({ ...p, ...p[lang] });
@@ -20,9 +21,11 @@ function page(lang) {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'WebSite', '@id': s.url + '#website', url: s.url, name: s.name + ' Portfolio', inLanguage: ['de-DE', 'en'], publisher: { '@id': s.url + '#person' } },
-      { '@type': 'ProfilePage', '@id': url + '#webpage', url, name: t.title, description: t.description, inLanguage: lang === 'de' ? 'de-DE' : 'en', isPartOf: { '@id': s.url + '#website' }, about: { '@id': s.url + '#person' }, mainEntity: { '@id': s.url + '#person' }, primaryImageOfPage: { '@id': s.url + '#photo' }, dateModified: today, breadcrumb: { '@id': url + '#crumbs' } },
-      { '@type': 'ImageObject', '@id': s.url + '#photo', url: s.url + s.photo, contentUrl: s.url + s.photo, width: 900, height: 900, caption: t.about.photoAlt, creditText: s.name },
-      { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: { '@id': s.url + '#photo' }, email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, homeLocation: { '@type': 'Place', name: 'Bonn, Germany' }, address: { '@type': 'PostalAddress', addressLocality: 'Bonn', addressCountry: 'DE' }, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
+      { '@type': 'ProfilePage', '@id': url + '#webpage', url, name: t.title, description: t.description, inLanguage: lang === 'de' ? 'de-DE' : 'en', isPartOf: { '@id': s.url + '#website' }, about: { '@id': s.url + '#person' }, mainEntity: { '@id': s.url + '#person' }, primaryImageOfPage: { '@id': s.url + '#hero-photo' }, dateModified: today, breadcrumb: { '@id': url + '#crumbs' } },
+      { '@type': 'ImageObject', '@id': s.url + '#hero-photo', url: s.url + s.photo, contentUrl: s.url + s.photo, width: 900, height: 900, caption: t.hero.photoAlt, creditText: s.name, representativeOfPage: true },
+      { '@type': 'ImageObject', '@id': s.url + '#hero-photo-16x9', url: s.url + 'assets/og.jpg', contentUrl: s.url + 'assets/og.jpg', width: 1200, height: 630, caption: t.ogAlt, creditText: s.name },
+      { '@type': 'ImageObject', '@id': s.url + '#about-photo', url: s.url + s.aboutPhoto, contentUrl: s.url + s.aboutPhoto, width: 1254, height: 1254, caption: t.about.photoAlt, creditText: s.name },
+      { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: [{ '@id': s.url + '#hero-photo' }, { '@id': s.url + '#about-photo' }], email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
       { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
@@ -114,7 +117,7 @@ function page(lang) {
   <section class="hero" id="top" aria-labelledby="h1">
     <div class="glow" aria-hidden="true"></div>
     <canvas class="ascii" aria-hidden="true"></canvas>
-    <figure class="hero-photo"><img src="${P}${s.photo}" alt="${esc(t.hero.photoAlt)}" width="900" height="900" fetchpriority="high"></figure>
+    <figure class="hero-photo"><img src="${P}${s.photo}" srcset="${P}${imageVariant(s.photo, 400)} 400w, ${P}${imageVariant(s.photo, 800)} 800w, ${P}${s.photo} 900w" sizes="(max-width: 900px) 0px, (max-width: 1200px) 24vw, 380px" alt="${esc(t.hero.photoAlt)}" width="900" height="900" fetchpriority="high"></figure>
     <h1 id="h1"><span class="sr">${esc(t.hero.srPrefix)}</span>${t.hero.lines.map((l, i) => `<span class="line"><span class="line-in${i === 1 ? ' it' : ''}">${esc(l)}</span></span>`).join('')}</h1>
     <div class="hero-foot">
       <p class="lead">${esc(t.hero.sub)}</p>
@@ -147,7 +150,7 @@ function page(lang) {
   </section>
 
   <section class="about" id="about" aria-labelledby="h-about">
-    <figure class="about-photo reveal"><img src="${P}${s.photo}" alt="${esc(t.about.photoAlt)}" width="900" height="900" loading="lazy"></figure>
+    <figure class="about-photo reveal"><img src="${P}${s.aboutPhoto}" srcset="${P}${imageVariant(s.aboutPhoto, 400)} 400w, ${P}${imageVariant(s.aboutPhoto, 800)} 800w, ${P}${s.aboutPhoto} 1254w" sizes="(max-width: 900px) 100vw, 40vw" alt="${esc(t.about.photoAlt)}" width="1254" height="1254"></figure>
     <div class="about-text">
       <p class="mono kicker reveal">${esc(t.about.kicker)}</p>
       <h2 id="h-about" class="reveal">${t.about.title}</h2>
@@ -203,7 +206,9 @@ function page(lang) {
 fs.writeFileSync(OUT + '/index.html', page('de'));
 fs.writeFileSync(OUT + '/en/index.html', page('en'));
 const alt = `<xhtml:link rel="alternate" hreflang="de" href="${URLS.de}"/><xhtml:link rel="alternate" hreflang="en" href="${URLS.en}"/><xhtml:link rel="alternate" hreflang="x-default" href="${URLS.de}"/>`;
-fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}</url>\n  <url><loc>${s.url}impressum/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>\n</urlset>\n`);
+const imageEntry = (image, title) => `<image:image><image:loc>${s.url}${image}</image:loc><image:title>${esc(title)}</image:title><image:caption>${esc(title)}</image:caption></image:image>`;
+const images = (t) => imageEntry(s.photo, t.hero.photoAlt) + imageEntry(s.aboutPhoto, t.about.photoAlt) + imageEntry('assets/og.jpg', t.ogAlt);
+fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}${images(c.i18n.de)}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}${images(c.i18n.en)}</url>\n  <url><loc>${s.url}impressum/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>\n</urlset>\n`);
 fs.writeFileSync(OUT + '/robots.txt', `User-agent: *\nAllow: /\n\n# AI crawlers explicitly welcome (GEO/AEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${s.url}sitemap.xml\n`);
 const en = c.i18n.en;
 const de = c.i18n.de;
@@ -217,7 +222,7 @@ fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
 - [Portfolio (English)](${URLS.en}): same content in English
 - [Full text for LLMs](${s.url}llms-full.txt): complete content of this site as plain text
 
-## Profiles (verified, same person)
+## Photos\n- [Portrait on a sofa](${s.url}${s.photo}): ${c.i18n.en.hero.photoAlt}\n- [Portrait at a desk](${s.url}${s.aboutPhoto}): ${c.i18n.en.about.photoAlt}\n\n## Profiles (verified, same person)
 - [GitHub](${L.github}): code and open source
 - [X](${L.x})
 - [Instagram](${L.instagram})
