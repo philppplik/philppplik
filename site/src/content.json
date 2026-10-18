@@ -201,6 +201,31 @@
         "subtitle": "Design beyond code.",
         "text": "Ein visuelles Web-Design-Studio, das deinen Quelltext respektiert: Elemente per Drag & Drop setzen, direkt im Canvas bearbeiten, und das HTML und CSS dahinter bleibt sauber und lesbar. Für Web und Desktop, mit hellem und dunklem Theme. Noch in Entwicklung.",
         "cta": "Somnia ansehen"
+      },
+      "sites": {
+        "kicker": "Eigene Seiten",
+        "title": "Seiten, die ich betreibe",
+        "note": "Ich betreibe und verantworte diese Seiten. Redaktionelle Inhalte entstehen mit KI-Unterstützung und werden von mir geprüft und freigegeben.",
+        "items": [
+          {
+            "name": "KI Fachblatt",
+            "url": "https://kifachblatt.de",
+            "logo": "assets/sites-kifachblatt.svg",
+            "desc": "Das deutsche Fachmagazin für künstliche Intelligenz."
+          },
+          {
+            "name": "Intelligenz Welt",
+            "url": "https://intelligenz-welt.de",
+            "logo": "assets/sites-intelligenz-welt.svg",
+            "desc": "KI- und LLM-News auf Deutsch, ein Live-Radar trendender Open-Source-Modelle und Analysen zu Agenten, Modellen und Strategie."
+          },
+          {
+            "name": "Finanz Adjust",
+            "url": "https://finanz-adjust.de",
+            "logo": "assets/sites-finanz-adjust.svg",
+            "desc": "Aktuelle Kurse zu DAX, S&P 500, Nasdaq, Aktien, Gold, Bitcoin und Devisen plus Finanznachrichten und PDF-Tagesberichte."
+          }
+        ]
       }
     },
     "en": {
@@ -384,6 +409,31 @@
         "subtitle": "Design beyond code.",
         "text": "A visual web design studio that respects your source code: drop elements in with drag and drop, edit right on the canvas, and the HTML and CSS behind it stay clean and readable. For web and desktop, with light and dark themes. Still in development.",
         "cta": "Visit Somnia"
+      },
+      "sites": {
+        "kicker": "My sites",
+        "title": "Sites I run",
+        "note": "I run and take responsibility for these sites. Editorial content is created with AI assistance and reviewed and approved by me.",
+        "items": [
+          {
+            "name": "KI Fachblatt",
+            "url": "https://kifachblatt.de",
+            "logo": "assets/sites-kifachblatt.svg",
+            "desc": "The German trade magazine for artificial intelligence."
+          },
+          {
+            "name": "Intelligenz Welt",
+            "url": "https://intelligenz-welt.de",
+            "logo": "assets/sites-intelligenz-welt.svg",
+            "desc": "German-language AI and LLM news, a live radar of trending open-source models, and analysis of agents, models and strategy."
+          },
+          {
+            "name": "Finanz Adjust",
+            "url": "https://finanz-adjust.de",
+            "logo": "assets/sites-finanz-adjust.svg",
+            "desc": "Current quotes for DAX, S&P 500, Nasdaq, stocks, gold, bitcoin and currencies plus financial news and daily PDF reports."
+          }
+        ]
       }
     }
   },
