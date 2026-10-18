@@ -4,7 +4,7 @@
     "name": "Philipp Paulik",
     "handle": "philppplik",
     "email": "philipp.l.paulik@gmail.com",
-    "photo": "assets/philipp-paulik.jpg",
+    "photo": "assets/philipp-paulik-portrait-sofa.jpg",
     "links": {
       "github": "https://github.com/philppplik",
       "x": "https://x.com/philppplik",
@@ -16,7 +16,8 @@
       "hob": "https://hob.philipp-paulik.de",
       "wikidata": "https://www.wikidata.org/wiki/Q137996883",
       "somnia": "https://somnia.philipp-paulik.de/"
-    }
+    },
+    "aboutPhoto": "assets/philipp-paulik-portrait-black-sweater-at-desk.jpg"
   },
   "i18n": {
     "de": {
@@ -47,7 +48,7 @@
         ],
         "srPrefix": "Philipp Paulik, AI Pioneer: ",
         "sub": "Ich entwickle KI-Strategien und baue die Tools dazu. Als Webdesigner und UI/UX-Designer sorge ich dafür, dass sie sich gut anfühlen.",
-        "photoAlt": "Porträt von Philipp Paulik, lächelnd auf einem Sofa vor einer Pflanze",
+        "photoAlt": "Philipp Paulik lächelt auf einem Sofa vor einer Pflanze",
         "scroll": "Scroll"
       },
       "manifestoLabel": "Haltung",
@@ -89,7 +90,7 @@
             "Bonn, Deutschland"
           ]
         ],
-        "photoAlt": "Philipp Paulik lächelt in die Kamera, weißes T-Shirt, Jeans, Sofa mit Zimmerpflanze"
+        "photoAlt": "Philipp Paulik im schwarzen Pullover an seinem Schreibtisch, mit Büchern und Pflanzen im Hintergrund"
       },
       "skills": {
         "kicker": "Wie ich arbeite",
@@ -230,7 +231,7 @@
         ],
         "srPrefix": "Philipp Paulik, AI Pioneer: ",
         "sub": "I develop AI strategies and build the tools to match. As a web and UI/UX designer, I make sure they feel right.",
-        "photoAlt": "Portrait of Philipp Paulik, smiling on a sofa in front of a plant",
+        "photoAlt": "Philipp Paulik smiling on a sofa in front of a plant",
         "scroll": "Scroll"
       },
       "manifestoLabel": "Approach",
@@ -272,7 +273,7 @@
             "Bonn, Germany"
           ]
         ],
-        "photoAlt": "Philipp Paulik smiling at the camera, white t-shirt and jeans, sofa with a houseplant"
+        "photoAlt": "Philipp Paulik in a black sweater at his desk, with books and plants in the background"
       },
       "skills": {
         "kicker": "How I work",
