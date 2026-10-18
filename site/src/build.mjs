@@ -27,6 +27,7 @@ function page(lang) {
       { '@type': 'ImageObject', '@id': s.url + '#about-photo', url: s.url + s.aboutPhoto, contentUrl: s.url + s.aboutPhoto, width: 1254, height: 1254, caption: t.about.photoAlt, creditText: s.name },
       { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: [{ '@id': s.url + '#hero-photo' }, { '@id': s.url + '#about-photo' }], email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
+      { '@type': 'ItemList', '@id': s.url + '#sites', name: lang === 'de' ? 'Seiten von Philipp Paulik' : 'Sites by Philipp Paulik', itemListElement: t.sites.items.map((x, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'WebSite', name: x.name, url: x.url, description: x.desc, inLanguage: 'de', publisher: { '@id': s.url + '#person' } } })) },
       { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
       { '@type': 'BreadcrumbList', '@id': url + '#crumbs', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Portfolio', item: url }] }
@@ -47,6 +48,13 @@ function page(lang) {
           </div>
         </article>`).join('');
   const more = c.more.map((m) => `<li class="reveal"><a href="${esc(m.url)}" target="_blank" rel="noopener noreferrer"><strong>${esc(m.name)}</strong><span>${esc(m[lang])}</span><i aria-hidden="true">↗</i></a></li>`).join('');
+  const siteCards = t.sites.items.map((x) => `
+        <a class="site-card reveal" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">
+          <span class="site-logo" aria-hidden="true"><img src="${P}${esc(x.logo)}" alt="" width="48" height="48" loading="lazy"></span>
+          <strong>${esc(x.name)}</strong>
+          <span class="site-desc">${esc(x.desc)}</span>
+          <span class="mono site-url">${esc(x.url.replace('https://', ''))} <i aria-hidden="true">↗</i></span>
+        </a>`).join('');
   const disc = t.skills.items.map((d) => `
         <article class="disc reveal">
           <span class="mono">${d.n}</span>
@@ -147,6 +155,14 @@ function page(lang) {
   <section class="more" aria-labelledby="h-more">
     <h2 id="h-more" class="mono kicker">${esc(t.more.title)}</h2>
     <ul>${more}</ul>
+  </section>
+
+  <section class="sites" id="seiten" aria-labelledby="h-sites">
+    <p class="mono kicker reveal">${esc(t.sites.kicker)}</p>
+    <h2 id="h-sites" class="reveal">${esc(t.sites.title)}</h2>
+    <div class="site-grid">${siteCards}
+    </div>
+    <p class="sites-note reveal">${esc(t.sites.note)}</p>
   </section>
 
   <section class="about" id="about" aria-labelledby="h-about">
