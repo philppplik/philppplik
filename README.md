@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-Hi ich bin Philipp!<br>Mediengestalter für Crossmediale Gestaltung.<br />
-KI-Stratege & Webdesigner, der die Schnittstelle von menschlicher Erfahrung und künstlicher Intelligenz navigiert. Ich entwerfe und baue intelligente, nutzerzentrierte digitale Produkte.<br />
+Hi ich bin Philipp!<br><br>Mediengestalter für Crossmediale Gestaltung, KI-Stratege, Autor<br /><br>
+KI-Stratege & Webdesigner, der die Schnittstelle von menschlicher Erfahrung und künstlicher Intelligenz navigiert. Ich entwerfe und baue intelligente, nutzerzentrierte digitale Produkte.<br /><br>
 Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst.
 </p>
 
