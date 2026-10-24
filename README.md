@@ -6,7 +6,7 @@
 Hi ich bin Philipp!<br>Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.<br />
 Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von <b>UI/UX-Design</b>, <b>Applied AI</b> und <b>Code</b> —
 methodisch fundiert durch Systems Thinking und First Principles.<br />
-Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst. 🛠️
+Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst.
 </p>
 
 ---
