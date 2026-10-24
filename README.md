@@ -1,20 +1,9 @@
-<h1 align="center">Hey, ich bin Philipp ☕</h1>
-
-<p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=18&pause=1000&color=5865F2&center=true&vCenter=true&width=650&lines=I+design+systems%2C+shape+AI%2C+write+code.;Mediengestalter+%7C+UX%2FUI+%7C+AI+Engineer;From+First+Principles+to+Final+Product.;Building+tools+that+do+one+thing+well." alt="Typing SVG" />
-</p>
-
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=philipp-paulik&style=for-the-badge&color=5865F2" alt="Profile views" />
 </p>
 
 <p align="center">
-  <a href="#stack--tools">Stack</a> •
-  <a href="#eigene-tools--side-projects">Tools</a>
-</p>
-
-<p align="center">
-Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.<br />
+Hi ich bin Philipp!<br>Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.<br />
 Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von <b>UI/UX-Design</b>, <b>Applied AI</b> und <b>Code</b> —
 methodisch fundiert durch Systems Thinking und First Principles.<br />
 Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst. 🛠️
@@ -99,27 +88,3 @@ Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst. 🛠️
 ![Whisper](https://img.shields.io/badge/Whisper-412991?style=for-the-badge&logo=openai&logoColor=white)
 
 </details>
-
----
-
-## Eigene Tools & Side Projects
-
-Tools, die ich aus eigenem Bedarf gebaut habe — vom Ad-Blocker bis zur eigenen Suchmaschine.
-
-| Tool | Was es macht | Stack | Link |
-|---|---|---|---|
-| **ZWEP** | Self-hosted, kuratierte Suchmaschine — Crawler + Extractor + Meilisearch + Fastify API + OpenAI-styled Web-UI & Admin-Konsole | TypeScript | [Repo](https://github.com/philppplik/zwep) |
-| **pBlock** | Chrome Ad-Blocker mit 3-stufigem Filter-System, Element-Picker & Cosmetik-Filtern | JavaScript | [Repo](https://github.com/philppplik/pBlock) |
-| **cust*m Tab** | Privacy-first New-Tab-Dashboard (Chrome MV3), hybrid-ready für Firefox/Brave/Edge | JavaScript | [Repo](https://github.com/philppplik/custm-tab) |
-| **true-code** | Agentic Coding Harness, der zeigt, was der Agent getan hat — und was es gekostet hat. Windows-first, model-neutral | Rust (ratatui TUI) | [Repo](https://github.com/philppplik/true-code) |
-| **plane** | Schlanker PC-Cleaner für Windows — lokal, schnell, ohne Datenübertragung. Mit GUI, CLI und TUI | Rust | [Repo](https://github.com/philppplik/plane) |
-| **claude-tetris** | Tetris im Split-Pane neben Claude Code — pausiert automatisch, wenn Claude fertig ist, läuft beim nächsten Prompt weiter | JavaScript | [Repo](https://github.com/philppplik/claude-tetris) |
-
-<p align="center">
-  <a href="https://github.com/philppplik/zwep"><img src="https://img.shields.io/badge/ZWEP-Search%20Engine-1a1a2e?style=for-the-badge&logo=algolia&logoColor=white" alt="ZWEP" /></a>
-  <a href="https://github.com/philppplik/pBlock"><img src="https://img.shields.io/badge/pBlock-Ad%20Blocker-FF6B35?style=for-the-badge&logo=shieldsio&logoColor=white" alt="pBlock" /></a>
-  <a href="https://github.com/philppplik/custm-tab"><img src="https://img.shields.io/badge/cust*m%20Tab-New%20Tab-5865F2?style=for-the-badge&logo=googlechrome&logoColor=white" alt="custm-tab" /></a>
-  <a href="https://github.com/philppplik/true-code"><img src="https://img.shields.io/badge/true--code-Agentic%20CLI-CE422B?style=for-the-badge&logo=rust&logoColor=white" alt="true-code" /></a>
-  <a href="https://github.com/philppplik/plane"><img src="https://img.shields.io/badge/plane-PC%20Cleaner-CE422B?style=for-the-badge&logo=rust&logoColor=white" alt="plane" /></a>
-  <a href="https://github.com/philppplik/claude-tetris"><img src="https://img.shields.io/badge/claude--tetris-Game%20%26%20Claude-CC785C?style=for-the-badge&logo=anthropic&logoColor=white" alt="claude-tetris" /></a>
-</p>
