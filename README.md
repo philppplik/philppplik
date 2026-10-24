@@ -3,9 +3,8 @@
 </p>
 
 <p align="center">
-Hi ich bin Philipp!<br>Mediengestalter Digital & Print in Ausbildung — Crossmediale Gestaltung.<br />
-Ich entwickle strukturierte digitale Konzepte an der Schnittstelle von <b>UI/UX-Design</b>, <b>Applied AI</b> und <b>Code</b> —
-methodisch fundiert durch Systems Thinking und First Principles.<br />
+Hi ich bin Philipp!<br>Mediengestalter für Crossmediale Gestaltung.<br />
+KI-Stratege & Webdesigner, der die Schnittstelle von menschlicher Erfahrung und künstlicher Intelligenz navigiert. Ich entwerfe und baue intelligente, nutzerzentrierte digitale Produkte.<br />
 Wenn ein Tool fehlt, das es geben sollte, baue ich es einfach selbst.
 </p>
 
