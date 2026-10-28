@@ -1,0 +1,68 @@
+{
+  "version": 2,
+  "consentRevision": "2026-11-ga4-rich-1",
+  "analytics": {
+    "enabled": true,
+    "provider": "ga4",
+    "measurementId": "G-6P66K7EQYE",
+    "activationApproved": true,
+    "privacyReviewed": true,
+    "eventRetentionMonths": 14,
+    "cookieLifetimeDays": 180,
+    "resetRetentionOnActivity": false,
+    "attribution": "cleaned",
+    "excludePaths": [
+      "^/somnia(/|$)"
+    ],
+    "contentGroups": {
+      "^/$": "startseite",
+      "^/en/$": "startseite-en",
+      "^/en/privacy/$": "rechtliches-en",
+      "^/en/": "startseite-en",
+      "^/(datenschutz|impressum)/": "rechtliches",
+      ".*": "sonstiges"
+    },
+    "downloadAllowlist": [],
+    "outboundAllowlist": [
+      "^github\\.com$",
+      "^x\\.com$",
+      "^instagram\\.com$",
+      "^youtube\\.com$",
+      "^de\\.linkedin\\.com$",
+      "^npmjs\\.com$",
+      "^paulikreisch\\.de$",
+      "^wikidata\\.org$",
+      "^hob\\.philipp-paulik\\.de$",
+      "^ct\\.philipp-paulik\\.de$",
+      "^custmtab\\.philipp-paulik\\.de$",
+      "^flower\\.philipp-paulik\\.de$",
+      "^pblock\\.philipp-paulik\\.de$",
+      "^plane\\.philipp-paulik\\.de$",
+      "^zwep\\.philipp-paulik\\.de$",
+      "^kifachblatt\\.de$",
+      "^intelligenz-welt\\.de$",
+      "^finanz-adjust\\.de$"
+    ],
+    "toolUsageAllowlist": [],
+    "campaignValues": {
+      "source": [
+        "newsletter",
+        "rss",
+        "x",
+        "linkedin"
+      ],
+      "medium": [
+        "email",
+        "social"
+      ],
+      "campaign": []
+    }
+  },
+  "advertising": {
+    "enabled": false
+  },
+  "metrics": {
+    "enabled": false
+  },
+  "spots": []
+}

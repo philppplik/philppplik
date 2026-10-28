@@ -1,0 +1,15 @@
+/* pp consent: house style, dark palette, no remote assets. */
+.pp-consent{position:fixed;inset:auto 24px 24px auto;width:min(560px,calc(100vw - 48px));max-height:calc(100dvh - 48px);overflow-y:auto;border:1px solid var(--line);border-radius:18px;padding:26px;background:var(--bg);color:var(--fg);box-shadow:0 12px 70px rgba(0,0,0,.45);z-index:99;font-size:14px;font-family:var(--sans)}
+.pp-consent[hidden]{display:none}.pp-consent h2{font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.2;margin:0 0 12px}.pp-consent p{margin:10px 0;color:var(--mut)}.pp-consent a{color:var(--acc);text-decoration:underline}
+.pp-consent fieldset{padding:0;margin:16px 0;border:0}.pp-consent legend{font-weight:700;margin-bottom:8px;color:var(--fg)}
+.pp-consent label{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-top:1px solid var(--line);color:var(--fg)}.pp-consent label span{flex:1}.pp-consent label small{display:block;font-size:13px;color:var(--mut);margin-top:3px}
+.pp-consent input{width:22px;height:22px;flex:none;accent-color:var(--acc)}
+.pp-consent-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pp-consent-actions button:last-child{grid-column:1/-1}
+.pp-consent button{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 16px;border:1px solid var(--acc);border-radius:8px;font:600 14px/1.4 var(--sans);background:transparent;color:var(--acc);cursor:pointer}
+.pp-consent button:hover{background:var(--line)}
+.pp-consent .pp-muted{color:var(--mut);font-size:12px}
+.pp-consent :focus-visible,.pp-consent-open:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.pp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.pp-consent-open{border:0;background:none;color:inherit;padding:0;min-height:0;font:inherit;text-align:left;text-decoration:none;cursor:pointer}
+.pp-consent-open:hover{color:var(--lime);text-decoration:underline}
+@media(max-width:650px){.pp-consent{inset:auto 0 0;width:100%;max-height:90dvh;border-radius:22px 22px 0 0;padding:24px 20px calc(20px + env(safe-area-inset-bottom));border-bottom:0}.pp-consent:before{content:'';display:block;width:38px;height:4px;border-radius:2px;background:var(--line);margin:-10px auto 18px}.pp-consent-actions{grid-template-columns:1fr}.pp-consent-actions button:last-child{grid-column:auto}}

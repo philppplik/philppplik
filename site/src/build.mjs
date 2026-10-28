@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 const OUT = process.argv[2] || 'out';
 const c = JSON.parse(fs.readFileSync(new URL('./content.json', import.meta.url), 'utf8'));
+const mon = JSON.parse(fs.readFileSync(new URL('./monetization.json', import.meta.url), 'utf8'));
 const s = c.site, L = s.links;
 const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const today = new Date().toISOString().slice(0, 10);
@@ -10,8 +11,63 @@ const URLS = { de: s.url, en: s.url + 'en/' };
 const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book, L.hob, L.wikidata];
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
+fs.cpSync(new URL('./monetization', import.meta.url), OUT + '/assets/monetization', { recursive: true });
 
 const imageVariant = (image, width) => image.replace(/\.jpg$/, `-${width}.jpg`);
+
+/* Consent-Panel + Analytics-Einbindung (pp). Texte DE/EN, keine Fremd-Assets. */
+const PP = {
+  de: {
+    h: 'Deine Privatsphäre.',
+    intro: 'Du entscheidest, ob Statistik geladen wird. Ohne deine Zustimmung bleibt sie aus.',
+    legend: 'Wofür dürfen Daten genutzt werden?',
+    nec: 'Notwendig', necSub: 'Seite und Datenschutzauswahl. Kein Tracking.',
+    stat: 'Statistik', statSub: 'Google Analytics 4 (Google Ireland / Google LLC): Seitenaufrufe, Lesetiefe und Herkunft als Domain, Cookies bis 180 Tage; Datenübermittlung in die USA möglich. Nur mit Zustimmung.',
+    ads: 'Werbung', adsSub: 'Derzeit nicht im Einsatz.',
+    reject: 'Alle ablehnen', all: 'Alle verfügbaren akzeptieren', save: 'Auswahl speichern',
+    links: '<a href="/datenschutz/">Datenschutz</a> · <a href="/impressum/">Impressum</a>',
+    note: 'Ohne Auswahl bleibt die Statistik aus. Jederzeit im Fußbereich änderbar.',
+    footLine: 'Statistik nur mit deiner Einwilligung. Details im <a href="/datenschutz/">Datenschutz</a>.',
+    settings: 'Datenschutzeinstellungen', privacy: 'Datenschutz', privacyHref: '/datenschutz/'
+  },
+  en: {
+    h: 'Your privacy.',
+    intro: 'You decide whether analytics is loaded. Without your consent it stays off.',
+    legend: 'What may data be used for?',
+    nec: 'Necessary', necSub: 'Site and privacy choice. No tracking.',
+    stat: 'Statistics', statSub: 'Google Analytics 4 (Google Ireland / Google LLC): page views, reading depth and origin as domain, cookies up to 180 days; transfer to the USA possible. Only with consent.',
+    ads: 'Advertising', adsSub: 'Currently not in use.',
+    reject: 'Reject all', all: 'Accept all available', save: 'Save selection',
+    links: '<a href="/en/privacy/">Privacy</a> · <a href="/impressum/">Imprint</a>',
+    note: 'Without a choice, analytics stays off. Adjustable anytime in the footer.',
+    footLine: 'Analytics only with your consent. Details in the <a href="/en/privacy/">privacy policy</a>.',
+    settings: 'Privacy settings', privacy: 'Privacy', privacyHref: '/en/privacy/'
+  }
+};
+const consentPanel = (lang) => { const x = PP[lang]; return `
+<aside class="pp-consent" id="pp-consent" role="dialog" aria-modal="true" aria-labelledby="pp-consent-h" hidden>
+  <h2 id="pp-consent-h">${x.h}</h2>
+  <p>${x.intro}</p>
+  <fieldset>
+    <legend>${x.legend}</legend>
+    <label><input type="checkbox" checked disabled><span>${x.nec}<small>${x.necSub}</small></span></label>
+    <label><input type="checkbox" id="pp-statistics"><span>${x.stat}<small>${x.statSub}</small></span></label>
+    <label><input type="checkbox" id="pp-advertising" disabled><span>${x.ads}<small>${x.adsSub}</small></span></label>
+  </fieldset>
+  <p class="pp-muted" id="pp-consent-status" role="status"></p>
+  <div class="pp-consent-actions">
+    <button type="button" data-consent="reject">${x.reject}</button>
+    <button type="button" data-consent="save">${x.save}</button>
+    <button type="button" data-consent="all">${x.all}</button>
+  </div>
+  <p class="pp-muted">${x.links}</p>
+  <p class="pp-muted">${x.note}</p>
+</aside>`; };
+const consentHead = (P) => `<link rel="stylesheet" href="${P}assets/monetization/consent.css">`;
+const consentScripts = (P, lang) => `
+<script type="application/json" id="pp-monetization-config">${JSON.stringify(mon)}</script>
+${consentPanel(lang)}
+<script src="${P}assets/monetization/consent.js" defer></script>`;
 function page(lang) {
   const t = c.i18n[lang], P = lang === 'de' ? '' : '../', url = URLS[lang], other = lang === 'de' ? 'en' : 'de';
   const proj = (p) => ({ ...p, ...p[lang] });
@@ -111,6 +167,7 @@ function page(lang) {
 <link rel="preload" href="${P}assets/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="${P}assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${P}assets/style.css">
+${consentHead(P)}
 <script type="application/ld+json">${JSON.stringify(jsonld)}</script>
 </head>
 <body>
@@ -210,7 +267,8 @@ function page(lang) {
     <ul class="social mono">${social}</ul>
   </section>
 </main>
-<footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${esc(t.foot.made)}</span><a href="${s.url}impressum/">Impressum</a><a href="#top">${esc(t.foot.up)}</a></footer>
+<footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${PP[lang].footLine}</span><a href="${PP[lang].privacyHref}">${PP[lang].privacy}</a><a href="${s.url}impressum/">Impressum</a><button type="button" class="pp-consent-open" data-pp-consent-open>${PP[lang].settings}</button><a href="#top">${esc(t.foot.up)}</a></footer>
+${consentScripts(P, lang)}
 <script src="${P}assets/vendor/gsap.min.js"></script>
 <script src="${P}assets/vendor/ScrollTrigger.min.js"></script>
 <script src="${P}assets/vendor/lenis.min.js"></script>
@@ -224,7 +282,9 @@ fs.writeFileSync(OUT + '/en/index.html', page('en'));
 const alt = `<xhtml:link rel="alternate" hreflang="de" href="${URLS.de}"/><xhtml:link rel="alternate" hreflang="en" href="${URLS.en}"/><xhtml:link rel="alternate" hreflang="x-default" href="${URLS.de}"/>`;
 const imageEntry = (image, title) => `<image:image><image:loc>${s.url}${image}</image:loc><image:title>${esc(title)}</image:title><image:caption>${esc(title)}</image:caption></image:image>`;
 const images = (t) => imageEntry(s.photo, t.hero.photoAlt) + imageEntry(s.aboutPhoto, t.about.photoAlt) + imageEntry('assets/og.jpg', t.ogAlt);
-fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}${images(c.i18n.de)}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}${images(c.i18n.en)}</url>\n  <url><loc>${s.url}impressum/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>\n</urlset>\n`);
+fs.writeFileSync(OUT + '/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n  <url><loc>${URLS.de}</loc><lastmod>${today}</lastmod><priority>1.0</priority>${alt}${images(c.i18n.de)}</url>\n  <url><loc>${URLS.en}</loc><lastmod>${today}</lastmod><priority>0.9</priority>${alt}${images(c.i18n.en)}</url>\n  <url><loc>${s.url}impressum/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>
+  <url><loc>${s.url}datenschutz/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>
+  <url><loc>${s.url}en/privacy/</loc><lastmod>${today}</lastmod><priority>0.3</priority></url>\n</urlset>\n`);
 fs.writeFileSync(OUT + '/robots.txt', `User-agent: *\nAllow: /\n\n# AI crawlers explicitly welcome (GEO/AEO)\nUser-agent: GPTBot\nAllow: /\nUser-agent: ClaudeBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${s.url}sitemap.xml\n`);
 const en = c.i18n.en;
 const de = c.i18n.de;
@@ -260,5 +320,14 @@ fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSou
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
 
 fs.mkdirSync(OUT + '/impressum', { recursive: true });
-fs.writeFileSync(OUT + '/impressum/index.html', `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b2545"><title>Impressum - ${esc(s.name)}</title><meta name="description" content="Impressum von ${esc(s.name)}."><link rel="canonical" href="${s.url}impressum/"><link rel="icon" href="${s.url}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="legal"><p class="mono kicker"><a href="${s.url}">← ${esc(s.name)}</a></p><h1>Impressum</h1><p class="mut">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p><h2>Anbieter</h2><p>${esc(s.name)}<br>Mozartstraße 1<br>53819 Neunkirchen-Seelscheid<br>Deutschland</p><h2>Kontakt</h2><p>E-Mail: <a href="mailto:${s.email}">${s.email}</a></p><h2>Urheberrecht</h2><p>Die vom Betreiber dieser Seite erstellten Inhalte und Werke unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.</p></main><footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><a href="${s.url}">Portfolio</a></footer></body></html>`);
+fs.writeFileSync(OUT + '/impressum/index.html', `<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b2545"><title>Impressum - ${esc(s.name)}</title><meta name="description" content="Impressum von ${esc(s.name)}."><link rel="canonical" href="${s.url}impressum/"><link rel="icon" href="${s.url}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${s.url}assets/style.css"><link rel="stylesheet" href="${s.url}assets/monetization/consent.css"></head><body><main class="legal"><p class="mono kicker"><a href="${s.url}">← ${esc(s.name)}</a></p><h1>Impressum</h1><p class="mut">Angaben gemäß § 5 Digitale-Dienste-Gesetz (DDG)</p><h2>Anbieter</h2><p>${esc(s.name)}<br>Mozartstraße 1<br>53819 Neunkirchen-Seelscheid<br>Deutschland</p><h2>Kontakt</h2><p>E-Mail: <a href="mailto:${s.email}">${s.email}</a></p><h2>Urheberrecht</h2><p>Die vom Betreiber dieser Seite erstellten Inhalte und Werke unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet.</p></main><footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${PP.de.footLine}</span><a href="/datenschutz/">Datenschutz</a><a href="${s.url}">Portfolio</a><button type="button" class="pp-consent-open" data-pp-consent-open>${PP.de.settings}</button></footer>${consentScripts(s.url, 'de')}</body></html>`);
+
+/* Datenschutz (DE) + Privacy (EN) */
+const legalPage = (lang, title, canonical, body) => `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b2545"><title>${esc(title)} - ${esc(s.name)}</title><meta name="description" content="${esc(title)} - ${esc(s.name)}."><link rel="canonical" href="${canonical}"><link rel="icon" href="${s.url}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${s.url}assets/style.css"><link rel="stylesheet" href="${s.url}assets/monetization/consent.css"></head><body><main class="legal"><p class="mono kicker"><a href="${lang === 'de' ? s.url : s.url + 'en/'}">← ${esc(s.name)}</a></p>${body}</main><footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${PP[lang].footLine}</span><a href="${s.url}impressum/">Impressum</a><a href="${s.url}">${lang === 'de' ? 'Portfolio' : 'Portfolio'}</a><button type="button" class="pp-consent-open" data-pp-consent-open>${PP[lang].settings}</button></footer>${consentScripts(s.url, lang)}</body></html>`;
+const dsBody = `<h1>Datenschutz</h1><h2>Verantwortlicher</h2><p>Philipp Paulik (Kontakt wie im <a href="/impressum/">Impressum</a>).</p><h2>Statistik mit Einwilligung</h2><p>Diese Website lädt ohne deine Einwilligung keinerlei Analyse- oder Fremdcode. Mit deiner Einwilligung &bdquo;Statistik&ldquo; nutzen wir Google Analytics 4 (Google Ireland Limited), um zu verstehen, welche Seiten und Projekte besucht werden. Gemessen werden Seitenaufrufe, Lesetiefe, Klicks auf festgelegte externe Links (nur die Ziel-Domain), die Herkunft als Domain sowie vorher festgelegte Kampagnenkennungen. Nicht erfasst werden: Eingaben, vollständige Adressen, Werbeprofile, seitenübergreifende Wiedererkennung. Standort nur als Land, Gerät nur als Kategorie; Speicherung der Ereignisse 14 Monate. Die Statistik-Cookies gelten nur für philipp-paulik.de, nicht für Unterprojekte wie hob.philipp-paulik.de. Die Route /somnia/ ist von jeglicher Messung ausgenommen.</p><h2>Widerruf</h2><p>Widerruf jederzeit über die Datenschutzeinstellungen im Fußbereich; die Cookies werden gelöscht und die Messung stoppt.</p><h2>Rechtsgrundlage und Empfänger</h2><p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG. Empfänger: Google; mögliche Übermittlung in die USA (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies und lokale Speicherung</h2><p>pp_consent_v1 (Cookie, 180 Tage) und pp-consent-v1 (lokaler Speicher): deine Datenschutzauswahl. _ga und _ga_&lt;ID&gt; (nur philipp-paulik.de, bis 180 Tage, nur nach Einwilligung): Statistik.</p>`;
+const pvBody = `<h1>Privacy policy</h1><h2>Controller</h2><p>Philipp Paulik (contact see <a href="/impressum/">imprint</a>).</p><h2>Analytics with consent</h2><p>Without your consent this site loads no analytics or third-party code. With your &ldquo;Statistics&rdquo; consent we use Google Analytics 4 (Google Ireland Limited) to see which pages and projects are visited. Measured: page views, reading depth, clicks on allowlisted external links (target domain only), origin as domain, and pre-defined campaign identifiers. Not collected: any input, full URLs, advertising profiles, cross-site recognition. Location limited to country, device to category; events are kept for 14 months. Analytics cookies apply to philipp-paulik.de only, not to sub-projects such as hob.philipp-paulik.de. The /somnia/ path is excluded from all measurement.</p><h2>Withdrawal</h2><p>Withdraw anytime via the privacy settings in the footer; cookies are deleted and measurement stops.</p><h2>Legal basis and recipient</h2><p>Legal basis: Art. 6(1)(a) GDPR, § 25(1) TDDDG. Recipient: Google; transfer to the USA possible (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies and local storage</h2><p>pp_consent_v1 (cookie, 180 days) and pp-consent-v1 (local storage): your privacy choice. _ga and _ga_&lt;ID&gt; (philipp-paulik.de only, up to 180 days, only after consent): analytics.</p>`;
+fs.mkdirSync(OUT + '/datenschutz', { recursive: true });
+fs.writeFileSync(OUT + '/datenschutz/index.html', legalPage('de', 'Datenschutz', s.url + 'datenschutz/', dsBody));
+fs.mkdirSync(OUT + '/en/privacy', { recursive: true });
+fs.writeFileSync(OUT + '/en/privacy/index.html', legalPage('en', 'Privacy policy', s.url + 'en/privacy/', pvBody));
 console.log('built');
