@@ -100,7 +100,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       if(modern && !consoleRoute && role==='analytics' && analytics) return analytics(req);
       if(modern && !u.pathname.startsWith('/api/') && ['blog','lp','ads','news'].includes(role) && content) return content(req,role);
       if(modern && role==='m' && studioHTML && ['GET','HEAD'].includes(req.method) && (u.pathname==='/' || u.pathname==='/manage') && !u.search) {
-        return response(200,req.method==='HEAD'?null:studioHTML,{'content-type':'text/html; charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"});
+        return response(200,req.method==='HEAD'?null:studioHTML,{'content-type':'text/html; charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; img-src https://static."+site+"; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"});
       }
       const linkHost=modern?'l':'link';
       if(modern && ((u.pathname==='/' && ['static','link'].includes(role)) || u.pathname==='/upload')) {
@@ -196,7 +196,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
           if(!['blog','lp','ads','news'].includes(role) || !content)return response(404);
           return content(req,role);
         }
-        if(u.pathname.startsWith('/api/files') && role!=='static')return response(404);
+        if(u.pathname.startsWith('/api/files') && !['static','m'].includes(role))return response(404);
         if(u.pathname.startsWith('/api/links') && !['link','analytics'].includes(role))return response(404);
         if(role==='analytics' && req.method!=='GET')return response(405);
       }

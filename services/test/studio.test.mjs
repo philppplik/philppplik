@@ -8,5 +8,6 @@ test('studio host m: login-gated overview over the same data, ads host routed',a
  assert.equal((await request('m','/api/login',{method:'POST',data:{password}})).status,200);
  const o=await request('m','/api/overview');assert.equal(o.status,200);const j=await o.json();assert.equal(j.lp.published,0);assert.equal(j.hosts.ads,'https://ads.'+site+'/');
  assert.equal((await request('ads','/api/content')).status,401);
+ assert.equal((await request('m','/api/files')).status,200);
  store.close();
 });
