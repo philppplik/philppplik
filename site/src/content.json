@@ -14,8 +14,7 @@
       "npm": "https://www.npmjs.com/~philppplik",
       "book": "https://paulikreisch.de",
       "hob": "https://hob.philipp-paulik.de",
-      "wikidata": "https://www.wikidata.org/wiki/Q137996883",
-      "somnia": "https://somnia.philipp-paulik.de/"
+      "wikidata": "https://www.wikidata.org/wiki/Q137996883"
     },
     "aboutPhoto": "assets/philipp-paulik-portrait-black-sweater-at-desk.jpg"
   },
@@ -195,13 +194,6 @@
         "Open Source",
         "Systems Thinking"
       ],
-      "somnia": {
-        "kicker": "Neues Projekt · in Entwicklung",
-        "title": "Somnia",
-        "subtitle": "Design beyond code.",
-        "text": "Ein visuelles Web-Design-Studio, das deinen Quelltext respektiert: Elemente per Drag & Drop setzen, direkt im Canvas bearbeiten, und das HTML und CSS dahinter bleibt sauber und lesbar. Für Web und Desktop, mit hellem und dunklem Theme. Noch in Entwicklung.",
-        "cta": "Somnia ansehen"
-      },
       "sites": {
         "kicker": "Eigene Seiten",
         "title": "Seiten, die ich betreibe",
@@ -403,13 +395,6 @@
         "Open source",
         "Systems thinking"
       ],
-      "somnia": {
-        "kicker": "New project · in development",
-        "title": "Somnia",
-        "subtitle": "Design beyond code.",
-        "text": "A visual web design studio that respects your source code: drop elements in with drag and drop, edit right on the canvas, and the HTML and CSS behind it stay clean and readable. For web and desktop, with light and dark themes. Still in development.",
-        "cta": "Visit Somnia"
-      },
       "sites": {
         "kicker": "My sites",
         "title": "Sites I run",

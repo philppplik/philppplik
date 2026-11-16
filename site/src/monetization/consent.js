@@ -4,7 +4,7 @@
    - attribution-Modus aus cfg.analytics.attribution: "stripped" (eigene Kategorien) | "cleaned" (nur Herkunfts-Domain + feste Kampagnen, native GA4-Quellen)
    - content_group, scroll_percent, outbound_click, file_download
    - acquisition_bucket nur im Modus "stripped" (eigene grobe Herkunftskategorien)
-   - excludePaths: Routen ohne jegliches Tag (Tokens, DOI, Abmeldung, /somnia/)
+   - excludePaths: Routen ohne jegliches Tag (Tokens, DOI, Abmeldung)
    Keine Formular-/Rechner-Eingaben, keine vollen externen Ziel-URLs, keine Werbung. */
 (function () {
   'use strict';

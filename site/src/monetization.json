@@ -11,9 +11,7 @@
     "cookieLifetimeDays": 180,
     "resetRetentionOnActivity": false,
     "attribution": "cleaned",
-    "excludePaths": [
-      "^/somnia(/|$)"
-    ],
+    "excludePaths": [],
     "contentGroups": {
       "^/$": "startseite",
       "^/en/$": "startseite-en",
