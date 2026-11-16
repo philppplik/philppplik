@@ -19,13 +19,13 @@ test('public build omits the retired project in both languages and metadata', ()
     for (const file of walk(out)) {
       assert.doesNotMatch(path.relative(out, file), /somnia/i);
       if (/\.(html|css|js|json|xml|txt|svg)$/.test(file)) {
-        assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /somnia/i, file);
+        assert.doesNotMatch(fs.readFileSync(file, 'utf8'), /somnia|hallo.welt|paulikreisch|paulik\s*(&|&amp;)\s*reisch/i, file);
       }
     }
     const content = JSON.parse(fs.readFileSync(new URL('../src/content.json', import.meta.url)));
     for (const route of ['index.html', 'en/index.html']) {
       const html = fs.readFileSync(path.join(out, route), 'utf8');
-      assert.match(html, /id="hallo-welt"/);
+      assert.doesNotMatch(html, /hallo.welt|paulikreisch|Paulik & Reisch/i);
       assert.match(html, /id="h-faq"/);
       assert.match(html, /id="kontakt"/);
       assert.match(html, /application\/ld\+json/);

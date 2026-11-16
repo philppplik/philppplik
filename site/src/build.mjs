@@ -8,7 +8,7 @@ const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const today = new Date().toISOString().slice(0, 10);
 const words = (t) => t.split(' ').map((w) => `<span class="w">${esc(w)}</span>`).join(' ');
 const URLS = { de: s.url, en: s.url + 'en/' };
-const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book, L.hob, L.wikidata];
+const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.hob, L.wikidata];
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
 fs.cpSync(new URL('./monetization', import.meta.url), OUT + '/assets/monetization', { recursive: true });
@@ -84,7 +84,6 @@ function page(lang) {
       { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: [{ '@id': s.url + '#hero-photo' }, { '@id': s.url + '#about-photo' }], email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
       { '@type': 'ItemList', '@id': s.url + '#sites', name: lang === 'de' ? 'Seiten von Philipp Paulik' : 'Sites by Philipp Paulik', itemListElement: t.sites.items.map((x, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'WebSite', name: x.name, url: x.url, description: x.desc, inLanguage: 'de', publisher: { '@id': s.url + '#person' } } })) },
-      { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
       { '@type': 'BreadcrumbList', '@id': url + '#crumbs', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Portfolio', item: url }] }
     ]
@@ -121,7 +120,7 @@ function page(lang) {
   const faq = t.faq.map((f) => `<details class="reveal"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
   const tickerHtml = [...t.ticker, ...t.ticker].map((x) => `<span>${esc(x)}</span>`).join('<b aria-hidden="true">✺</b>');
   const facts = t.about.facts.map(([k, v]) => `<div><dt class="mono">${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['paulikreisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
+  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
 
   return `<!doctype html>
 <html lang="${lang}">
@@ -176,7 +175,7 @@ ${consentHead(P)}
 <div class="cursor" aria-hidden="true"><span></span></div>
 <header class="top">
   <a class="brand" href="#top" aria-label="${esc(s.name)} - ${esc(t.nav.top)}"><img src="${P}assets/logo.svg" alt="" width="34" height="34"></a>
-  <nav aria-label="${esc(t.nav.aria)}"><a href="#projekte">${esc(t.nav.work)}</a><a href="#about">${esc(t.nav.about)}</a><a href="#hallo-welt">${esc(t.nav.books)}</a><a href="#kontakt">${esc(t.nav.contact)}</a><a class="lang" href="${t.nav.switchHref}" hreflang="${t.nav.switchLang}" lang="${t.nav.switchLang}">${esc(t.nav.switch)}</a></nav>
+  <nav aria-label="${esc(t.nav.aria)}"><a href="#projekte">${esc(t.nav.work)}</a><a href="#about">${esc(t.nav.about)}</a><a href="#kontakt">${esc(t.nav.contact)}</a><a class="lang" href="${t.nav.switchHref}" hreflang="${t.nav.switchLang}" lang="${t.nav.switchLang}">${esc(t.nav.switch)}</a></nav>
 </header>
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
@@ -239,13 +238,6 @@ ${consentHead(P)}
     </div>
   </section>
 
-  <section class="writing" id="hallo-welt" aria-labelledby="h-writing">
-    <p class="mono kicker reveal">${esc(t.writing.kicker)}</p>
-    <h2 id="h-writing" class="reveal">${esc(t.writing.title)}<span class="sub">${esc(t.writing.subtitle)}</span></h2>
-    <p class="reveal body">${esc(t.writing.text)}</p>
-    <a class="btn reveal" href="${esc(L.book)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
-  </section>
-
   <section class="faq" aria-labelledby="h-faq">
     <h2 id="h-faq" class="mono kicker">${esc(t.faqTitle)}</h2>
     ${faq}
@@ -282,7 +274,7 @@ const de = c.i18n.de;
 const projLine = (p, l) => `- [${p.name}](${p.url}): ${p[l].type}. ${p[l].desc}`;
 fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
 
-> ${s.name} (online: ${s.handle}) is an AI pioneer and strategist, web and UI/UX designer, software engineer by passion and author from Bonn, Germany. He builds his own AI tools and agents (true-code, ZWEP, Flower) and writes the satirical book series "Hallo Welt". This site is his official portfolio and the canonical source for facts about him. German and English versions.
+> ${s.name} (online: ${s.handle}) is an AI pioneer and strategist, web and UI/UX designer, software engineer by passion and author from Bonn, Germany. He builds his own AI tools and agents (true-code, ZWEP, Flower). This site is his official portfolio and the canonical source for facts about him. German and English versions.
 
 ## Key pages
 - [Portfolio (Deutsch)](${URLS.de}): main page with projects, about, FAQ and contact
@@ -297,7 +289,6 @@ fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
 - [LinkedIn](${L.linkedin})
 - [npm](${L.npm}): published packages
 - [Wikidata](${L.wikidata})
-- [Paulik & Reisch](${L.book}): books and satirical online magazine
 - [Daily Hob](${L.hob}): AI briefing archive
 
 ## Projects
@@ -306,7 +297,7 @@ ${c.projects.map((p) => projLine(p, 'en')).join('\n')}
 ## Optional
 ${c.more.map((m) => `- [${m.name}](${m.url}): ${m.en}`).join('\n')}
 `);
-const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.writing.title}\n${t.writing.subtitle}\n${t.writing.text}\n${L.book}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
+const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
 fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSource: ${s.url}\nContact: ${s.email}\n\n${full('de', de)}\n${full('en', en)}`);
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
 
