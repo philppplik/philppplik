@@ -36,3 +36,21 @@ test('public build omits the retired project in both languages and metadata', ()
     fs.rmSync(out, { recursive: true, force: true });
   }
 });
+
+test('privacy pages describe current services and keep newsletter disabled', () => {
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'portfolio-privacy-'));
+  try {
+    execFileSync(process.execPath, ['site/src/build.mjs', out]);
+    for (const route of ['datenschutz/index.html', 'en/privacy/index.html']) {
+      const html = fs.readFileSync(path.join(out, route), 'utf8');
+      for (const text of ['Netlify', 'Neon', '__Host-console', 'Resend', 'TDDDG', '90']) assert.ok(html.includes(text), text);
+      assert.doesNotMatch(html, /keinerlei Analyse- oder Fremdcode|no analytics or third-party code/);
+      assert.ok(html.includes('https://www.netlify.com/privacy/'));
+      assert.ok(html.includes('https://neon.com/privacy-policy'));
+    }
+    assert.match(fs.readFileSync(path.join(out, 'datenschutz/index.html'), 'utf8'), /derzeit sind|Derzeit sind/);
+    assert.match(fs.readFileSync(path.join(out, 'en/privacy/index.html'), 'utf8'), /currently disabled/);
+  } finally {
+    fs.rmSync(out, {recursive: true, force: true});
+  }
+});
