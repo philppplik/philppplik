@@ -8,6 +8,7 @@ import {analyticsProxy,setUnlockEnabled} from '../../src/analytics-proxy.mjs';
 import {createGaData} from '../../src/ga-data.mjs';
 import {createContentService} from '../../src/content.mjs';
 import {createNewsletter} from '../../src/newsletter.mjs';
+import {createResendMailer} from '../../src/resend-mailer.mjs';
 import {maintain} from '../../src/maintenance.mjs';
 let service,lastMaintenance=0,store;
 async function initialize(){
@@ -21,8 +22,11 @@ async function initialize(){
  const content=createContentService({store,site:'philipp-paulik.de',authenticate:async req=>!!await readSession(req,store,'philipp-paulik.de'),managementHTML:readFileSync(join(process.cwd(),'public/content.html'),'utf8'),managementAssets:contentAssets,vendorDir:join(process.cwd(),'public','vendor')});
  for(const [name,type]of [['manage.css','text/css'],['manage.js','text/javascript'],['studio.js','text/javascript']])assets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
  const gaData=createGaData({password:process.env.GA_DASHBOARD_PASSWORD});setUnlockEnabled(!!gaData);
- // Newsletter management wired for the private studio: no mailer, no send flag, public host off.
- const newsletter=createNewsletter({store,site:'philipp-paulik.de'});
+ // Newsletter: Resend mailer prepared once RESEND_API_KEY is configured. Sending stays
+ // gated by NEWSLETTER_ALLOW_SEND (default off); the sender identity comes from
+ // NEWSLETTER_FROM (unset until the user picks one). Public host stays off.
+ const newsFrom=process.env.NEWSLETTER_FROM||'';
+ const newsletter=createNewsletter({store,site:'philipp-paulik.de',mailer:createResendMailer({apiKey:process.env.RESEND_API_KEY||'',from:newsFrom}),allowSend:process.env.NEWSLETTER_ALLOW_SEND==='1',from:newsFrom});
  service=createService({store,enabled:true,modern:true,clickCounting:true,sites:{'philipp-paulik.de':{enabled:true,verifier:JSON.parse(verifier)}},studioHTML:readFileSync(join(process.cwd(),'public/studio.html'),'utf8'),managementHTML:readFileSync(join(process.cwd(),'public/manage.html'),'utf8'),managementAssets:assets,analytics:analyticsProxy,gaData,content,newsletter,newsletterPublic:false});
  return service;
 }
