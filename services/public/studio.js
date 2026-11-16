@@ -6,7 +6,7 @@ function tile(title,href,detail){const a=document.createElement('article');a.cla
 async function show(){const s=await api('/api/session');csrf=s.csrf;siteName=s.site;$('gate').hidden=true;$('console').hidden=false;$('logout').hidden=false;await loadTiles();await loadImages();await loadNewsletter();}
 async function loadNewsletter(){
  const box=$('nl');if(!box)return;
- try{const n=await api('/api/newsletter/subscribers');const c=n.counts||{};box.textContent=`${c.active||0} Abonnenten · ${c.pending||0} unbestätigt · ${c.unsubscribed||0} abgemeldet. `+(n.sendEnabled?'Versand ist eingerichtet.':'Versand ist noch nicht eingerichtet.');}catch(e){box.textContent='Newsletter-Verwaltung ist auf diesem Stand noch nicht verfügbar.';}
+ try{const n=await api('/api/newsletter/subscribers');const c=n.counts||{};box.textContent=`${c.active||0} Abonnenten · ${c.pending||0} unbestätigt · ${c.unsubscribed||0} abgemeldet. `+(n.sendEnabled?'Versand ist eingerichtet.':'Versand ist gesperrt (noch nicht freigegeben).');}catch(e){box.textContent='Newsletter-Verwaltung ist auf diesem Stand noch nicht verfügbar.';}
 }
 async function loadTiles(){const o=await api('/api/overview');
  const c=x=>`${x.published} live · ${x.drafts} Entwürfe`;

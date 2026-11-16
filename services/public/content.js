@@ -172,7 +172,7 @@ async function refreshSend(){
     const s=await api('/api/newsletter/subscribers');
     const c=s.counts||{},active=c.active||0,pend=c.pending||0,unsub=c.unsubscribed||0;
     if(s.sendEnabled){$('send-status').textContent=`${active} Abonnenten · ${pend} unbestätigt · ${unsub} abgemeldet. Versand ist eingerichtet und freigegeben.`;$('send-now').disabled=!active;$('send-now').textContent='An Abonnenten senden';}
-    else{$('send-status').textContent=`${active} Abonnenten · ${pend} unbestätigt · ${unsub} abgemeldet. Versand ist noch nicht eingerichtet - der Versanddienst (Resend) wird gerade eingerichtet. Bis dahin bleibt der Versand gesperrt.`;$('send-now').disabled=true;$('send-now').textContent='Versand noch nicht eingerichtet';}
+    else{$('send-status').textContent=`${active} Abonnenten · ${pend} unbestätigt · ${unsub} abgemeldet. Versand ist gesperrt - der Versanddienst ist eingerichtet, aber der Versand startet erst nach ausdrücklicher Freigabe und Zustelltest.`;$('send-now').disabled=true;$('send-now').textContent='Versand noch nicht freigegeben';}}
   }catch(e){$('send-status').textContent='Versandstatus konnte nicht geladen werden.';$('send-now').disabled=true;}
 }
 $('send-now').addEventListener('click',()=>action($('send-now'),async()=>{
