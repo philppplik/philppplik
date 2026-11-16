@@ -17,14 +17,17 @@ async function api(path,{method='GET',data}={}) {
   return r.status===204?null:r.json();
 }
 function lock(){csrf='';editing=null;$('console').hidden=true;$('logout').hidden=true;$('gate').hidden=false;$('items').replaceChildren();$('password').value='';resetEditor();}
-function wrapSel(a,b,ph){const t=$('f-text'),s0=t.selectionStart,e0=t.selectionEnd,sel=t.value.slice(s0,e0)||ph;t.setRangeText(a+sel+b,s0,e0,'select');t.focus();}
-function prefixLines(pre,numbered){const t=$('f-text'),s0=t.value.lastIndexOf('\n',t.selectionStart-1)+1;let e0=t.value.indexOf('\n',t.selectionEnd);if(e0<0)e0=t.value.length;const lines=t.value.slice(s0,e0).split('\n').map((l,i)=>(numbered?`${i+1}. `:pre)+l.replace(/^(#{2,3} |[-*] |\d+\. |> ?)/,''));t.setRangeText(lines.join('\n'),s0,e0,'select');t.focus();}
+function setText(list){if(rtOn())window.Richtext.setBlocks($('rt-editor'),list);else $('f-text').value=textFromParagraphs(list);}
 function initRichtext(){
-  if(role!=='blog')return;
-  $('rt-bar').hidden=false;$('rt-image').hidden=false;$('rt-help').textContent='Formatierung über die Knöpfe oder Markdown: **fett**, *kursiv*, ## Überschrift, - Liste, > Zitat. Bilder nur aus deiner Dateiverwaltung (static.), die Datei muss freigegeben sein.';
-  const acts={bold:()=>wrapSel('**','**','Text'),italic:()=>wrapSel('*','*','Text'),h2:()=>prefixLines('## '),h3:()=>prefixLines('### '),ul:()=>prefixLines('- '),ol:()=>prefixLines('',true),quote:()=>prefixLines('> '),link:()=>{const u=prompt('Link (https://…)');if(!u)return;if(!/^(https:\/\/|mailto:)/.test(u)){say('Nur https- oder mailto-Links.');return;}wrapSel('[',`](${u})`,'Linktext');}};
-  for(const b of $('rt-bar').querySelectorAll('button'))b.addEventListener('click',()=>acts[b.dataset.rt]());
-  $('rt-insert').addEventListener('click',()=>{const o=$('rt-file').selectedOptions[0];if(!o||!o.dataset.url)return say('Erst eine freigegebene Datei auswählen.');const t=$('f-text'),alt=$('rt-alt').value.replace(/[\[\]\n]/g,' ').trim(),block=`![${alt}](${o.dataset.url})`;const pre=t.value&&!t.value.endsWith('\n\n')?(t.value.endsWith('\n')?'\n':'\n\n'):'';t.setRangeText(pre+block+'\n\n',t.selectionStart,t.selectionEnd,'end');$('rt-alt').value='';t.focus();});
+  if(!rtOn())return;
+  const ed=$('rt-editor');$('f-text').hidden=true;ed.hidden=false;$('rt-bar').hidden=false;$('rt-image').hidden=false;
+  if(!ed.firstChild)window.Richtext.setBlocks(ed,[]);
+  $('rt-help').textContent='Direkt formatieren wie im Textverarbeiter. Bilder kommen aus deiner Dateiverwaltung (static.), die Datei muss freigegeben sein.';
+  const cmd=(c,v)=>{ed.focus();document.execCommand(c,false,v);};
+  const acts={bold:()=>cmd('bold'),italic:()=>cmd('italic'),h2:()=>cmd('formatBlock','h2'),h3:()=>cmd('formatBlock','h3'),ul:()=>cmd('insertUnorderedList'),ol:()=>cmd('insertOrderedList'),quote:()=>cmd('formatBlock','blockquote'),text:()=>cmd('formatBlock','p'),link:()=>{const u=prompt('Link (https://…)');if(!u)return;if(!/^(https:\/\/|mailto:)/.test(u)){say('Nur https- oder mailto-Links.');return;}cmd('createLink',u);}};
+  for(const b of $('rt-bar').querySelectorAll('button'))b.addEventListener('mousedown',e=>e.preventDefault()),b.addEventListener('click',()=>acts[b.dataset.rt]());
+  ed.addEventListener('paste',e=>{e.preventDefault();document.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text/plain'));});
+  $('rt-insert').addEventListener('click',()=>{const o=$('rt-file').selectedOptions[0];if(!o||!o.dataset.url)return say('Erst eine freigegebene Datei auswählen.');const fig=document.createElement('figure'),img=document.createElement('img');img.src=o.dataset.url;img.alt=$('rt-alt').value.replace(/[\[\]\n]/g,' ').trim();fig.append(img);ed.focus();document.execCommand('insertHTML',false,fig.outerHTML+'<p><br></p>');$('rt-alt').value='';});
   loadRtFiles();
 }
 async function loadRtFiles(){const {files}=await api('/api/assets');const sel=$('rt-file');sel.replaceChildren();const shared=files.filter(f=>f.shared&&/\.(png|jpe?g|gif|webp|avif|svg)$/i.test(f.name));if(!shared.length){const o=document.createElement('option');o.textContent='Keine freigegebenen Bilder - auf static. hochladen und freigeben';o.value='';sel.append(o);return;}for(const f of shared){const o=document.createElement('option');o.value=f.id;o.dataset.url=f.url;o.textContent=f.name;sel.append(o);}}
@@ -32,7 +35,8 @@ async function show(){const s=await api('/api/session');csrf=s.csrf;$('gate').hi
 async function action(button,fn){button.disabled=true;say('');try{await fn();}catch(e){say(e.message);}finally{button.disabled=false;}}
 function button(text,fn,kind='secondary'){const b=document.createElement('button');b.type='button';b.textContent=text;b.className=kind;b.addEventListener('click',()=>action(b,fn));return b;}
 const publicURL=slug=>role==='blog'?`https://blog.${site}/${slug}`:`https://${role}.${site}/${slug}`;
-const paragraphsFromText=text=>text.split(/\n{2,}/).map(p=>p.trim()).filter(Boolean);
+const rtOn=()=>role==='blog'&&window.Richtext;
+const paragraphsFromText=text=>rtOn()?window.Richtext.getBlocks($('rt-editor')):text.split(/\n{2,}/).map(p=>p.trim()).filter(Boolean);
 const textFromParagraphs=list=>list.join('\n\n');
 
 // --- Custom code editors (Monaco or CodeMirror, both vendored locally) ---
@@ -68,10 +72,10 @@ for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.addEventListener(
 $('engine-monaco').addEventListener('click',()=>action($('engine-monaco'),async()=>{if(engineName!=='monaco')await openEditor('monaco');}));
 $('engine-codemirror').addEventListener('click',()=>action($('engine-codemirror'),async()=>{if(engineName!=='codemirror')await openEditor('codemirror');}));
 
-function resetEditor(){editing=null;closeEditor();code.html='';code.css='';code.js='';currentTab='html';$('editor').reset();if(custom){$('f-custom-toggle').checked=false;$('code-area').hidden=true;$('text-field').hidden=false;$('cta-fields').hidden=false;}for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab==='html');$('f-slug').disabled=false;$('editor-title').textContent=words.fresh;$('editor-status').hidden=true;$('save').textContent='Als Entwurf speichern';$('publish').textContent='Veröffentlichen';$('preview').hidden=true;$('delete').hidden=true;$('cancel').hidden=true;}
+function resetEditor(){editing=null;closeEditor();code.html='';code.css='';code.js='';currentTab='html';$('editor').reset();if(rtOn())window.Richtext.setBlocks($('rt-editor'),[]);if(custom){$('f-custom-toggle').checked=false;$('code-area').hidden=true;$('text-field').hidden=false;$('cta-fields').hidden=false;}for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab==='html');$('f-slug').disabled=false;$('editor-title').textContent=words.fresh;$('editor-status').hidden=true;$('save').textContent='Als Entwurf speichern';$('publish').textContent='Veröffentlichen';$('preview').hidden=true;$('delete').hidden=true;$('cancel').hidden=true;}
 async function load(slug){
   const item=await api('/api/content/'+slug);editing=item;
-  $('f-title').value=item.title;$('f-slug').value=item.slug;$('f-slug').disabled=true;$('f-text').value=textFromParagraphs(item.paragraphs);
+  $('f-title').value=item.title;$('f-slug').value=item.slug;$('f-slug').disabled=true;setText(item.paragraphs);
   if(custom){
     $('f-cta-label').value=item.cta_label||'';$('f-cta-url').value=item.cta_url||'';$('f-hero').value=item.hero_image||'';
     const hasCustom=!!item.custom_html;$('f-custom-toggle').checked=hasCustom;

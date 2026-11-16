@@ -16,7 +16,7 @@ async function initialize(){
  const pool=new pg.Pool({connectionString:url,max:2,idleTimeoutMillis:10000,connectionTimeoutMillis:10000});
  pool.on('error',()=>console.warn('Database idle connection dropped; reconnecting on next request.'));
  store=new PostgresStore(pool);const assets={},contentAssets={};
- for(const [name,type]of [['content.css','text/css'],['content.js','text/javascript']])contentAssets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
+ for(const [name,type]of [['content.css','text/css'],['content.js','text/javascript'],['richtext.js','text/javascript']])contentAssets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
  const content=createContentService({store,site:'philipp-paulik.de',authenticate:async req=>!!await readSession(req,store,'philipp-paulik.de'),managementHTML:readFileSync(join(process.cwd(),'public/content.html'),'utf8'),managementAssets:contentAssets,vendorDir:join(process.cwd(),'public','vendor')});
  for(const [name,type]of [['manage.css','text/css'],['manage.js','text/javascript'],['studio.js','text/javascript']])assets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
  const gaData=createGaData({password:process.env.GA_DASHBOARD_PASSWORD});setUnlockEnabled(!!gaData);

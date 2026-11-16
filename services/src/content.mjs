@@ -38,7 +38,7 @@ const RESERVED = new Set(['manage', 'api', 'content', 'preview', 'frame', 'previ
 // Virtual file paths: lowercase file-like paths, never a bare slug, never a
 // reserved first segment. Served by the lp host as a 302 to the static.* file.
 const VPATH = /^\/[a-z0-9](?:[a-z0-9._-]*[a-z0-9.])?(?:\/[a-z0-9](?:[a-z0-9._-]*[a-z0-9.])?)*$/;
-const VPATH_BLOCKED = new Set(['api', 'manage', 'preview', 'preview-frame', 'frame', 'vendor', 'content', 'assets', 'content.css', 'content.js']);
+const VPATH_BLOCKED = new Set(['api', 'manage', 'preview', 'preview-frame', 'frame', 'vendor', 'content', 'assets', 'content.css', 'content.js', 'richtext.js']);
 const VENDOR_MIME = { '.js': 'text/javascript', '.css': 'text/css', '.ttf': 'font/ttf', '.woff': 'font/woff', '.woff2': 'font/woff2', '.map': 'application/json' };
 const NOINDEX = {
   'cache-control': 'no-store, max-age=0', 'x-content-type-options': 'nosniff',
@@ -300,7 +300,7 @@ export function createContentService({ store, site, managementHTML = '', managem
         return await api(req, role, u);
       }
       if (!['GET', 'HEAD'].includes(req.method)) return noindex(405);
-      const manageShell = () => noindex(200, head ? null : managementHTML.replace('<head>', `<head><meta name="content-role" content="${role}">`), { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': PAGE_CSP });
+      const manageShell = () => noindex(200, head ? null : managementHTML.replace('<head>', `<head><meta name="content-role" content="${role}">`), { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': PAGE_CSP.replace("img-src 'self' data:", `img-src 'self' data: ${staticBase}`) });
       if (u.pathname === '/manage' && !u.search) return manageShell();
       // The LP host has no public index: its root opens the management shell.
       if (CUSTOM.has(role) && (u.pathname === '/' || u.pathname === '') && !u.search) return manageShell();
