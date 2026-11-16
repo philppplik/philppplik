@@ -11,9 +11,7 @@
     "cookieLifetimeDays": 180,
     "resetRetentionOnActivity": false,
     "attribution": "cleaned",
-    "excludePaths": [
-      "^/somnia(/|$)"
-    ],
+    "excludePaths": [],
     "contentGroups": {
       "^/$": "startseite",
       "^/en/$": "startseite-en",
@@ -30,7 +28,6 @@
       "^youtube\\.com$",
       "^de\\.linkedin\\.com$",
       "^npmjs\\.com$",
-      "^paulikreisch\\.de$",
       "^wikidata\\.org$",
       "^hob\\.philipp-paulik\\.de$",
       "^ct\\.philipp-paulik\\.de$",

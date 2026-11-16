@@ -12,10 +12,8 @@
       "youtube": "https://www.youtube.com/@philppplik",
       "linkedin": "https://de.linkedin.com/in/philipp-paulik-7967753aa",
       "npm": "https://www.npmjs.com/~philppplik",
-      "book": "https://paulikreisch.de",
       "hob": "https://hob.philipp-paulik.de",
-      "wikidata": "https://www.wikidata.org/wiki/Q137996883",
-      "somnia": "https://somnia.philipp-paulik.de/"
+      "wikidata": "https://www.wikidata.org/wiki/Q137996883"
     },
     "aboutPhoto": "assets/philipp-paulik-portrait-black-sweater-at-desk.jpg"
   },
@@ -30,7 +28,6 @@
       "nav": {
         "work": "Projekte",
         "about": "Über mich",
-        "books": "Bücher",
         "contact": "Kontakt",
         "aria": "Hauptnavigation",
         "top": "nach oben",
@@ -70,7 +67,7 @@
         "title": "Pionier mit <em>Gestaltungswillen</em>",
         "paras": [
           "Ich bin Philipp, komme aus Bonn und mache gerade meine Ausbildung zum Mediengestalter (Digital und Print). Meine Leidenschaft ist künstliche Intelligenz: Ich entwickle KI-Strategien, baue eigene Agents und Tools und veröffentliche sie als Open Source und als npm-Pakete.",
-          "Webdesign und UI/UX sind mein Handwerk, Software Engineering mein liebstes Hobby. Dazu schreibe ich Bücher. Wenn ein Tool fehlt, das es geben sollte, baue ich es selbst."
+          "Webdesign und UI/UX sind mein Handwerk, Software Engineering mein liebstes Hobby. Wenn ein Tool fehlt, das es geben sollte, baue ich es selbst."
         ],
         "facts": [
           [
@@ -145,14 +142,6 @@
           }
         ]
       },
-      "writing": {
-        "kicker": "Abseits vom Code",
-        "title": "Hallo Welt",
-        "subtitle": "Eine Abrechnung mit der Schule.",
-        "text": "Als Autor schreibe ich satirische Bücher und ein Online-Magazin. Der erste Band heißt \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". Dazu gibt es Worthaft, ein tägliches Fünf-Buchstaben-Ratespiel.",
-        "cta": "paulikreisch.de besuchen",
-        "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S"
-      },
       "faqTitle": "Kurz gefragt",
       "faq": [
         {
@@ -162,10 +151,6 @@
         {
           "q": "Welche Projekte hat Philipp Paulik gebaut?",
           "a": "Die wichtigsten sind true-code (Agentic Coding Harness in Rust), ZWEP (self-hosted Suchmaschine mit MCP für KI-Agents) und Flower (ASCII Image Studio im Browser). Dazu kommen Daily Hob, cust*m Tab, pBlock, claude-tetris und plane."
-        },
-        {
-          "q": "Was macht Philipp Paulik neben KI und Design?",
-          "a": "Er schreibt satirische Bücher und ein Online-Magazin (paulikreisch.de)."
         },
         {
           "q": "Wo finde ich Philipp Paulik online?",
@@ -195,13 +180,6 @@
         "Open Source",
         "Systems Thinking"
       ],
-      "somnia": {
-        "kicker": "Neues Projekt · in Entwicklung",
-        "title": "Somnia",
-        "subtitle": "Design beyond code.",
-        "text": "Ein visuelles Web-Design-Studio, das deinen Quelltext respektiert: Elemente per Drag & Drop setzen, direkt im Canvas bearbeiten, und das HTML und CSS dahinter bleibt sauber und lesbar. Für Web und Desktop, mit hellem und dunklem Theme. Noch in Entwicklung.",
-        "cta": "Somnia ansehen"
-      },
       "sites": {
         "kicker": "Eigene Seiten",
         "title": "Seiten, die ich betreibe",
@@ -238,7 +216,6 @@
       "nav": {
         "work": "Work",
         "about": "About",
-        "books": "Books",
         "contact": "Contact",
         "aria": "Main navigation",
         "top": "back to top",
@@ -278,7 +255,7 @@
         "title": "A pioneer with an <em>eye for design</em>",
         "paras": [
           "I am Philipp, based in Bonn, Germany, and currently training as a media designer (digital and print). My passion is artificial intelligence: I develop AI strategies, build my own agents and tools and release them as open source and npm packages.",
-          "Web design and UI/UX are my craft, software engineering is my favorite hobby. I also write books. When a tool is missing that should exist, I build it myself."
+          "Web design and UI/UX are my craft, software engineering is my favorite hobby. When a tool is missing that should exist, I build it myself."
         ],
         "facts": [
           [
@@ -353,14 +330,6 @@
           }
         ]
       },
-      "writing": {
-        "kicker": "Beyond code",
-        "title": "Hallo Welt",
-        "subtitle": "A reckoning with school.",
-        "text": "As an author I write satirical books and an online magazine, in German. The first volume is called \"Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S\". There is also Worthaft, a daily five-letter word game.",
-        "cta": "Visit paulikreisch.de",
-        "bookName": "Hallo Welt: Erhebliche Kritik am unerhörten Bildungsgang der Lernvollzugsanstalt SK-S"
-      },
       "faqTitle": "Quick answers",
       "faq": [
         {
@@ -370,10 +339,6 @@
         {
           "q": "What has Philipp Paulik built?",
           "a": "The main ones are true-code (an agentic coding harness in Rust), ZWEP (a self-hosted search engine with MCP for AI agents) and Flower (an ASCII image studio in the browser). Others include Daily Hob, cust*m Tab, pBlock, claude-tetris and plane."
-        },
-        {
-          "q": "What does Philipp Paulik do besides AI and design?",
-          "a": "He writes satirical books and an online magazine in German (paulikreisch.de)."
         },
         {
           "q": "Where can I find Philipp Paulik online?",
@@ -403,13 +368,6 @@
         "Open source",
         "Systems thinking"
       ],
-      "somnia": {
-        "kicker": "New project · in development",
-        "title": "Somnia",
-        "subtitle": "Design beyond code.",
-        "text": "A visual web design studio that respects your source code: drop elements in with drag and drop, edit right on the canvas, and the HTML and CSS behind it stay clean and readable. For web and desktop, with light and dark themes. Still in development.",
-        "cta": "Visit Somnia"
-      },
       "sites": {
         "kicker": "My sites",
         "title": "Sites I run",

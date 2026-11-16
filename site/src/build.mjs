@@ -8,7 +8,7 @@ const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const today = new Date().toISOString().slice(0, 10);
 const words = (t) => t.split(' ').map((w) => `<span class="w">${esc(w)}</span>`).join(' ');
 const URLS = { de: s.url, en: s.url + 'en/' };
-const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.book, L.hob, L.wikidata];
+const sameAs = [L.github, L.x, L.instagram, L.youtube, L.linkedin, L.npm, L.hob, L.wikidata];
 fs.mkdirSync(OUT + '/en', { recursive: true });
 fs.mkdirSync(OUT + '/assets', { recursive: true });
 fs.cpSync(new URL('./monetization', import.meta.url), OUT + '/assets/monetization', { recursive: true });
@@ -84,7 +84,6 @@ function page(lang) {
       { '@type': 'Person', '@id': s.url + '#person', name: s.name, alternateName: s.handle, url: s.url, mainEntityOfPage: { '@id': url + '#webpage' }, image: [{ '@id': s.url + '#hero-photo' }, { '@id': s.url + '#about-photo' }], email: undefined, jobTitle: lang === 'de' ? 'KI-Pionier und KI-Stratege, Webdesigner, UI/UX-Designer, Software Engineer, Autor' : 'AI Pioneer and Strategist, Web Designer, UI/UX Designer, Software Engineer, Author', description: t.description, knowsLanguage: ['de', 'en'], knowsAbout: ['AI Strategy', 'Artificial Intelligence', 'AI Agents', 'Model Context Protocol', 'Web Design', 'UI/UX Design', 'Software Engineering', 'TypeScript', 'Rust', 'Authoring'], sameAs, subjectOf: { '@id': s.url + '#projects' } },
       { '@type': 'ItemList', '@id': s.url + '#projects', name: lang === 'de' ? 'Projekte von Philipp Paulik' : 'Projects by Philipp Paulik', itemListElement: projects.map((p, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'SoftwareSourceCode', name: p.name, description: p.desc, codeRepositoryUrl: p.repo || p.url, url: p.url, programmingLanguage: p.lang, author: { '@id': s.url + '#person' } } })) },
       { '@type': 'ItemList', '@id': s.url + '#sites', name: lang === 'de' ? 'Seiten von Philipp Paulik' : 'Sites by Philipp Paulik', itemListElement: t.sites.items.map((x, i) => ({ '@type': 'ListItem', position: i + 1, item: { '@type': 'WebSite', name: x.name, url: x.url, description: x.desc, inLanguage: 'de', publisher: { '@id': s.url + '#person' } } })) },
-      { '@type': 'Book', name: t.writing.bookName, inLanguage: 'de', url: L.book, author: { '@id': s.url + '#person' } },
       { '@type': 'FAQPage', '@id': url + '#faq', mainEntity: t.faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) },
       { '@type': 'BreadcrumbList', '@id': url + '#crumbs', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Portfolio', item: url }] }
     ]
@@ -121,7 +120,7 @@ function page(lang) {
   const faq = t.faq.map((f) => `<details class="reveal"><summary>${esc(f.q)}</summary><p>${esc(f.a)}</p></details>`).join('');
   const tickerHtml = [...t.ticker, ...t.ticker].map((x) => `<span>${esc(x)}</span>`).join('<b aria-hidden="true">✺</b>');
   const facts = t.about.facts.map(([k, v]) => `<div><dt class="mono">${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('');
-  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm], ['paulikreisch.de', L.book]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
+  const social = [['GitHub', L.github], ['X', L.x], ['Instagram', L.instagram], ['YouTube', L.youtube], ['LinkedIn', L.linkedin], ['npm', L.npm]].map(([n, h]) => `<li><a href="${esc(h)}" rel="me noopener">${esc(n)}</a></li>`).join('');
 
   return `<!doctype html>
 <html lang="${lang}">
@@ -176,7 +175,7 @@ ${consentHead(P)}
 <div class="cursor" aria-hidden="true"><span></span></div>
 <header class="top">
   <a class="brand" href="#top" aria-label="${esc(s.name)} - ${esc(t.nav.top)}"><img src="${P}assets/logo.svg" alt="" width="34" height="34"></a>
-  <nav aria-label="${esc(t.nav.aria)}"><a href="#projekte">${esc(t.nav.work)}</a><a href="#about">${esc(t.nav.about)}</a><a href="#hallo-welt">${esc(t.nav.books)}</a><a href="#kontakt">${esc(t.nav.contact)}</a><a class="lang" href="${t.nav.switchHref}" hreflang="${t.nav.switchLang}" lang="${t.nav.switchLang}">${esc(t.nav.switch)}</a></nav>
+  <nav aria-label="${esc(t.nav.aria)}"><a href="#projekte">${esc(t.nav.work)}</a><a href="#about">${esc(t.nav.about)}</a><a href="#kontakt">${esc(t.nav.contact)}</a><a class="lang" href="${t.nav.switchHref}" hreflang="${t.nav.switchLang}" lang="${t.nav.switchLang}">${esc(t.nav.switch)}</a></nav>
 </header>
 <main id="main">
   <section class="hero" id="top" aria-labelledby="h1">
@@ -239,22 +238,6 @@ ${consentHead(P)}
     </div>
   </section>
 
-  <section class="writing" id="hallo-welt" aria-labelledby="h-writing">
-    <p class="mono kicker reveal">${esc(t.writing.kicker)}</p>
-    <h2 id="h-writing" class="reveal">${esc(t.writing.title)}<span class="sub">${esc(t.writing.subtitle)}</span></h2>
-    <p class="reveal body">${esc(t.writing.text)}</p>
-    <a class="btn reveal" href="${esc(L.book)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${esc(t.writing.cta)} ${arrow}</a>
-  </section>
-
-  <section class="somnia" id="somnia" aria-labelledby="h-somnia">
-    <div class="somnia-card">
-      <p class="mono kicker reveal">${esc(t.somnia.kicker)}</p>
-      <h2 id="h-somnia" class="reveal">${esc(t.somnia.title)}<span class="sub">${esc(t.somnia.subtitle)}</span></h2>
-      <p class="reveal body">${esc(t.somnia.text)}</p>
-      <a class="btn reveal" href="${esc(L.somnia)}" target="_blank" rel="noopener noreferrer" data-cursor="${esc(t.work.open)}">${esc(t.somnia.cta)} ${arrow}</a>
-    </div>
-  </section>
-
   <section class="faq" aria-labelledby="h-faq">
     <h2 id="h-faq" class="mono kicker">${esc(t.faqTitle)}</h2>
     ${faq}
@@ -291,7 +274,7 @@ const de = c.i18n.de;
 const projLine = (p, l) => `- [${p.name}](${p.url}): ${p[l].type}. ${p[l].desc}`;
 fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
 
-> ${s.name} (online: ${s.handle}) is an AI pioneer and strategist, web and UI/UX designer, software engineer by passion and author from Bonn, Germany. He builds his own AI tools and agents (true-code, ZWEP, Flower) and writes the satirical book series "Hallo Welt". This site is his official portfolio and the canonical source for facts about him. German and English versions.
+> ${s.name} (online: ${s.handle}) is an AI pioneer and strategist, web and UI/UX designer, software engineer by passion and author from Bonn, Germany. He builds his own AI tools and agents (true-code, ZWEP, Flower). This site is his official portfolio and the canonical source for facts about him. German and English versions.
 
 ## Key pages
 - [Portfolio (Deutsch)](${URLS.de}): main page with projects, about, FAQ and contact
@@ -306,7 +289,6 @@ fs.writeFileSync(OUT + '/llms.txt', `# ${s.name}
 - [LinkedIn](${L.linkedin})
 - [npm](${L.npm}): published packages
 - [Wikidata](${L.wikidata})
-- [Paulik & Reisch](${L.book}): books and satirical online magazine
 - [Daily Hob](${L.hob}): AI briefing archive
 
 ## Projects
@@ -315,7 +297,7 @@ ${c.projects.map((p) => projLine(p, 'en')).join('\n')}
 ## Optional
 ${c.more.map((m) => `- [${m.name}](${m.url}): ${m.en}`).join('\n')}
 `);
-const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.writing.title}\n${t.writing.subtitle}\n${t.writing.text}\n${L.book}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
+const full = (l, t) => `## ${l === 'de' ? 'Deutsch' : 'English'}\n\n${t.description}\n\n### ${t.about.kicker}\n${t.about.paras.join('\n\n')}\n\n${t.about.facts.map(([k, v]) => `- ${k}: ${v}`).join('\n')}\n\n### ${t.work.kicker}\n${c.projects.map((p) => `#### ${p.name} (${p[l].type})\n${p[l].desc}\nStack: ${p.stack}\nLink: ${p.url}${p.npm ? '\nnpm: ' + p.npm : ''}${p.repo ? '\nRepo: ' + p.repo : ''}`).join('\n\n')}\n\n### ${t.skills.kicker}\n${t.skills.items.map((d) => `- ${d.title}: ${d.text} (${d.tags.join(', ')})`).join('\n')}\n\n### ${t.faqTitle}\n${t.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join('\n\n')}\n`;
 fs.writeFileSync(OUT + '/llms-full.txt', `# ${s.name} - full site content\n\nSource: ${s.url}\nContact: ${s.email}\n\n${full('de', de)}\n${full('en', en)}`);
 fs.writeFileSync(OUT + '/404.html', `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>404 - ${esc(s.name)}</title><link rel="stylesheet" href="${s.url}assets/style.css"></head><body><main class="nf"><p class="mono kicker">404</p><h1><span class="it">Nothing</span> here.</h1><p><a class="btn" href="${s.url}">Portfolio →</a></p></main></body></html>`);
 
@@ -324,8 +306,8 @@ fs.writeFileSync(OUT + '/impressum/index.html', `<!doctype html><html lang="de">
 
 /* Datenschutz (DE) + Privacy (EN) */
 const legalPage = (lang, title, canonical, body) => `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="index, follow"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b2545"><title>${esc(title)} - ${esc(s.name)}</title><meta name="description" content="${esc(title)} - ${esc(s.name)}."><link rel="canonical" href="${canonical}"><link rel="icon" href="${s.url}assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${s.url}assets/style.css"><link rel="stylesheet" href="${s.url}assets/monetization/consent.css"></head><body><main class="legal"><p class="mono kicker"><a href="${lang === 'de' ? s.url : s.url + 'en/'}">← ${esc(s.name)}</a></p>${body}</main><footer class="foot mono"><span>© ${new Date().getFullYear()} ${esc(s.name)}</span><span>${PP[lang].footLine}</span><a href="${s.url}impressum/">Impressum</a><a href="${s.url}">${lang === 'de' ? 'Portfolio' : 'Portfolio'}</a><button type="button" class="pp-consent-open" data-pp-consent-open>${PP[lang].settings}</button></footer>${consentScripts(s.url, lang)}</body></html>`;
-const dsBody = `<h1>Datenschutz</h1><h2>Verantwortlicher</h2><p>Philipp Paulik (Kontakt wie im <a href="/impressum/">Impressum</a>).</p><h2>Statistik mit Einwilligung</h2><p>Diese Website lädt ohne deine Einwilligung keinerlei Analyse- oder Fremdcode. Mit deiner Einwilligung &bdquo;Statistik&ldquo; nutzen wir Google Analytics 4 (Google Ireland Limited), um zu verstehen, welche Seiten und Projekte besucht werden. Gemessen werden Seitenaufrufe, Lesetiefe, Klicks auf festgelegte externe Links (nur die Ziel-Domain), die Herkunft als Domain sowie vorher festgelegte Kampagnenkennungen. Nicht erfasst werden: Eingaben, vollständige Adressen, Werbeprofile, seitenübergreifende Wiedererkennung. Standort nur als Land, Gerät nur als Kategorie; Speicherung der Ereignisse 14 Monate. Die Statistik-Cookies gelten nur für philipp-paulik.de, nicht für Unterprojekte wie hob.philipp-paulik.de. Die Route /somnia/ ist von jeglicher Messung ausgenommen.</p><h2>Widerruf</h2><p>Widerruf jederzeit über die Datenschutzeinstellungen im Fußbereich; die Cookies werden gelöscht und die Messung stoppt.</p><h2>Rechtsgrundlage und Empfänger</h2><p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG. Empfänger: Google; mögliche Übermittlung in die USA (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies und lokale Speicherung</h2><p>pp_consent_v1 (Cookie, 180 Tage) und pp-consent-v1 (lokaler Speicher): deine Datenschutzauswahl. _ga und _ga_&lt;ID&gt; (nur philipp-paulik.de, bis 180 Tage, nur nach Einwilligung): Statistik.</p>`;
-const pvBody = `<h1>Privacy policy</h1><h2>Controller</h2><p>Philipp Paulik (contact see <a href="/impressum/">imprint</a>).</p><h2>Analytics with consent</h2><p>Without your consent this site loads no analytics or third-party code. With your &ldquo;Statistics&rdquo; consent we use Google Analytics 4 (Google Ireland Limited) to see which pages and projects are visited. Measured: page views, reading depth, clicks on allowlisted external links (target domain only), origin as domain, and pre-defined campaign identifiers. Not collected: any input, full URLs, advertising profiles, cross-site recognition. Location limited to country, device to category; events are kept for 14 months. Analytics cookies apply to philipp-paulik.de only, not to sub-projects such as hob.philipp-paulik.de. The /somnia/ path is excluded from all measurement.</p><h2>Withdrawal</h2><p>Withdraw anytime via the privacy settings in the footer; cookies are deleted and measurement stops.</p><h2>Legal basis and recipient</h2><p>Legal basis: Art. 6(1)(a) GDPR, § 25(1) TDDDG. Recipient: Google; transfer to the USA possible (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies and local storage</h2><p>pp_consent_v1 (cookie, 180 days) and pp-consent-v1 (local storage): your privacy choice. _ga and _ga_&lt;ID&gt; (philipp-paulik.de only, up to 180 days, only after consent): analytics.</p>`;
+const dsBody = `<h1>Datenschutz</h1><h2>Verantwortlicher</h2><p>Philipp Paulik (Kontakt wie im <a href="/impressum/">Impressum</a>).</p><h2>Statistik mit Einwilligung</h2><p>Diese Website lädt ohne deine Einwilligung keinerlei Analyse- oder Fremdcode. Mit deiner Einwilligung &bdquo;Statistik&ldquo; nutzen wir Google Analytics 4 (Google Ireland Limited), um zu verstehen, welche Seiten und Projekte besucht werden. Gemessen werden Seitenaufrufe, Lesetiefe, Klicks auf festgelegte externe Links (nur die Ziel-Domain), die Herkunft als Domain sowie vorher festgelegte Kampagnenkennungen. Nicht erfasst werden: Eingaben, vollständige Adressen, Werbeprofile, seitenübergreifende Wiedererkennung. Standort nur als Land, Gerät nur als Kategorie; Speicherung der Ereignisse 14 Monate. Die Statistik-Cookies gelten nur für philipp-paulik.de, nicht für Unterprojekte wie hob.philipp-paulik.de.</p><h2>Widerruf</h2><p>Widerruf jederzeit über die Datenschutzeinstellungen im Fußbereich; die Cookies werden gelöscht und die Messung stoppt.</p><h2>Rechtsgrundlage und Empfänger</h2><p>Rechtsgrundlage: Art. 6 Abs. 1 lit. a DSGVO, § 25 Abs. 1 TDDDG. Empfänger: Google; mögliche Übermittlung in die USA (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies und lokale Speicherung</h2><p>pp_consent_v1 (Cookie, 180 Tage) und pp-consent-v1 (lokaler Speicher): deine Datenschutzauswahl. _ga und _ga_&lt;ID&gt; (nur philipp-paulik.de, bis 180 Tage, nur nach Einwilligung): Statistik.</p>`;
+const pvBody = `<h1>Privacy policy</h1><h2>Controller</h2><p>Philipp Paulik (contact see <a href="/impressum/">imprint</a>).</p><h2>Analytics with consent</h2><p>Without your consent this site loads no analytics or third-party code. With your &ldquo;Statistics&rdquo; consent we use Google Analytics 4 (Google Ireland Limited) to see which pages and projects are visited. Measured: page views, reading depth, clicks on allowlisted external links (target domain only), origin as domain, and pre-defined campaign identifiers. Not collected: any input, full URLs, advertising profiles, cross-site recognition. Location limited to country, device to category; events are kept for 14 months. Analytics cookies apply to philipp-paulik.de only, not to sub-projects such as hob.philipp-paulik.de.</p><h2>Withdrawal</h2><p>Withdraw anytime via the privacy settings in the footer; cookies are deleted and measurement stops.</p><h2>Legal basis and recipient</h2><p>Legal basis: Art. 6(1)(a) GDPR, § 25(1) TDDDG. Recipient: Google; transfer to the USA possible (EU-US Data Privacy Framework). Details: <a href="https://policies.google.com/privacy" rel="noopener noreferrer">policies.google.com/privacy</a></p><h2>Cookies and local storage</h2><p>pp_consent_v1 (cookie, 180 days) and pp-consent-v1 (local storage): your privacy choice. _ga and _ga_&lt;ID&gt; (philipp-paulik.de only, up to 180 days, only after consent): analytics.</p>`;
 fs.mkdirSync(OUT + '/datenschutz', { recursive: true });
 fs.writeFileSync(OUT + '/datenschutz/index.html', legalPage('de', 'Datenschutz', s.url + 'datenschutz/', dsBody));
 fs.mkdirSync(OUT + '/en/privacy', { recursive: true });
