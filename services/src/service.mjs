@@ -24,10 +24,15 @@ export function passwordVerifier(password, salt=randomBytes(16).toString('hex'))
   if (password.length < 20) throw new Error('At least 20 characters required');
   return {salt, hash:scryptSync(password,salt,64).toString('hex')};
 }
-function validPassword(password, verifier) {
+function validPassword(password, verifier, email) {
   if(typeof password !== 'string' || password.length > 512 || !verifier) return false;
   const actual=scryptSync(password,verifier.salt,64), expected=Buffer.from(verifier.hash,'hex');
-  return actual.length === expected.length && timingSafeEqual(actual,expected);
+  const passwordOk=actual.length === expected.length && timingSafeEqual(actual,expected);
+  // Optional second factor of identity: when the verifier carries an e-mail, it must match too (checked after the scrypt work, constant-time on digests).
+  if(!verifier.email) return passwordOk;
+  const given=createHash('sha256').update(typeof email==='string'&&email.length<=320?email.trim().toLowerCase():'').digest();
+  const wanted=createHash('sha256').update(String(verifier.email).trim().toLowerCase()).digest();
+  return timingSafeEqual(given,wanted) && passwordOk;
 }
 export function validTarget(raw, domains) {
   if(typeof raw!=='string' || raw.length>2048 || /[\x00-\x20\x7f]/.test(raw)) fail(400,'Invalid destination');
@@ -157,7 +162,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
           return (await store.get('SELECT attempts FROM login_limits WHERE site=? AND bucket=?',site,bucket)).attempts;
         });
         if(tries>10) return response(429,'Too many attempts');
-        if(!validPassword(input.password,sites[site].verifier)) return response(401,'Sign in failed');
+        if(!validPassword(input.password,sites[site].verifier,input.email)) return response(401,'Sign in failed');
         const token=hex(),csrf=hex();
         await store.run('DELETE FROM sessions WHERE site=? AND expires<=?',site,now());
         await store.run('INSERT INTO sessions VALUES(?,?,?,?)',site,digest(token),csrf,now()+SESSION_MS);

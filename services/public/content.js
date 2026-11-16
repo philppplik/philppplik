@@ -137,7 +137,7 @@ if(role==='lp'){
 document.querySelector('header>a').href='https://'+site;
 if(role==='lp'){$('f-title').placeholder='Zum Beispiel: Mein neues Angebot';$('cta-fields').hidden=false;$('custom-fields').hidden=false;$('files-card').hidden=false;$('public-link').hidden=true;}
 else{$('public-link').href=`https://blog.${site}/`;}
-$('login').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{const password=$('password').value;$('password').value='';const s=await api('/api/login',{method:'POST',data:{password}});csrf=s.csrf;await show();say('Angemeldet.');});});
+$('login').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{const password=$('password').value,email=$('email').value;$('password').value='';const s=await api('/api/login',{method:'POST',data:{email,password}});csrf=s.csrf;await show();say('Angemeldet.');});});
 $('logout').addEventListener('click',()=>action($('logout'),async()=>{await api('/api/logout',{method:'POST'});lock();say('Abgemeldet.');}));
 $('editor').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{const slug=await save();await refresh();await load(slug);say('Gespeichert.');});});
 $('publish').addEventListener('click',()=>action($('publish'),async()=>{const slug=await save();const live=editing&&$('editor-status').textContent==='Veröffentlicht';await api(`/api/content/${slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();await load(slug);say(live?'Zurück auf Entwurf. Nicht mehr öffentlich erreichbar.':'Veröffentlicht. Jetzt öffentlich erreichbar.');}));
