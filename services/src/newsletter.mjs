@@ -1,6 +1,6 @@
 // Newsletter subscribers with double opt-in and a working unsubscribe. Dormant until wired in and enabled:
 // sending needs a mailer (e.g. Resend), an explicit allowSend flag and a per-call confirmation. Nothing is sent by default.
-import { randomBytes, createHash } from 'node:crypto';
+import { randomBytes, createHash, createHmac, timingSafeEqual } from 'node:crypto';
 const digest = v => createHash('sha256').update(v).digest('hex');
 const EMAIL = /^[^\s@<>"']{1,64}@[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)+$/i;
 const page = (status, title, text) => new Response(`<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${title}</title></head><body style="font:16px/1.6 system-ui,sans-serif;max-width:520px;margin:12vh auto;padding:0 20px"><h1 style="font-size:22px">${title}</h1><p>${text}</p></body></html>`, { status, headers: { 'content-type': 'text/html; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex', 'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; frame-ancestors 'none'" } });
@@ -8,10 +8,12 @@ const json = (status, body) => new Response(JSON.stringify(body), { status, head
 
 export const newsletterSchema = `CREATE TABLE IF NOT EXISTS subscribers(site TEXT, email TEXT, status TEXT NOT NULL, token_digest TEXT NOT NULL, created BIGINT NOT NULL, confirmed BIGINT, unsubscribed BIGINT, PRIMARY KEY(site,email));`;
 
-export function createNewsletter({ store, site, mailer = null, allowSend = false, now = () => Date.now(), maxPending = 500, from = '' }) {
+export function createNewsletter({ store, site, mailer = null, allowSend = false, now = () => Date.now(), maxPending = 500, from = '', publicBase = '', webhookSecret = '' }) {
   let ready = false;
   const init = async () => { if (!ready) { await store.run(newsletterSchema); ready = true; } };
-  const base = `https://news.${site}`;
+  // Public confirm/unsubscribe links. Default stays the dedicated news host; pass publicBase
+  // (e.g. the studio host) to serve them on a host that is already reachable.
+  const base = publicBase || `https://news.${site}`;
   const link = (kind, email, token) => `${base}/${kind}?e=${encodeURIComponent(email)}&t=${token}`;
   async function subscribe(req) {
     if (!mailer) return json(503, { error: 'Anmeldung ist noch nicht aktiviert.' });
@@ -53,6 +55,38 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
     }
     return null;
   }
+  // Resend webhook (svix-signed): bounce and complaint events suppress the address so it
+  // never gets mailed again. Dormant until RESEND_WEBHOOK_SECRET is configured.
+  async function webhook(req) {
+    if (req.method !== 'POST') return json(405, { error: 'Method not allowed.' });
+    if (!webhookSecret) return json(503, { error: 'Webhook ist nicht eingerichtet.' });
+    const body = await req.text();
+    if (!verifySvix(req.headers, body)) return json(400, { error: 'Ungültige Signatur.' });
+    let event; try { event = JSON.parse(body); } catch { return json(400, { error: 'Ungültige Anfrage.' }); }
+    const status = { 'email.bounced': 'bounced', 'email.complained': 'complained' }[event?.type];
+    if (!status) return json(200, { ok: true, ignored: event?.type || 'unknown' });
+    await init();
+    const to = event?.data?.to;
+    for (const addr of Array.isArray(to) ? to : [to].filter(Boolean)) {
+      const email = String(addr).trim().toLowerCase();
+      if (EMAIL.test(email)) await store.run("UPDATE subscribers SET status=?,unsubscribed=? WHERE site=? AND email=? AND status<>'unsubscribed'", status, now(), site, email);
+    }
+    return json(200, { ok: true });
+  }
+  function verifySvix(headers, body) {
+    const id = headers.get('svix-id'), ts = headers.get('svix-timestamp'), sigHeader = headers.get('svix-signature');
+    if (!id || !ts || !sigHeader) return false;
+    if (Math.abs(Math.floor(now() / 1000) - Number(ts)) > 300) return false;
+    let key; try { key = Buffer.from(webhookSecret.replace(/^whsec_/, ''), 'base64'); } catch { return false; }
+    if (!key.length) return false;
+    const expected = createHmac('sha256', key).update(`${id}.${ts}.${body}`).digest('base64');
+    return sigHeader.split(' ').some(part => {
+      const [version, sig] = part.split(',');
+      if (version !== 'v1' || !sig) return false;
+      const a = Buffer.from(expected), b = Buffer.from(sig);
+      return a.length === b.length && timingSafeEqual(a, b);
+    });
+  }
   // Authenticated admin API (session and CSRF are checked by the caller).
   // getDraft(slug) resolves a send-ready draft to {subject, html, text, preheader} or null.
   async function admin(req, u, getDraft) {
@@ -87,5 +121,5 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
     }
     return null;
   }
-  return { publicRoute, admin, init };
+  return { publicRoute, admin, webhook, init };
 }

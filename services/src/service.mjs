@@ -97,6 +97,9 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       const role=rawRole==='l'?'link':rawRole;
       const consoleRoute=u.pathname.startsWith('/api/') || u.pathname==='/manage' || u.pathname==='/upload' || !!managementAssets[u.pathname];
       if(modern && role==='news' && newsletter && !u.pathname.startsWith('/api/')) { const r=await newsletter.publicRoute(req,u); if(r) return r; }
+      // Public double-opt-in confirm and unsubscribe stay reachable on the studio host even
+      // while the dedicated news host has no DNS; /subscribe stays off there.
+      if(modern && role==='m' && newsletter && !u.pathname.startsWith('/api/') && (u.pathname==='/confirm'||u.pathname==='/unsubscribe')) { const r=await newsletter.publicRoute(req,u); if(r) return r; }
       if(modern && !consoleRoute && role==='analytics' && analytics) return analytics(req);
       if(modern && !u.pathname.startsWith('/api/') && ['blog','lp','ads','news'].includes(role) && content) return content(req,role);
       // Central studio: private newsletter draft management lives on the m host as role 'news'.
@@ -177,6 +180,8 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
         await store.run('INSERT INTO sessions VALUES(?,?,?,?)',site,digest(token),csrf,now()+SESSION_MS);
         return response(200,JSON.stringify({csrf}),{'content-type':'application/json; charset=utf-8','set-cookie':`__Host-console=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=3600`});
       }
+      // Resend webhook is public but svix-signed inside the newsletter module; it must run before the session check.
+      if(role==='m' && newsletter && req.method==='POST' && u.pathname==='/api/newsletter/resend-webhook') return newsletter.webhook(req);
       const s=await session(req,site);
       if(role==='m' && req.method==='GET' && u.pathname==='/api/overview') {
         const n=async(q,...a)=>Number((await store.get(q,...a)).total);

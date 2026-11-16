@@ -24,9 +24,10 @@ async function initialize(){
  const gaData=createGaData({password:process.env.GA_DASHBOARD_PASSWORD});setUnlockEnabled(!!gaData);
  // Newsletter: Resend mailer prepared once RESEND_API_KEY is configured. Sending stays
  // gated by NEWSLETTER_ALLOW_SEND (default off); the sender identity comes from
- // NEWSLETTER_FROM (unset until the user picks one). Public host stays off.
+ // NEWSLETTER_FROM (unset until the user picks one). Public host stays off; confirm and
+ // unsubscribe links are served on the studio host unless NEWSLETTER_PUBLIC_BASE overrides.
  const newsFrom=process.env.NEWSLETTER_FROM||'';
- const newsletter=createNewsletter({store,site:'philipp-paulik.de',mailer:createResendMailer({apiKey:process.env.RESEND_API_KEY||'',from:newsFrom}),allowSend:process.env.NEWSLETTER_ALLOW_SEND==='1',from:newsFrom});
+ const newsletter=createNewsletter({store,site:'philipp-paulik.de',mailer:createResendMailer({apiKey:process.env.RESEND_API_KEY||'',from:newsFrom}),allowSend:process.env.NEWSLETTER_ALLOW_SEND==='1',from:newsFrom,publicBase:process.env.NEWSLETTER_PUBLIC_BASE||'https://m.philipp-paulik.de',webhookSecret:process.env.RESEND_WEBHOOK_SECRET||''});
  service=createService({store,enabled:true,modern:true,clickCounting:true,sites:{'philipp-paulik.de':{enabled:true,verifier:JSON.parse(verifier)}},studioHTML:readFileSync(join(process.cwd(),'public/studio.html'),'utf8'),managementHTML:readFileSync(join(process.cwd(),'public/manage.html'),'utf8'),managementAssets:assets,analytics:analyticsProxy,gaData,content,newsletter,newsletterPublic:false});
  return service;
 }
