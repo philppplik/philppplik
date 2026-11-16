@@ -54,7 +54,8 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
     return null;
   }
   // Authenticated admin API (session and CSRF are checked by the caller).
-  async function admin(req, u, sendHtml) {
+  // getDraft(slug) resolves a send-ready draft to {subject, html, text, preheader} or null.
+  async function admin(req, u, getDraft) {
     await init();
     if (req.method === 'GET' && u.pathname === '/api/newsletter/subscribers') {
       const rows = await store.all('SELECT status,count(*) AS total FROM subscribers WHERE site=? GROUP BY status', site);
@@ -65,8 +66,13 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
       if (!allowSend || !mailer) return json(403, { error: 'Versand ist nicht freigegeben.' });
       let input; try { input = await req.json(); } catch { return json(400, { error: 'Ungültige Anfrage.' }); }
       if (input?.confirm !== 'SEND') return json(400, { error: 'Bestätigung fehlt.' });
-      const subject = String(input.subject || '').slice(0, 200), html = await sendHtml(String(input.slug || ''));
-      if (!subject || !html) return json(400, { error: 'Betreff oder Newsletter fehlt.' });
+      const draft = await getDraft(String(input.slug || ''));
+      const subject = String(input.subject || draft?.subject || '').slice(0, 200);
+      if (!subject || !draft?.html) return json(400, { error: 'Betreff oder Newsletter fehlt (der Entwurf muss zum Versand bereit sein).' });
+      // Owner-authored draft fields; the preheader is escaped because it lands inside the HTML body.
+      const esc = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+      const preheader = draft.preheader ? `<div style="display:none;max-height:0;overflow:hidden;mso-hide:all">${esc(draft.preheader)}</div>` : '';
+      const html = preheader + draft.html, text = draft.text || '';
       const test = typeof input.test === 'string' ? input.test.trim().toLowerCase() : '';
       const targets = test ? [{ email: test, token: null }] : (await store.all("SELECT email FROM subscribers WHERE site=? AND status='active'", site));
       let sent = 0;
@@ -74,7 +80,7 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
         const token = randomBytes(24).toString('hex');
         if (!test) await store.run('UPDATE subscribers SET token_digest=? WHERE site=? AND email=?', digest(token), site, t.email);
         const unsub = test ? `${base}/unsubscribe` : link('unsubscribe', t.email, token);
-        await mailer.send({ to: t.email, subject, html: html + `<p style="font-size:12px;color:#666"><a href="${unsub}">Abmelden</a></p>`, text: `Abmelden: ${unsub}`, headers: { 'List-Unsubscribe': `<${unsub}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' } });
+        await mailer.send({ to: t.email, subject, html: html + `<p style="font-size:12px;color:#666"><a href="${unsub}">Abmelden</a></p>`, text: `${text}${text ? '\n\n' : ''}Abmelden: ${unsub}`, headers: { 'List-Unsubscribe': `<${unsub}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' } });
         sent++;
       }
       return json(200, { sent, test: !!test });

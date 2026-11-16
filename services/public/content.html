@@ -7,6 +7,7 @@
 <div id="console" hidden>
 <section class="card" id="editor-card"><div class="section-title"><h2 id="editor-title">Neu anlegen</h2><span class="pill" id="editor-status" hidden>Entwurf</span></div>
 <form id="editor"><div class="field"><label for="f-title">Titel</label><input id="f-title" required maxlength="200"></div>
+<div class="field" id="preheader-field" hidden><label for="f-preheader">Preheader (Vorschautext im Postfach, optional)</label><input id="f-preheader" maxlength="200"></div>
 <div class="field"><label for="f-slug">Kurzname (Slug, optional)</label><input id="f-slug" maxlength="60" pattern="[a-z0-9][a-z0-9-]*" placeholder="wird aus dem Titel abgeleitet"></div>
 <div class="field" id="text-field"><label for="f-text">Text</label><div class="toolbar" id="rt-bar" role="toolbar" aria-label="Formatierung" hidden><button type="button" class="secondary" data-rt="bold"><b>B</b></button><button type="button" class="secondary" data-rt="italic"><i>I</i></button><button type="button" class="secondary" data-rt="text">Absatz</button><button type="button" class="secondary" data-rt="h2">Überschrift</button><button type="button" class="secondary" data-rt="h3">Unterüberschrift</button><button type="button" class="secondary" data-rt="ul">Liste</button><button type="button" class="secondary" data-rt="ol">Nummeriert</button><button type="button" class="secondary" data-rt="quote">Zitat</button><button type="button" class="secondary" data-rt="link">Link</button></div><div id="rt-editor" class="rt-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Beitragstext" hidden></div><textarea id="f-text" rows="12" placeholder="Absätze durch eine Leerzeile trennen."></textarea><div class="inline" id="rt-image" hidden><select id="rt-file" aria-label="Bild aus Dateiverwaltung"></select><input id="rt-alt" maxlength="200" placeholder="Bildbeschreibung (Alt-Text)"><button type="button" class="secondary" id="rt-insert">Bild einfügen</button></div><p class="muted" id="rt-help">Reiner Text.</p></div>
 <div class="field cta-fields" id="cta-fields" hidden><label for="f-cta-label">Button (optional)</label><div class="inline"><input id="f-cta-label" maxlength="80" placeholder="Beschriftung"><input id="f-cta-url" type="url" placeholder="https://…"></div><label for="f-hero">Hero-Bild (Freigabe-Link von static.)</label><input id="f-hero" type="url" placeholder="https://static.…/…"></div>
@@ -25,6 +26,9 @@
 <div class="field"><label for="t-content">utm_content</label><input id="t-content" maxlength="100"></div>
 <div class="actions"><button type="submit" id="t-create">Kurzlink erstellen</button></div></form>
 <div id="t-result" class="items"></div></section>
+<section class="card" id="send-card" hidden><div class="section-title"><h2>Versand</h2></div>
+<p class="muted" id="send-status">Versandstatus wird geladen …</p>
+<div class="actions"><button type="button" id="send-now" disabled>An Abonnenten senden</button></div></section>
 <section class="card"><h2>Inhalte</h2><div id="items" class="items"></div></section>
 </div>
 <footer><a href="https://philipp-paulik.de/datenschutz/">Datenschutz</a> · <a href="https://philipp-paulik.de/impressum/">Impressum</a></footer></main></body></html>

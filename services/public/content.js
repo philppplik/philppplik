@@ -63,7 +63,7 @@ async function openEditor(name){
 function closeEditor(){if(engine){engine.destroy();engine=null;engineName='';}$('editor-host').replaceChildren();}
 function setTab(tab){if(!engine)return;code[currentTab]=engine.value;currentTab=tab;engine.setLanguage(tab);engine.setValue(code[tab]);for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab===tab);}
 function setCustomMode(on){
-  $('code-area').hidden=!on;$('text-field').hidden=on;$('cta-fields').hidden=on||!custom;
+  $('code-area').hidden=!on;$('text-field').hidden=on&&role!=='news';$('cta-fields').hidden=role==='news'||on||!custom;
   if(on&&!engine)openEditor(preferredEngine()).catch(()=>say('Editor konnte nicht geladen werden.'));
   if(!on)closeEditor();
 }
@@ -72,10 +72,11 @@ for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.addEventListener(
 $('engine-monaco').addEventListener('click',()=>action($('engine-monaco'),async()=>{if(engineName!=='monaco')await openEditor('monaco');}));
 $('engine-codemirror').addEventListener('click',()=>action($('engine-codemirror'),async()=>{if(engineName!=='codemirror')await openEditor('codemirror');}));
 
-function resetEditor(){editing=null;closeEditor();code.html='';code.css='';code.js='';currentTab='html';$('editor').reset();if(rtOn())window.Richtext.setBlocks($('rt-editor'),[]);if(custom){$('f-custom-toggle').checked=false;$('code-area').hidden=true;$('text-field').hidden=false;$('cta-fields').hidden=false;}for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab==='html');$('f-slug').disabled=false;$('editor-title').textContent=words.fresh;$('editor-status').hidden=true;$('save').textContent='Als Entwurf speichern';$('publish').textContent='Veröffentlichen';$('preview').hidden=true;$('delete').hidden=true;$('cancel').hidden=true;}
+function resetEditor(){editing=null;closeEditor();code.html='';code.css='';code.js='';currentTab='html';$('editor').reset();if(rtOn())window.Richtext.setBlocks($('rt-editor'),[]);if(custom){$('f-custom-toggle').checked=false;$('code-area').hidden=true;$('text-field').hidden=false;$('cta-fields').hidden=role==='news';}for(const b of $('code-tabs').querySelectorAll('[data-tab]'))b.classList.toggle('active',b.dataset.tab==='html');$('f-slug').disabled=false;$('editor-title').textContent=words.fresh;$('editor-status').hidden=true;$('save').textContent='Als Entwurf speichern';$('publish').textContent=role==='news'?'Zum Versand bereit':'Veröffentlichen';$('preview').hidden=true;$('delete').hidden=true;$('cancel').hidden=true;}
 async function load(slug){
   const item=await api('/api/content/'+slug);editing=item;
   $('f-title').value=item.title;$('f-slug').value=item.slug;$('f-slug').disabled=true;setText(item.paragraphs);
+  if(role==='news')$('f-preheader').value=item.preheader||'';
   if(custom){
     $('f-cta-label').value=item.cta_label||'';$('f-cta-url').value=item.cta_url||'';$('f-hero').value=item.hero_image||'';
     const hasCustom=!!item.custom_html;$('f-custom-toggle').checked=hasCustom;
@@ -84,14 +85,21 @@ async function load(slug){
     setCustomMode(hasCustom);
   }
   $('editor-title').textContent=item.title;
-  const live=item.status==='published';$('editor-status').hidden=false;$('editor-status').textContent=live?'Veröffentlicht':'Entwurf';$('editor-status').className='pill'+(live?' live':'');
-  $('save').textContent='Änderungen speichern';$('publish').textContent=live?'Zurück auf Entwurf':'Veröffentlichen';$('preview').hidden=false;$('delete').hidden=false;$('cancel').hidden=false;scrollTo({top:0,behavior:'smooth'});
+  const live=item.status==='published';$('editor-status').hidden=false;$('editor-status').textContent=live?(role==='news'?'Versandbereit':'Veröffentlicht'):'Entwurf';$('editor-status').className='pill'+(live?' live':'');
+  $('save').textContent='Änderungen speichern';$('publish').textContent=live?'Zurück auf Entwurf':(role==='news'?'Zum Versand bereit':'Veröffentlichen');$('preview').hidden=false;$('delete').hidden=false;$('cancel').hidden=false;scrollTo({top:0,behavior:'smooth'});
 }
 async function save(){
   if(custom&&engine)code[currentTab]=engine.value;
   const customOn=custom&&$('f-custom-toggle').checked;
   const data={title:$('f-title').value,paragraphs:paragraphsFromText($('f-text').value)};
-  if(custom){
+  if(role==='news'){
+    data.preheader=$('f-preheader').value.trim()||null;data.cta=null;data.hero_image=null;
+    if(customOn){
+      if(!code.html.trim())throw new Error('HTML-Version ist leer. Entweder HTML schreiben oder den Schalter aus lassen - dann wird die Mail aus dem Klartext aufgebaut.');
+      data.custom={html:code.html,css:code.css,js:code.js};
+    }else data.custom=null;
+    if(!data.paragraphs.length)throw new Error('Bitte mindestens einen Absatz als Klartext-Version schreiben.');
+  }else if(custom){
     if(customOn){
       if(!code.html.trim())throw new Error('Eigenes HTML ist leer. Entweder HTML schreiben oder den Schalter aus lassen.');
       data.custom={html:code.html,css:code.css,js:code.js};data.paragraphs=[];data.cta=null;data.hero_image=null;
@@ -113,18 +121,19 @@ async function refresh(){
     const live=item.status==='published';
     const outer=document.createElement('article');outer.className='item';
     const text=document.createElement('div');const strong=document.createElement('strong');strong.textContent=item.title;
-    const url=document.createElement('span');url.className='url';url.textContent=live?publicURL(item.slug):'Entwurf · Noch nicht öffentlich';
-    const d=document.createElement('div');d.className='details';d.textContent=`${live?'Veröffentlicht':'Entwurf'} · Geändert: ${new Date(item.updated).toLocaleString('de-DE')} · /${item.slug}`+(item.has_custom?' · Eigenes HTML/CSS/JS':'')+(custom&&!item.has_custom?(item.cta_label?' · Button: '+item.cta_label:'')+(item.hero_image?' · Hero-Bild':''):'');
+    const url=document.createElement('span');url.className='url';url.textContent=live?(role==='news'?'Zum Versand bereit':publicURL(item.slug)):(role==='news'?'Entwurf · Noch nicht versandbereit':'Entwurf · Noch nicht öffentlich');
+    const d=document.createElement('div');d.className='details';d.textContent=`${live?(role==='news'?'Versandbereit':'Veröffentlicht'):'Entwurf'} · Geändert: ${new Date(item.updated).toLocaleString('de-DE')} · /${item.slug}`+(item.has_custom?' · Eigenes HTML/CSS/JS':'')+(custom&&role!=='news'&&!item.has_custom?(item.cta_label?' · Button: '+item.cta_label:'')+(item.hero_image?' · Hero-Bild':''):'');
     text.append(strong,url,d);
     const actions=document.createElement('div');actions.className='actions';
     actions.append(button('Bearbeiten',async()=>{await load(item.slug);}));
-    actions.append(button(live?'Zurückziehen':'Veröffentlichen',async()=>{await api(`/api/content/${item.slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();say(live?'Zurück auf Entwurf. Nicht mehr öffentlich erreichbar.':'Veröffentlicht.');}));
+    actions.append(button(live?'Zurück auf Entwurf':(role==='news'?'Versandbereit':'Veröffentlichen'),async()=>{await api(`/api/content/${item.slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();say(live?'Zurück auf Entwurf.':(role==='news'?'Als versandbereit markiert. Der Versand startet erst, wenn der Versanddienst eingerichtet und freigegeben ist.':'Veröffentlicht.'));}));
     if(live&&role!=='news')actions.append(button('Live-URL kopieren',async()=>{await navigator.clipboard.writeText(publicURL(item.slug));say('Live-URL kopiert.');}));
     if(live&&custom&&role!=='news')actions.append(button('Tracking-Link',async()=>{$('t-slug').value=item.slug;$('track-card').scrollIntoView({behavior:'smooth'});$('t-source').focus();}));
     actions.append(button('Löschen',async()=>{if(!confirm(`${words.one} „${item.title}“ dauerhaft löschen?`))return;await api('/api/content/'+item.slug,{method:'DELETE'});if(editing?.slug===item.slug)resetEditor();await refresh();say('Gelöscht.');},'danger'));
     outer.append(text,actions);$('items').append(outer);
   }
   if(!items.length)$('items').textContent=`Noch keine ${words.many} angelegt.`;
+  if(role==='news')await refreshSend();
   if(custom&&role!=='news'){const sel=$('t-slug'),keep=sel.value;sel.replaceChildren();for(const i of items.filter(i=>i.status==='published')){const o=document.createElement('option');o.value=i.slug;o.textContent=`${i.title} (/${i.slug})`;sel.append(o);}if(keep)sel.value=keep;$('track-card').hidden=!sel.options.length;}
 }
 // --- Virtual file paths to static.* (lp only) ---
@@ -155,13 +164,40 @@ if(custom){
     await api('/api/vpaths',{method:'POST',data:{path,file_id}});$('vp-path').value='';await refreshAssets();say('Pfad verknüpft.');
   });});
 }
+// --- Newsletter send status (news only): honest state, hard-gated until the provider is wired ---
+async function refreshSend(){
+  if(role!=='news')return;
+  $('send-card').hidden=false;
+  try{
+    const s=await api('/api/newsletter/subscribers');
+    const c=s.counts||{},active=c.active||0,pend=c.pending||0,unsub=c.unsubscribed||0;
+    if(s.sendEnabled){$('send-status').textContent=`${active} Abonnenten · ${pend} unbestätigt · ${unsub} abgemeldet. Versand ist eingerichtet und freigegeben.`;$('send-now').disabled=!active;$('send-now').textContent='An Abonnenten senden';}
+    else{$('send-status').textContent=`${active} Abonnenten · ${pend} unbestätigt · ${unsub} abgemeldet. Versand ist noch nicht eingerichtet - der Versanddienst (Resend) wird gerade eingerichtet. Bis dahin bleibt der Versand gesperrt.`;$('send-now').disabled=true;$('send-now').textContent='Versand noch nicht eingerichtet';}
+  }catch(e){$('send-status').textContent='Versandstatus konnte nicht geladen werden.';$('send-now').disabled=true;}
+}
+$('send-now').addEventListener('click',()=>action($('send-now'),async()=>{
+  const slug=editing?.slug;
+  if(!slug||editing?.status!=='published')throw new Error('Erst einen Newsletter öffnen und als versandbereit markieren.');
+  if(!confirm(`Newsletter „${editing.title}“ wirklich an alle Abonnenten senden?`))return;
+  const r=await api('/api/newsletter/send',{method:'POST',data:{slug,confirm:'SEND'}});
+  say(`Versendet an ${r.sent} Empfänger.`);await refreshSend();
+}));
 document.querySelector('header>a').href='https://'+site;
 if(custom){$('f-title').placeholder=role==='ads'?'Zum Beispiel: Herbst-Kampagne 1080x1080':'Zum Beispiel: Mein neues Angebot';$('cta-fields').hidden=false;$('custom-fields').hidden=false;$('files-card').hidden=false;$('public-link').hidden=true;}
+if(role==='news'){
+  document.querySelector('label[for="f-title"]').textContent='Betreff';
+  $('f-title').placeholder='Zum Beispiel: Neue Projekte im November';
+  $('preheader-field').hidden=false;
+  document.querySelector('label[for="f-text"]').textContent='Text (Klartext-Version der Mail)';
+  $('rt-help').textContent='Klartext-Version - geht immer mit, auch wenn du unten eine HTML-Version baust.';
+  document.querySelector('label[for="f-custom-toggle"]').textContent='HTML-Version der Mail (optional)';
+  $('cta-fields').hidden=true;$('files-card').hidden=true;
+}
 else{$('public-link').href=`https://blog.${site}/`;}
 $('login').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{const password=$('password').value,email=$('email').value;$('password').value='';const s=await api('/api/login',{method:'POST',data:{email,password}});csrf=s.csrf;await show();say('Angemeldet.');});});
 $('logout').addEventListener('click',()=>action($('logout'),async()=>{await api('/api/logout',{method:'POST'});lock();say('Abgemeldet.');}));
 $('editor').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{const slug=await save();await refresh();await load(slug);say('Gespeichert.');});});
-$('publish').addEventListener('click',()=>action($('publish'),async()=>{const slug=await save();const live=editing&&$('editor-status').textContent==='Veröffentlicht';await api(`/api/content/${slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();await load(slug);say(live?'Zurück auf Entwurf. Nicht mehr öffentlich erreichbar.':'Veröffentlicht. Jetzt öffentlich erreichbar.');}));
+$('publish').addEventListener('click',()=>action($('publish'),async()=>{const slug=await save();const live=editing&&editing.status==='published';await api(`/api/content/${slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();await load(slug);say(live?'Zurück auf Entwurf.':(role==='news'?'Als versandbereit markiert. Der Versand startet erst, wenn der Versanddienst eingerichtet und freigegeben ist.':'Veröffentlicht. Jetzt öffentlich erreichbar.'));}));
 $('preview').addEventListener('click',()=>action($('preview'),async()=>{const slug=await save();await refresh();open('/preview/'+slug,'_blank','noopener');}));
 $('delete').addEventListener('click',()=>action($('delete'),async()=>{if(!editing||!confirm(`${words.one} „${editing.title}“ dauerhaft löschen?`))return;await api('/api/content/'+editing.slug,{method:'DELETE'});resetEditor();await refresh();say('Gelöscht.');}));
 $('cancel').addEventListener('click',()=>{resetEditor();say('');});

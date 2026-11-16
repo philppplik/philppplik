@@ -8,7 +8,7 @@ function setup(opts = {}) {
   const mailer = { send: async m => { sent.push(m); } };
   const nl = createNewsletter({ store, site: 'philipp-paulik.de', mailer, ...opts });
   const pub = (path, method = 'GET', data) => nl.publicRoute(new Request('https://news.philipp-paulik.de' + path, { method, headers: data ? { 'content-type': 'application/json' } : {}, body: data ? JSON.stringify(data) : undefined }), new URL('https://news.philipp-paulik.de' + path));
-  const adm = (path, method = 'GET', data, html = async () => '<p>Hallo</p>') => nl.admin(new Request('https://news.philipp-paulik.de' + path, { method, headers: { 'content-type': 'application/json' }, body: data ? JSON.stringify(data) : undefined }), new URL('https://news.philipp-paulik.de' + path), html);
+  const adm = (path, method = 'GET', data, draft = async () => ({ subject: 'Hallo', html: '<p>Hallo</p>', text: 'Hallo', preheader: null })) => nl.admin(new Request('https://news.philipp-paulik.de' + path, { method, headers: { 'content-type': 'application/json' }, body: data ? JSON.stringify(data) : undefined }), new URL('https://news.philipp-paulik.de' + path), draft);
   return { store, sent, pub, adm };
 }
 const tokenUrl = m => new URL(m.text.match(/https:\/\/\S+/)[0]);

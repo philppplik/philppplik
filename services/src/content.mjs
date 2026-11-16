@@ -81,7 +81,7 @@ export const vpathsSchema = `CREATE TABLE IF NOT EXISTS vpaths(site TEXT, path T
 // and PostgreSQL once present; that failure is expected and ignored.
 async function ensureSchema(store) {
   await store.run(contentSchema);
-  for (const col of ['custom_html', 'custom_css', 'custom_js']) {
+  for (const col of ['custom_html', 'custom_css', 'custom_js', 'preheader']) {
     try { await store.run(`ALTER TABLE content ADD COLUMN ${col} TEXT`); } catch { /* column exists */ }
   }
   await store.run(vpathsSchema);
@@ -153,6 +153,10 @@ function cleanText(value, limit, label) {
   const text = value.replace(/\r\n?/g, '\n').trim();
   if (!text || text.length > limit || /[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]/.test(text)) fail(400, `Invalid ${label}`);
   return text;
+}
+function cleanOptional(value, limit, label) {
+  if (value === null || value === undefined || value === '') return null;
+  return cleanText(value, limit, label);
 }
 function cleanParagraphs(value, allowEmpty = false) {
   if (allowEmpty && (value === undefined || value === null || (Array.isArray(value) && !value.length))) return [];
@@ -232,7 +236,7 @@ export function createContentService({ store, site, managementHTML = '', managem
   const init = () => ready ??= ensureSchema(store);
   const vendorCache = new Map();
   const num = value => value === null || value === undefined ? null : Number(value);
-  const row = r => r && { slug: r.slug, title: r.title, status: r.status, created: num(r.created), updated: num(r.updated), published_at: num(r.published_at), cta_label: r.cta_label ?? null, cta_url: r.cta_url ?? null, hero_image: r.hero_image ?? null, has_custom: !!(r.custom_html || Number(r.custom_len ?? 0)) };
+  const row = r => r && { slug: r.slug, title: r.title, status: r.status, preheader: r.preheader ?? null, created: num(r.created), updated: num(r.updated), published_at: num(r.published_at), cta_label: r.cta_label ?? null, cta_url: r.cta_url ?? null, hero_image: r.hero_image ?? null, has_custom: !!(r.custom_html || Number(r.custom_len ?? 0)) };
 
   async function publicPage(role, slug, head, preview = false) {
     if (role === 'news' && !preview) return null; // newsletters are never public web pages
@@ -431,7 +435,7 @@ export function createContentService({ store, site, managementHTML = '', managem
     }
     const base = u.pathname === '/api/content' ? null : u.pathname.match(/^\/api\/content\/([a-z0-9-]{1,60})(\/status)?$/);
     if (req.method === 'GET' && u.pathname === '/api/content') {
-      const items = (await store.all('SELECT slug,title,status,created,updated,published_at,cta_label,cta_url,hero_image,length(custom_html) AS custom_len FROM content WHERE site=? AND role=? ORDER BY updated DESC', site, role)).map(row);
+      const items = (await store.all('SELECT slug,title,status,created,updated,published_at,cta_label,cta_url,hero_image,preheader,length(custom_html) AS custom_len FROM content WHERE site=? AND role=? ORDER BY updated DESC', site, role)).map(row);
       return json({ role, items });
     }
     if (req.method === 'POST' && u.pathname === '/api/content') {
@@ -441,20 +445,21 @@ export function createContentService({ store, site, managementHTML = '', managem
       const paragraphs = JSON.stringify(cleanParagraphs(input.paragraphs, !!custom.html));
       const cta = cleanCta(input.cta);
       const hero = validHero(input.hero_image, site);
+      const preheader = role === 'news' ? cleanOptional(input.preheader, 200, 'preheader') : null;
       const requested = input.slug === undefined || input.slug === null || input.slug === '' ? null : String(input.slug);
       if (requested !== null && !validSlug(requested)) fail(400, 'Invalid slug');
       const slug = await store.transaction(async () => {
         const total = Number((await store.get('SELECT count(*) AS total FROM content WHERE site=? AND role=?', site, role)).total);
         if (total >= MAX_ITEMS) fail(413, 'Site content cap reached');
         if (requested) {
-          const r = await store.run('INSERT INTO content(site,role,slug,title,paragraphs,status,created,updated,cta_label,cta_url,hero_image,custom_html,custom_css,custom_js) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(site,role,slug) DO NOTHING', site, role, requested, title, paragraphs, 'draft', now(), now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js);
+          const r = await store.run('INSERT INTO content(site,role,slug,title,paragraphs,status,created,updated,cta_label,cta_url,hero_image,custom_html,custom_css,custom_js,preheader) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(site,role,slug) DO NOTHING', site, role, requested, title, paragraphs, 'draft', now(), now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js, preheader);
           if (r.changes) return requested;
           fail(409, 'Slug already in use');
         }
         const baseSlug = slugify(title);
         for (let attempt = 0; attempt < 50; attempt++) {
           const candidate = attempt ? `${baseSlug.slice(0, 56)}-${attempt + 1}` : baseSlug;
-          const r = await store.run('INSERT INTO content(site,role,slug,title,paragraphs,status,created,updated,cta_label,cta_url,hero_image,custom_html,custom_css,custom_js) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(site,role,slug) DO NOTHING', site, role, candidate, title, paragraphs, 'draft', now(), now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js);
+          const r = await store.run('INSERT INTO content(site,role,slug,title,paragraphs,status,created,updated,cta_label,cta_url,hero_image,custom_html,custom_css,custom_js,preheader) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(site,role,slug) DO NOTHING', site, role, candidate, title, paragraphs, 'draft', now(), now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js, preheader);
           if (r.changes) return candidate;
         }
         fail(503, 'Please retry');
@@ -475,7 +480,8 @@ export function createContentService({ store, site, managementHTML = '', managem
       const paragraphs = JSON.stringify(cleanParagraphs(input.paragraphs, !!custom.html));
       const cta = cleanCta(input.cta);
       const hero = validHero(input.hero_image, site);
-      const r = await store.run('UPDATE content SET title=?, paragraphs=?, updated=?, cta_label=?, cta_url=?, hero_image=?, custom_html=?, custom_css=?, custom_js=? WHERE site=? AND role=? AND slug=?', title, paragraphs, now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js, site, role, slug);
+      const preheader = role === 'news' ? cleanOptional(input.preheader, 200, 'preheader') : null;
+      const r = await store.run('UPDATE content SET title=?, paragraphs=?, updated=?, cta_label=?, cta_url=?, hero_image=?, custom_html=?, custom_css=?, custom_js=?, preheader=? WHERE site=? AND role=? AND slug=?', title, paragraphs, now(), cta.label, cta.url, hero, custom.html, custom.css, custom.js, preheader, site, role, slug);
       return r.changes ? json({ slug, updated: true }) : noindex(404, 'Not found');
     }
     if (req.method === 'POST' && base[2] === '/status') {

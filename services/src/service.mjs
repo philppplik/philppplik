@@ -194,7 +194,15 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       }
       // Newsletter admin API after the CSRF check: management on the m host, public host stays off unless newsletterPublic.
       if((role==='news'||role==='m') && newsletter && u.pathname.startsWith('/api/newsletter/')) {
-        const r=await newsletter.admin(req,u,async slug=>{const rec=await store.get("SELECT custom_html FROM content WHERE site=? AND role='news' AND slug=? AND status='published'",site,slug);return rec?.custom_html||'';});
+        const r=await newsletter.admin(req,u,async slug=>{
+          const rec=await store.get("SELECT title,paragraphs,custom_html,preheader FROM content WHERE site=? AND role='news' AND slug=? AND status='published'",site,slug);
+          if(!rec) return null;
+          const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+          const paras=JSON.parse(rec.paragraphs||'[]');
+          const text=paras.join('\n\n');
+          const html=rec.custom_html||paras.map(p=>`<p>${esc(p)}</p>`).join('');
+          return {subject:rec.title,html,text,preheader:rec.preheader||null};
+        });
         if(r) return r;
       }
       if(modern) {
