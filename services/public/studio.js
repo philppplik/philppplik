@@ -22,7 +22,7 @@ async function loadImages(){
     if(x.shared){const im=document.createElement('img');im.src=`https://static.${siteName}/${x.id}`;im.alt=x.name;im.className='thumb';text.append(im);}
     const acts=document.createElement('div');acts.className='actions';
     const b1=document.createElement('button');b1.type='button';b1.className='secondary';b1.textContent=x.shared?'Freigabe zurückziehen':'Freigeben';
-    b1.addEventListener('click',async()=>{try{await api('/api/files/'+x.id,{method:'POST',data:{shared:!x.shared}});await loadImages();await loadTiles();}catch(e){say(e.message);}});
+    b1.addEventListener('click',async()=>{try{await api('/api/files/'+x.id,{method:'POST',data:{shared:!x.shared}});await loadImages();await loadTiles();say(x.shared?'Freigabe zurückgezogen. Das Bild ist jetzt privat.':'Bild freigegeben. Es kann jetzt im Blog verwendet werden.');}catch(e){say(e.message);}});
     const b2=document.createElement('button');b2.type='button';b2.className='secondary';b2.textContent='Löschen';
     b2.addEventListener('click',async()=>{if(!confirm(`${x.name} löschen?`))return;try{await api('/api/files/'+x.id,{method:'DELETE'});await loadImages();await loadTiles();}catch(e){say(e.message);}});
     acts.append(b1,b2);row.append(text,acts);list.append(row);

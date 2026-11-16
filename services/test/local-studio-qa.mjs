@@ -31,6 +31,11 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['mob
   await page.getByRole('button', { name: 'Freigeben' }).first().waitFor();
   await page.getByRole('button', { name: 'Freigeben' }).first().click();
   await page.locator('img.thumb').first().waitFor();
+  await page.getByText('Bild freigegeben. Es kann jetzt im Blog verwendet werden.', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Freigabe zurückziehen', exact: true }).click();
+  await page.getByText('Freigabe zurückgezogen. Das Bild ist jetzt privat.', { exact: true }).waitFor();
+  await page.getByRole('button', { name: 'Freigeben', exact: true }).click();
+  await page.getByText('Bild freigegeben. Es kann jetzt im Blog verwendet werden.', { exact: true }).waitFor();
   await page.screenshot({ path: `${out}-studio-${name}.png`, fullPage: true });
   await login('blog');
   await page.locator('#f-title').fill('Beispielbeitrag (Fixture)');
