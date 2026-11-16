@@ -1,7 +1,9 @@
 const $=id=>document.getElementById(id);
-const roleMeta=document.querySelector('meta[name="content-role"]')?.content;const role=['lp','ads'].includes(roleMeta)?roleMeta:'blog';const custom=role!=='blog';
-const site=location.hostname.replace(/^(blog|lp|ads)\./,'');
-const words=role==='ads'
+const roleMeta=document.querySelector('meta[name="content-role"]')?.content;const role=['lp','ads','news'].includes(roleMeta)?roleMeta:'blog';const custom=role!=='blog';
+const site=location.hostname.replace(/^(blog|lp|ads|news)\./,'');
+const words=role==='news'
+  ?{one:'Newsletter',many:'Newsletter',fresh:'Neuer Newsletter'}
+  :role==='ads'
   ?{one:'Anzeige',many:'Anzeigen',fresh:'Neue Anzeige'}
   :role==='lp'
   ?{one:'Landing Page',many:'Landing Pages',fresh:'Neue Landing Page'}
@@ -102,13 +104,13 @@ async function refresh(){
     const actions=document.createElement('div');actions.className='actions';
     actions.append(button('Bearbeiten',async()=>{await load(item.slug);}));
     actions.append(button(live?'Zurückziehen':'Veröffentlichen',async()=>{await api(`/api/content/${item.slug}/status`,{method:'POST',data:{status:live?'draft':'published'}});await refresh();say(live?'Zurück auf Entwurf. Nicht mehr öffentlich erreichbar.':'Veröffentlicht.');}));
-    if(live)actions.append(button('Live-URL kopieren',async()=>{await navigator.clipboard.writeText(publicURL(item.slug));say('Live-URL kopiert.');}));
-    if(live&&custom)actions.append(button('Tracking-Link',async()=>{$('t-slug').value=item.slug;$('track-card').scrollIntoView({behavior:'smooth'});$('t-source').focus();}));
+    if(live&&role!=='news')actions.append(button('Live-URL kopieren',async()=>{await navigator.clipboard.writeText(publicURL(item.slug));say('Live-URL kopiert.');}));
+    if(live&&custom&&role!=='news')actions.append(button('Tracking-Link',async()=>{$('t-slug').value=item.slug;$('track-card').scrollIntoView({behavior:'smooth'});$('t-source').focus();}));
     actions.append(button('Löschen',async()=>{if(!confirm(`${words.one} „${item.title}“ dauerhaft löschen?`))return;await api('/api/content/'+item.slug,{method:'DELETE'});if(editing?.slug===item.slug)resetEditor();await refresh();say('Gelöscht.');},'danger'));
     outer.append(text,actions);$('items').append(outer);
   }
   if(!items.length)$('items').textContent=`Noch keine ${words.many} angelegt.`;
-  if(custom){const sel=$('t-slug'),keep=sel.value;sel.replaceChildren();for(const i of items.filter(i=>i.status==='published')){const o=document.createElement('option');o.value=i.slug;o.textContent=`${i.title} (/${i.slug})`;sel.append(o);}if(keep)sel.value=keep;$('track-card').hidden=!sel.options.length;}
+  if(custom&&role!=='news'){const sel=$('t-slug'),keep=sel.value;sel.replaceChildren();for(const i of items.filter(i=>i.status==='published')){const o=document.createElement('option');o.value=i.slug;o.textContent=`${i.title} (/${i.slug})`;sel.append(o);}if(keep)sel.value=keep;$('track-card').hidden=!sel.options.length;}
 }
 // --- Virtual file paths to static.* (lp only) ---
 async function refreshAssets(){
@@ -150,7 +152,7 @@ $('delete').addEventListener('click',()=>action($('delete'),async()=>{if(!editin
 $('cancel').addEventListener('click',()=>{resetEditor();say('');});
 resetEditor();show().catch(()=>lock());
 
-if(custom){$('track-form').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{
+if(custom&&role!=='news'){$('track-form').addEventListener('submit',e=>{e.preventDefault();action(e.submitter,async()=>{
   const utm={};for(const k of ['source','medium','campaign','term','content']){const v=$('t-'+k).value.trim();if(v)utm[k]=v;}
   const r=await api('/api/tracking-link',{method:'POST',data:{slug:$('t-slug').value,utm}});
   const row=document.createElement('article');row.className='item';const t=document.createElement('div');const a=document.createElement('strong');a.textContent=r.short;const d=document.createElement('div');d.className='details';d.textContent='→ '+r.target;t.append(a,d);

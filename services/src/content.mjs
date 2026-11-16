@@ -68,7 +68,7 @@ const json = (body, status = 200) => noindex(status, JSON.stringify(body), { 'co
 // Single statement so both store adapters can apply it verbatim. BIGINT is
 // accepted by SQLite (type affinity) and native PostgreSQL alike.
 // Roles that may carry custom HTML/CSS/JS (always served in the sandboxed wrapper).
-const CUSTOM = new Set(['lp', 'ads']);
+const CUSTOM = new Set(['lp', 'ads', 'news']);
 const UTM_KEYS = ['source', 'medium', 'campaign', 'term', 'content'];
 const UTM_VALUE = /^[\p{L}\p{N} _.,:+~/-]{1,100}$/u;
 const B62 = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -234,6 +234,7 @@ export function createContentService({ store, site, managementHTML = '', managem
   const row = r => r && { slug: r.slug, title: r.title, status: r.status, created: num(r.created), updated: num(r.updated), published_at: num(r.published_at), cta_label: r.cta_label ?? null, cta_url: r.cta_url ?? null, hero_image: r.hero_image ?? null, has_custom: !!(r.custom_html || Number(r.custom_len ?? 0)) };
 
   async function publicPage(role, slug, head, preview = false) {
+    if (role === 'news' && !preview) return null; // newsletters are never public web pages
     const record = await store.get('SELECT * FROM content WHERE site=? AND role=? AND slug=?', site, role, slug);
     const post = record && row(record);
     if (!post || (post.status !== 'published' && !preview)) return null;
@@ -266,6 +267,7 @@ export function createContentService({ store, site, managementHTML = '', managem
   // navigation would run the code on the manager's origin without the
   // sandbox, so browsers that report a non-iframe destination get 404).
   async function framePage(role, slug, preview, req) {
+    if (role === 'news' && !preview) return null;
     const dest = req.headers.get('sec-fetch-dest');
     if (dest && dest !== 'iframe') return null;
     const record = await store.get('SELECT * FROM content WHERE site=? AND role=? AND slug=?', site, role, slug);
