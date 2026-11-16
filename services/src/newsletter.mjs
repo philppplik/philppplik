@@ -66,12 +66,13 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
     const status = { 'email.bounced': 'bounced', 'email.complained': 'complained' }[event?.type];
     if (!status) return json(200, { ok: true, ignored: event?.type || 'unknown' });
     // The Resend account hosts other projects and the signature is no project filter: only
-    // events from this project's approved sender are applied. With a configured sender the
-    // address must match exactly; without one the verified sending domain gates it.
+    // events from this project's approved sender are applied. The sender must be configured
+    // and valid; a verified domain is a technical property, not a sender approval, so a
+    // missing or invalid configuration fails closed and never touches the database.
     const addr = v => { const m = /<([^>]+)>/.exec(String(v || '')); return (m ? m[1] : String(v || '')).trim().toLowerCase(); };
     const evFrom = addr(event?.data?.from), wantFrom = addr(from);
-    const own = wantFrom ? evFrom === wantFrom : evFrom.endsWith('@news.' + site);
-    if (!own) return json(200, { ok: true, ignored: 'foreign-sender' });
+    if (!EMAIL.test(wantFrom)) return json(200, { ok: true, ignored: 'no-approved-sender' });
+    if (evFrom !== wantFrom) return json(200, { ok: true, ignored: 'foreign-sender' });
     await init();
     const to = event?.data?.to;
     // UPDATE only: unknown addresses are never created from provider events.

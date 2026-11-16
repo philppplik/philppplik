@@ -18,7 +18,7 @@ function sign(body, id = 'msg_1', ts = Math.floor(NOW / 1000)) {
 function setup(opts = {}) {
   const store = new Store(), sent = [];
   const mailer = { send: async m => { sent.push(m); } };
-  const nl = createNewsletter({ store, site: 'philipp-paulik.de', mailer, now: () => NOW, webhookSecret: SECRET, ...opts });
+  const nl = createNewsletter({ store, site: 'philipp-paulik.de', mailer, now: () => NOW, webhookSecret: SECRET, from: OWN_FROM, ...opts });
   const hook = (body, headers = sign(body)) => nl.webhook(new Request('https://m.philipp-paulik.de/api/newsletter/resend-webhook', { method: 'POST', headers, body }));
   const add = async (email, status = 'active') => { await nl.init(); await store.run("INSERT INTO subscribers VALUES(?,?,?,?,?,?,?)", 'philipp-paulik.de', email, status, 'x'.repeat(64), NOW, NOW, null); };
   const statusOf = async email => (await store.get('SELECT status FROM subscribers WHERE email=?', email))?.status;
@@ -60,6 +60,17 @@ test('webhook rejects bad signatures and stale timestamps', async () => {
   assert.equal((await hook(body, { ...sign(body), 'svix-signature': 'v1,AAAA' })).status, 400);
   assert.equal((await hook(body, sign(body, 'msg_1', Math.floor(NOW / 1000) - 3600))).status, 400, 'older than 5 minutes');
   assert.equal(await statusOf('d@example.com'), 'active', 'nothing changed');
+});
+
+test('missing or invalid sender configuration fails closed with no database write', async () => {
+  for (const from of ['', 'not-an-address']) {
+    const { hook, add, statusOf, event } = setup({ from });
+    await add('h@example.com');
+    const res = await hook(event('email.bounced', 'h@example.com'));
+    assert.equal(res.status, 200);
+    assert.deepEqual(await res.json(), { ok: true, ignored: 'no-approved-sender' });
+    assert.equal(await statusOf('h@example.com'), 'active', 'verified domain alone is not a sender approval');
+  }
 });
 
 test('foreign-project events are acknowledged but never applied', async () => {
