@@ -1,0 +1,55 @@
+// Local visual QA with fixtures only: in-memory store, fake password, generated PNG.
+import { chromium } from 'playwright';
+import { readFileSync } from 'node:fs';
+import { Store } from '../src/sqlite.mjs';
+import { createService, passwordVerifier } from '../src/service.mjs';
+import { createContentService } from '../src/content.mjs';
+import { readSession } from '../src/sessions.mjs';
+const site = 'philipp-paulik.de', pw = 'local-fixture-only-password-20+', pub = f => readFileSync(new URL('../public/' + f, import.meta.url), 'utf8');
+const store = new Store();
+const contentAssets = {}, assets = {};
+for (const [n, t] of [['content.css', 'text/css'], ['content.js', 'text/javascript'], ['richtext.js', 'text/javascript']]) contentAssets['/' + n] = { body: pub(n), type: t };
+for (const [n, t] of [['manage.css', 'text/css'], ['manage.js', 'text/javascript'], ['studio.js', 'text/javascript']]) assets['/' + n] = { body: pub(n), type: t };
+const content = createContentService({ store, site, authenticate: async req => !!await readSession(req, store, site), managementHTML: pub('content.html'), managementAssets: contentAssets });
+const service = createService({ store, enabled: true, modern: true, sites: { [site]: { enabled: true, verifier: passwordVerifier(pw) } }, studioHTML: pub('studio.html'), managementHTML: pub('manage.html'), managementAssets: assets, content });
+const browser = await chromium.launch({ executablePath: '/usr/bin/google-chrome', headless: true, args: ['--no-sandbox'] });
+const out = process.argv[2] || '/tmp/qa';
+const results = {};
+for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['mobile', { width: 390, height: 844 }]]) {
+  const ctx = await browser.newContext({ viewport });
+  await ctx.route('https://**/*', async route => {
+    const r = route.request(), u = new URL(r.url());
+    if (!u.hostname.endsWith('.' + site)) return route.abort();
+    const res = await service(new Request(r.url(), { method: r.method(), headers: r.headers(), body: r.postDataBuffer() ?? undefined }));
+    await route.fulfill({ status: res.status, headers: Object.fromEntries(res.headers), body: Buffer.from(await res.arrayBuffer()) });
+  });
+  const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message)); page.on('console', m => m.type() === 'error' && errs.push(m.text()));
+  const login = async host => { await page.goto(`https://${host}.${site}${host==='blog'?'/manage':'/'}`); if(!await page.locator('#email').count()) console.log('NOEMAIL',host,(await page.content()).slice(0,300)); if (await page.locator('#console').isHidden()) { await page.locator('#email').fill('fixture@example.com'); await page.locator('#password').fill(pw); await page.getByRole('button', { name: 'Anmelden' }).click(); await page.locator('#console').waitFor({ state: 'visible' }); } };
+  await login('m');
+  if (name === 'desktop') await page.locator('#img-file').setInputFiles('/tmp/fixture.png'); else await page.locator('#img-file').setInputFiles('/tmp/fixture.png');
+  await page.getByRole('button', { name: 'Hochladen' }).click();
+  await page.getByRole('button', { name: 'Freigeben' }).first().waitFor();
+  await page.getByRole('button', { name: 'Freigeben' }).first().click();
+  await page.locator('img.thumb').first().waitFor();
+  await page.screenshot({ path: `${out}-studio-${name}.png`, fullPage: true });
+  await login('blog');
+  await page.locator('#f-title').fill('Beispielbeitrag (Fixture)');
+  await page.locator('#rt-editor').click();
+  await page.keyboard.type('Erster Absatz mit ');
+  await page.getByRole('button', { name: 'B', exact: true }).click(); await page.keyboard.type('fettem'); await page.getByRole('button', { name: 'B', exact: true }).click();
+  await page.keyboard.type(' Text.'); await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'Liste' }).click(); await page.keyboard.type('Punkt eins'); await page.keyboard.press('Enter'); await page.keyboard.type('Punkt zwei'); await page.keyboard.press('Enter'); await page.keyboard.press('Enter');
+  await page.locator('#rt-file').selectOption({ index: 0 }); await page.locator('#rt-alt').fill('Testbild'); await page.getByRole('button', { name: 'Bild einfügen' }).click();
+  await page.locator('#rt-editor img').waitFor();
+  await page.screenshot({ path: `${out}-blog-editor-${name}.png`, fullPage: true });
+  await page.getByRole('button', { name: 'Als Entwurf speichern' }).click(); await page.waitForTimeout(500);
+  const slug = (await store.all("SELECT slug,paragraphs FROM content WHERE role='blog'"))[0];
+  const res = await service(new Request(`https://blog.${site}/preview/${slug.slug}`, { headers: { cookie: (await ctx.cookies()).filter(c => c.name).map(c => c.name + '=' + c.value).join('; ') } }));
+  results[name] = { errs, scrollOverflow: await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), paragraphs: JSON.parse(slug.paragraphs), previewStatus: res.status };
+  await page.goto(`https://blog.${site}/preview/${slug.slug}`);
+  await page.screenshot({ path: `${out}-blog-preview-${name}.png`, fullPage: true });
+  await store.run("DELETE FROM content"); await store.run("DELETE FROM files");
+  await ctx.close();
+}
+console.log(JSON.stringify(results, null, 1));
+await browser.close(); store.close();
