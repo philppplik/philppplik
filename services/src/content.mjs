@@ -23,6 +23,7 @@ import { isIP } from 'node:net';
 import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { renderBlocks, plainExcerpt } from './richtext.mjs';
 
 const MAX_ITEMS = 100;
 const MAX_TITLE = 200;
@@ -202,7 +203,7 @@ function customWrapper({ title, description, framePath, preview = false }) {
 <body><iframe src="${escapeHTML(framePath)}" title="${escapeHTML(title)}" sandbox="allow-scripts allow-forms allow-popups allow-top-navigation"></iframe>${preview ? '<p class="note">Entwurfsvorschau - nur mit Verwaltungszugang sichtbar.</p>' : ''}</body></html>`;
 }
 
-const pageCSS = `:root{color-scheme:dark;--bg:#0c2340;--panel:#112f51;--line:#294a6e;--text:#eee9df;--muted:#adbed2;--blue:#77a8ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top right,#173c64,transparent 65%),var(--bg);color:var(--text);font:16px/1.65 system-ui,sans-serif}header,main,footer{max-width:760px;margin:0 auto;padding:0 22px}header{padding-top:28px}header a{color:var(--muted);text-decoration:none;font:12px monospace;letter-spacing:.12em}h1{font:clamp(40px,6vw,64px)/1.1 Georgia,serif;letter-spacing:-.03em;margin:22px 0 10px}h1 a{color:var(--text);text-decoration:none}.date{color:var(--muted);font-size:14px;margin:0 0 34px}.post{border-top:1px solid var(--line);padding:26px 0}.post h2{font:28px/1.2 Georgia,serif;margin:0 0 6px}.post h2 a{color:var(--text);text-decoration:none}.post h2 a:hover{color:var(--blue)}.post .excerpt,.body p{color:var(--text)}.post .meta,.empty{color:var(--muted);font-size:14px}.body p{white-space:pre-line;margin:0 0 22px;font-size:18px}main{padding-bottom:40px}footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:22px;padding-bottom:48px}footer a{color:var(--blue)}.back{display:inline-block;margin:18px 0 0;color:var(--blue);text-decoration:none;font-size:14px}.hero{margin:64px 0 40px}.hero .body p{font-size:20px}.heroimg{display:block;width:100%;border-radius:20px;border:1px solid var(--line);margin:0 0 34px}.cta{display:inline-block;background:#78a9fa;color:#10233c;border:1px solid #87b5ff;font:600 16px/1.4 system-ui;border-radius:10px;padding:14px 22px;text-decoration:none;margin-top:8px}.cta:hover{background:#8cb6fb}.previewnote{border-left:2px solid #e9cd8d;background:#153658;padding:10px 16px;font-size:13px;color:#e9cd8d;margin:26px 0 0}`;
+const pageCSS = `:root{color-scheme:dark;--bg:#0c2340;--panel:#112f51;--line:#294a6e;--text:#eee9df;--muted:#adbed2;--blue:#77a8ff}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top right,#173c64,transparent 65%),var(--bg);color:var(--text);font:16px/1.65 system-ui,sans-serif}header,main,footer{max-width:760px;margin:0 auto;padding:0 22px}header{padding-top:28px}header a{color:var(--muted);text-decoration:none;font:12px monospace;letter-spacing:.12em}h1{font:clamp(40px,6vw,64px)/1.1 Georgia,serif;letter-spacing:-.03em;margin:22px 0 10px}h1 a{color:var(--text);text-decoration:none}.date{color:var(--muted);font-size:14px;margin:0 0 34px}.post{border-top:1px solid var(--line);padding:26px 0}.post h2{font:28px/1.2 Georgia,serif;margin:0 0 6px}.post h2 a{color:var(--text);text-decoration:none}.post h2 a:hover{color:var(--blue)}.post .excerpt,.body p{color:var(--text)}.post .meta,.empty{color:var(--muted);font-size:14px}.body p,.body ul,.body ol,.body blockquote,.body figure{margin:0 0 22px;font-size:18px}.body h2,.body h3{font:26px/1.25 Georgia,serif;margin:34px 0 12px}.body h3{font-size:21px}.body ul,.body ol{padding-left:1.4em}.body blockquote{border-left:2px solid var(--blue);padding-left:16px;color:var(--muted)}.body figure{margin-left:0;margin-right:0}.body img{display:block;max-width:100%;height:auto;border-radius:14px;border:1px solid var(--line)}.body a{color:var(--blue)}.body code{background:#153658;padding:1px 5px;border-radius:4px;font-size:.9em}main{padding-bottom:40px}footer{color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:22px;padding-bottom:48px}footer a{color:var(--blue)}.back{display:inline-block;margin:18px 0 0;color:var(--blue);text-decoration:none;font-size:14px}.hero{margin:64px 0 40px}.hero .body p{font-size:20px}.heroimg{display:block;width:100%;border-radius:20px;border:1px solid var(--line);margin:0 0 34px}.cta{display:inline-block;background:#78a9fa;color:#10233c;border:1px solid #87b5ff;font:600 16px/1.4 system-ui;border-radius:10px;padding:14px 22px;text-decoration:none;margin-top:8px}.cta:hover{background:#8cb6fb}.previewnote{border-left:2px solid #e9cd8d;background:#153658;padding:10px 16px;font-size:13px;color:#e9cd8d;margin:26px 0 0}`;
 
 function layout({ site, role, title, description, body, manageLink = false }) {
   const main = `https://${site}`;
@@ -246,18 +247,18 @@ export function createContentService({ store, site, managementHTML = '', managem
     }
     let article;
     if (role === 'blog') {
-      article = `<p class="date">Veröffentlicht am ${dateDE(post.published_at ?? post.created)}</p><h1>${escapeHTML(post.title)}</h1><div class="body">${paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join('')}</div><a class="back" href="/">← Alle Beiträge</a>`;
+      article = `<p class="date">Veröffentlicht am ${dateDE(post.published_at ?? post.created)}</p><h1>${escapeHTML(post.title)}</h1><div class="body">${renderBlocks(paragraphs, site)}</div><a class="back" href="/">← Alle Beiträge</a>`;
     } else {
       const hero = post.hero_image ? `<img class="heroimg" src="${escapeHTML(post.hero_image)}" alt="" loading="lazy">` : '';
       const cta = post.cta_label && post.cta_url ? `<p><a class="cta" href="${escapeHTML(post.cta_url)}" rel="noopener">${escapeHTML(post.cta_label)}</a></p>` : '';
       article = `<div class="hero">${hero}<h1>${escapeHTML(post.title)}</h1><div class="body">${paragraphs.map(p => `<p>${escapeHTML(p)}</p>`).join('')}</div>${cta}</div>`;
     }
     if (preview) article = `<p class="previewnote">Entwurfsvorschau - nur mit Verwaltungszugang sichtbar.</p>` + article;
-    return { body: layout({ site, role, title: post.title, description: paragraphs[0] ? paragraphs[0].slice(0, 155) : post.title, body: article }), head, custom: false };
+    return { body: layout({ site, role, title: post.title, description: plainExcerpt(paragraphs[0] ?? '').slice(0, 155) || post.title, body: article }), head, custom: false };
   }
 
   async function blogIndex() {
-    const posts = (await store.all("SELECT slug,title,paragraphs,published_at,created FROM content WHERE site=? AND role='blog' AND status='published' ORDER BY published_at DESC", site)).map(r => ({ ...row(r), first: JSON.parse(r.paragraphs)[0] }));
+    const posts = (await store.all("SELECT slug,title,paragraphs,published_at,created FROM content WHERE site=? AND role='blog' AND status='published' ORDER BY published_at DESC", site)).map(r => ({ ...row(r), first: plainExcerpt(JSON.parse(r.paragraphs).find(b => plainExcerpt(b)) ?? '') }));
     const items = posts.map(p => `<article class="post"><h2><a href="/${escapeHTML(p.slug)}">${escapeHTML(p.title)}</a></h2><p class="meta">${dateDE(p.published_at ?? p.created)}</p><p class="excerpt">${escapeHTML(p.first.length > 220 ? p.first.slice(0, 220).trimEnd() + ' …' : p.first)}</p></article>`).join('');
     return layout({ site, role: 'blog', title: `Blog | ${site}`, description: `Blog auf blog.${site}`, manageLink: true, body: `<h1>Blog</h1>${items || '<p class="empty">Noch keine Beiträge veröffentlicht.</p>'}` });
   }
@@ -372,9 +373,9 @@ export function createContentService({ store, site, managementHTML = '', managem
   async function api(req, role, u) {
     // Shared static.* files and virtual path mappings, lp host only.
     if (req.method === 'GET' && u.pathname === '/api/assets') {
-      if (!CUSTOM.has(role)) return noindex(404, 'Not found');
+      if (!CUSTOM.has(role) && role !== 'blog') return noindex(404, 'Not found');
       const files = await store.all('SELECT id,name,length(content) AS size,shared FROM files WHERE site=? ORDER BY id DESC', site);
-      const paths = await store.all('SELECT path,file_id,created FROM vpaths WHERE site=? ORDER BY path', site);
+      const paths = role === 'blog' ? [] : await store.all('SELECT path,file_id,created FROM vpaths WHERE site=? ORDER BY path', site);
       const byId = new Map(files.map(f => [f.id, f]));
       return json({
         files: files.map(f => ({ id: f.id, name: f.name, size: num(f.size), shared: !!Number(f.shared), url: `${staticBase}/${f.id}` })),

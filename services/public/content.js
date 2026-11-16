@@ -17,7 +17,18 @@ async function api(path,{method='GET',data}={}) {
   return r.status===204?null:r.json();
 }
 function lock(){csrf='';editing=null;$('console').hidden=true;$('logout').hidden=true;$('gate').hidden=false;$('items').replaceChildren();$('password').value='';resetEditor();}
-async function show(){const s=await api('/api/session');csrf=s.csrf;$('gate').hidden=true;$('console').hidden=false;$('logout').hidden=false;await refresh();if(custom)refreshAssets();}
+function wrapSel(a,b,ph){const t=$('f-text'),s0=t.selectionStart,e0=t.selectionEnd,sel=t.value.slice(s0,e0)||ph;t.setRangeText(a+sel+b,s0,e0,'select');t.focus();}
+function prefixLines(pre,numbered){const t=$('f-text'),s0=t.value.lastIndexOf('\n',t.selectionStart-1)+1;let e0=t.value.indexOf('\n',t.selectionEnd);if(e0<0)e0=t.value.length;const lines=t.value.slice(s0,e0).split('\n').map((l,i)=>(numbered?`${i+1}. `:pre)+l.replace(/^(#{2,3} |[-*] |\d+\. |> ?)/,''));t.setRangeText(lines.join('\n'),s0,e0,'select');t.focus();}
+function initRichtext(){
+  if(role!=='blog')return;
+  $('rt-bar').hidden=false;$('rt-image').hidden=false;$('rt-help').textContent='Formatierung über die Knöpfe oder Markdown: **fett**, *kursiv*, ## Überschrift, - Liste, > Zitat. Bilder nur aus deiner Dateiverwaltung (static.), die Datei muss freigegeben sein.';
+  const acts={bold:()=>wrapSel('**','**','Text'),italic:()=>wrapSel('*','*','Text'),h2:()=>prefixLines('## '),h3:()=>prefixLines('### '),ul:()=>prefixLines('- '),ol:()=>prefixLines('',true),quote:()=>prefixLines('> '),link:()=>{const u=prompt('Link (https://…)');if(!u)return;if(!/^(https:\/\/|mailto:)/.test(u)){say('Nur https- oder mailto-Links.');return;}wrapSel('[',`](${u})`,'Linktext');}};
+  for(const b of $('rt-bar').querySelectorAll('button'))b.addEventListener('click',()=>acts[b.dataset.rt]());
+  $('rt-insert').addEventListener('click',()=>{const o=$('rt-file').selectedOptions[0];if(!o||!o.dataset.url)return say('Erst eine freigegebene Datei auswählen.');const t=$('f-text'),alt=$('rt-alt').value.replace(/[\[\]\n]/g,' ').trim(),block=`![${alt}](${o.dataset.url})`;const pre=t.value&&!t.value.endsWith('\n\n')?(t.value.endsWith('\n')?'\n':'\n\n'):'';t.setRangeText(pre+block+'\n\n',t.selectionStart,t.selectionEnd,'end');$('rt-alt').value='';t.focus();});
+  loadRtFiles();
+}
+async function loadRtFiles(){const {files}=await api('/api/assets');const sel=$('rt-file');sel.replaceChildren();const shared=files.filter(f=>f.shared&&/\.(png|jpe?g|gif|webp|avif|svg)$/i.test(f.name));if(!shared.length){const o=document.createElement('option');o.textContent='Keine freigegebenen Bilder - auf static. hochladen und freigeben';o.value='';sel.append(o);return;}for(const f of shared){const o=document.createElement('option');o.value=f.id;o.dataset.url=f.url;o.textContent=f.name;sel.append(o);}}
+async function show(){const s=await api('/api/session');csrf=s.csrf;$('gate').hidden=true;$('console').hidden=false;$('logout').hidden=false;await refresh();if(custom)refreshAssets();initRichtext();}
 async function action(button,fn){button.disabled=true;say('');try{await fn();}catch(e){say(e.message);}finally{button.disabled=false;}}
 function button(text,fn,kind='secondary'){const b=document.createElement('button');b.type='button';b.textContent=text;b.className=kind;b.addEventListener('click',()=>action(b,fn));return b;}
 const publicURL=slug=>role==='blog'?`https://blog.${site}/${slug}`:`https://${role}.${site}/${slug}`;

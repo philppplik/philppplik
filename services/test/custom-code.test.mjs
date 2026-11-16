@@ -124,7 +124,8 @@ test('virtual paths: create, redirect, share gating, validation, delete', async 
   assert.equal(assets.files.length, 2);
   assert.equal(assets.vpaths.length, 2);
   assert.equal(assets.vpaths.find(p => p.path === '/bilder/cover.jpg').shared, true);
-  assert.equal((await x.req('/api/assets', { r: 'blog' })).status, 404);
+  assert.equal((await x.req('/api/assets', { r: 'blog' })).status, 200); // blog: image picker
+  assert.equal((await x.req('/api/assets', { r: 'static' })).status, 404);
   // Landing-page slugs keep working alongside
   await x.req('/api/content', { method: 'POST', data: { title: 'Normal', paragraphs: ['Text'] } });
   await x.req('/api/content/normal/status', { method: 'POST', data: { status: 'published' } });
