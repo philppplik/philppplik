@@ -23,7 +23,7 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['mob
     const res = await service(new Request(r.url(), { method: r.method(), headers: r.headers(), body: r.postDataBuffer() ?? undefined }));
     await route.fulfill({ status: res.status, headers: Object.fromEntries(res.headers), body: Buffer.from(await res.arrayBuffer()) });
   });
-  const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message)); page.on('console', m => m.type() === 'error' && errs.push(m.text()));
+  const page = await ctx.newPage(); const errs = []; page.on('pageerror', e => errs.push(e.message)); page.on('console', m => { if (m.type() === 'error') { errs.push(m.text()); console.log('CONSOLE', m.text()); } });
   const login = async host => { await page.goto(`https://${host}.${site}${host==='blog'?'/manage':'/'}`); if(!await page.locator('#email').count()) console.log('NOEMAIL',host,(await page.content()).slice(0,300)); if (await page.locator('#console').isHidden()) { await page.locator('#email').fill('fixture@example.com'); await page.locator('#password').fill(pw); await page.getByRole('button', { name: 'Anmelden' }).click(); await page.locator('#console').waitFor({ state: 'visible' }); } };
   await login('m');
   if (name === 'desktop') await page.locator('#img-file').setInputFiles('/tmp/fixture.png'); else await page.locator('#img-file').setInputFiles('/tmp/fixture.png');
@@ -45,7 +45,8 @@ for (const [name, viewport] of [['desktop', { width: 1280, height: 900 }], ['mob
   await page.getByRole('button', { name: 'Als Entwurf speichern' }).click(); await page.waitForTimeout(500);
   const slug = (await store.all("SELECT slug,paragraphs FROM content WHERE role='blog'"))[0];
   const res = await service(new Request(`https://blog.${site}/preview/${slug.slug}`, { headers: { cookie: (await ctx.cookies()).filter(c => c.name).map(c => c.name + '=' + c.value).join('; ') } }));
-  results[name] = { errs, scrollOverflow: await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), paragraphs: JSON.parse(slug.paragraphs), previewStatus: res.status };
+  const previewBody = await res.clone().text();
+  results[name] = { errs, scrollOverflow: await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), paragraphs: JSON.parse(slug.paragraphs), previewStatus: res.status, previewDraftLabel: previewBody.includes('Entwurf · zuletzt geändert'), previewFakePublished: previewBody.includes('Veröffentlicht am') };
   await page.goto(`https://blog.${site}/preview/${slug.slug}`);
   await page.screenshot({ path: `${out}-blog-preview-${name}.png`, fullPage: true });
   await store.run("DELETE FROM content"); await store.run("DELETE FROM files");

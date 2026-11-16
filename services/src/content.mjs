@@ -247,7 +247,7 @@ export function createContentService({ store, site, managementHTML = '', managem
     }
     let article;
     if (role === 'blog') {
-      article = `<p class="date">Veröffentlicht am ${dateDE(post.published_at ?? post.created)}</p><h1>${escapeHTML(post.title)}</h1><div class="body">${renderBlocks(paragraphs, site)}</div><a class="back" href="/">← Alle Beiträge</a>`;
+      article = `<p class="date">${post.status === 'published' ? `Veröffentlicht am ${dateDE(post.published_at ?? post.created)}` : `Entwurf · zuletzt geändert am ${dateDE(post.updated)}`}</p><h1>${escapeHTML(post.title)}</h1><div class="body">${renderBlocks(paragraphs, site)}</div><a class="back" href="/">← Alle Beiträge</a>`;
     } else {
       const hero = post.hero_image ? `<img class="heroimg" src="${escapeHTML(post.hero_image)}" alt="" loading="lazy">` : '';
       const cta = post.cta_label && post.cta_url ? `<p><a class="cta" href="${escapeHTML(post.cta_url)}" rel="noopener">${escapeHTML(post.cta_label)}</a></p>` : '';
