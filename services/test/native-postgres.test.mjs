@@ -9,10 +9,11 @@ test('native PostgreSQL concurrent connections, privacy, persistence and rollbac
   const probe=createServer();await new Promise(r=>probe.listen(0,'127.0.0.1',r));const port=probe.address().port;await new Promise(r=>probe.close(r));
   const dir=mkdtempSync(join(tmpdir(),'native-pg-fixture-'));
   const database=new EmbeddedPostgres({databaseDir:join(dir,'data'),user:'postgres',password:'explicit-local-only-fixture',port,persistent:true,onLog:()=>{},onError:()=>{}});
-  let pool;
+  let pool,shutdown=false;const unexpected=[];
+  const connectPool=()=>{const p=new pg.Pool({host:'127.0.0.1',port,user:'postgres',password:'explicit-local-only-fixture',database:'postgres',max:10});p.on('error',e=>{if(!(shutdown&&e.code==='57P01'))unexpected.push(e);});return p;};
   try{
     await database.initialise();await database.start();
-    pool=new pg.Pool({host:'127.0.0.1',port,user:'postgres',password:'explicit-local-only-fixture',database:'postgres',max:10});
+    pool=connectPool();
     await pool.query(schema);
     const a=new PostgresStore(pool),b=new PostgresStore(pool);
     const sites={'philipp-paulik.de':{enabled:true,verifier:passwordVerifier('local-native-postgres-fixture','local-fixture')}};
@@ -30,10 +31,11 @@ test('native PostgreSQL concurrent connections, privacy, persistence and rollbac
 
     await assert.rejects(()=>a.transaction(async()=>{await a.run('INSERT INTO files(site,id,name,content) VALUES(?,?,?,?)','philipp-paulik.de','b'.repeat(32),'private.txt',Buffer.from('private'));throw new Error('fixture rollback');}));assert.equal((await pool.query('SELECT * FROM files')).rows.length,0);
     await a.run('INSERT INTO files(site,id,name,content) VALUES(?,?,?,?)','philipp-paulik.de','c'.repeat(32),'private.txt',Buffer.from('private'));
-    await pool.end();pool=null;await database.stop();await database.start();
-    pool=new pg.Pool({host:'127.0.0.1',port,user:'postgres',password:'explicit-local-only-fixture',database:'postgres'});
+    shutdown=true;await pool.end();pool=null;await database.stop();await database.start();shutdown=false;
+    pool=connectPool();
     const after=createService({store:new PostgresStore(pool),sites,enabled:true});
     assert.equal((await after(new Request('https://static.philipp-paulik.de/'+'c'.repeat(32)))).status,404);
     assert.equal((await pool.query('SELECT * FROM files')).rows.length,1);
-  }finally{if(pool)await pool.end();await database.stop().catch(()=>{});rmSync(dir,{recursive:true,force:true});}
+    assert.deepEqual(unexpected,[]);
+  }finally{shutdown=true;if(pool)await pool.end();await database.stop().catch(()=>{});rmSync(dir,{recursive:true,force:true});}
 });
