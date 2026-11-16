@@ -26,7 +26,7 @@ async function initialize(){
 export default async function(req){
  try{
   const u=new URL(req.url);
-  if(!['analytics','static','l','blog','lp'].some(r=>u.hostname===r+'.philipp-paulik.de'))return new Response('Not found',{status:404});
+  if(!['analytics','static','l','blog','lp','ads'].some(r=>u.hostname===r+'.philipp-paulik.de'))return new Response('Not found',{status:404});
   // The platform-supplied request URL, never client forwarded headers, selects the host.
   const headers=new Headers(req.headers);headers.delete('x-forwarded-host');
   const request=new Request(req,{headers});

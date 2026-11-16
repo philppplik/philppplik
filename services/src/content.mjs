@@ -20,6 +20,7 @@
 // an `authenticate(req)` option and this module enforces it itself.
 
 import { isIP } from 'node:net';
+import { randomBytes } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -66,6 +67,11 @@ const json = (body, status = 200) => noindex(status, JSON.stringify(body), { 'co
 
 // Single statement so both store adapters can apply it verbatim. BIGINT is
 // accepted by SQLite (type affinity) and native PostgreSQL alike.
+// Roles that may carry custom HTML/CSS/JS (always served in the sandboxed wrapper).
+const CUSTOM = new Set(['lp', 'ads']);
+const UTM_KEYS = ['source', 'medium', 'campaign', 'term', 'content'];
+const UTM_VALUE = /^[\p{L}\p{N} _.,:+~/-]{1,100}$/u;
+const B62 = 'abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 export const contentSchema = `CREATE TABLE IF NOT EXISTS content(site TEXT, role TEXT, slug TEXT, title TEXT NOT NULL, paragraphs TEXT NOT NULL, status TEXT NOT NULL DEFAULT 'draft', created BIGINT NOT NULL, updated BIGINT NOT NULL, published_at BIGINT, cta_label TEXT, cta_url TEXT, hero_image TEXT, custom_html TEXT, custom_css TEXT, custom_js TEXT, PRIMARY KEY(site, role, slug))`;
 // Pretty public paths on the lp host pointing at shared static.* files.
 export const vpathsSchema = `CREATE TABLE IF NOT EXISTS vpaths(site TEXT, path TEXT, file_id TEXT NOT NULL, created BIGINT NOT NULL, PRIMARY KEY(site, path))`;
@@ -121,7 +127,7 @@ function cleanCode(value, limit, label) {
 }
 function cleanCustom(value, role) {
   if (value === null || value === undefined) return { html: null, css: null, js: null };
-  if (role === 'blog') fail(400, 'Custom code is only available for landing pages');
+  if (role === 'blog') fail(400, 'Custom code is only available for landing pages and ads');
   if (typeof value !== 'object') fail(400, 'Invalid custom code');
   const html = cleanCode(value.html, MAX_HTML, 'custom HTML');
   const css = cleanCode(value.css, MAX_CSS, 'custom CSS');
@@ -233,7 +239,7 @@ export function createContentService({ store, site, managementHTML = '', managem
     if (!post || (post.status !== 'published' && !preview)) return null;
     const paragraphs = JSON.parse(record.paragraphs);
     // Custom-code landing pages are served as a sandboxed-iframe wrapper.
-    if (role === 'lp' && record.custom_html) {
+    if (CUSTOM.has(role) && record.custom_html) {
       const description = paragraphs[0] ? paragraphs[0].slice(0, 155) : post.title;
       return { body: customWrapper({ title: post.title, description, framePath: `${preview ? '/preview-frame' : '/frame'}/${post.slug}`, preview }), head, custom: true };
     }
@@ -263,7 +269,7 @@ export function createContentService({ store, site, managementHTML = '', managem
     const dest = req.headers.get('sec-fetch-dest');
     if (dest && dest !== 'iframe') return null;
     const record = await store.get('SELECT * FROM content WHERE site=? AND role=? AND slug=?', site, role, slug);
-    if (!record || role !== 'lp' || !record.custom_html) return null;
+    if (!record || !CUSTOM.has(role) || !record.custom_html) return null;
     if (!preview && record.status !== 'published') return null;
     return customDocument(record);
   }
@@ -282,7 +288,7 @@ export function createContentService({ store, site, managementHTML = '', managem
   return async (req, role) => {
     try {
       await init();
-      if (role !== 'blog' && role !== 'lp') return noindex(404, 'Not found');
+      if (role !== 'blog' && !CUSTOM.has(role)) return noindex(404, 'Not found');
       const u = new URL(req.url);
       const head = req.method === 'HEAD';
 
@@ -294,7 +300,7 @@ export function createContentService({ store, site, managementHTML = '', managem
       const manageShell = () => noindex(200, head ? null : managementHTML.replace('<head>', `<head><meta name="content-role" content="${role}">`), { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': PAGE_CSP });
       if (u.pathname === '/manage' && !u.search) return manageShell();
       // The LP host has no public index: its root opens the management shell.
-      if (role === 'lp' && (u.pathname === '/' || u.pathname === '') && !u.search) return manageShell();
+      if (CUSTOM.has(role) && (u.pathname === '/' || u.pathname === '') && !u.search) return manageShell();
       if (managementAssets[u.pathname]) {
         const asset = managementAssets[u.pathname];
         return noindex(200, head ? null : asset.body, { 'content-type': asset.type, 'content-security-policy': "default-src 'none'; frame-ancestors 'none'" });
@@ -364,7 +370,7 @@ export function createContentService({ store, site, managementHTML = '', managem
   async function api(req, role, u) {
     // Shared static.* files and virtual path mappings, lp host only.
     if (req.method === 'GET' && u.pathname === '/api/assets') {
-      if (role !== 'lp') return noindex(404, 'Not found');
+      if (!CUSTOM.has(role)) return noindex(404, 'Not found');
       const files = await store.all('SELECT id,name,length(content) AS size,shared FROM files WHERE site=? ORDER BY id DESC', site);
       const paths = await store.all('SELECT path,file_id,created FROM vpaths WHERE site=? ORDER BY path', site);
       const byId = new Map(files.map(f => [f.id, f]));
@@ -374,7 +380,7 @@ export function createContentService({ store, site, managementHTML = '', managem
       });
     }
     if (req.method === 'POST' && u.pathname === '/api/vpaths') {
-      if (role !== 'lp') return noindex(404, 'Not found');
+      if (!CUSTOM.has(role)) return noindex(404, 'Not found');
       const input = await readJSON(req);
       const path = validVpath(input.path);
       if (!path) fail(400, 'Invalid path');
@@ -387,12 +393,38 @@ export function createContentService({ store, site, managementHTML = '', managem
       return json({ path }, 201);
     }
     if (req.method === 'DELETE' && u.pathname === '/api/vpaths') {
-      if (role !== 'lp') return noindex(404, 'Not found');
+      if (!CUSTOM.has(role)) return noindex(404, 'Not found');
       const input = await readJSON(req);
       const path = validVpath(input.path);
       if (!path) fail(400, 'Invalid path');
       const r = await store.run('DELETE FROM vpaths WHERE site=? AND path=?', site, path);
       return r.changes ? noindex(204, null) : noindex(404, 'Not found');
+    }
+    if (req.method === 'POST' && u.pathname === '/api/tracking-link') {
+      const input = await readJSON(req);
+      const slug = String(input.slug || '');
+      if (!/^[a-z0-9-]{1,60}$/.test(slug)) fail(400, 'Invalid slug');
+      const rec = await store.get("SELECT status FROM content WHERE site=? AND role=? AND slug=?", site, role, slug);
+      if (!rec) return noindex(404, 'Not found');
+      if (rec.status !== 'published') fail(409, 'Only published pages can be shared');
+      const target = new URL(`https://${role}.${site}/${slug}`);
+      const utm = input.utm && typeof input.utm === 'object' ? input.utm : {};
+      for (const k of UTM_KEYS) {
+        const v = utm[k];
+        if (v === undefined || v === null || v === '') continue;
+        if (typeof v !== 'string' || !UTM_VALUE.test(v.trim())) fail(400, `Invalid utm_${k}`);
+        target.searchParams.set(`utm_${k}`, v.trim());
+      }
+      if (!target.searchParams.has('utm_source') || !target.searchParams.has('utm_campaign')) fail(400, 'utm_source and utm_campaign are required');
+      const total = Number((await store.get('SELECT count(*) AS total FROM links WHERE site=?', site)).total);
+      if (total >= 1000) fail(413, 'Link limit reached');
+      const label = `${role.toUpperCase()} ${slug} · ${target.searchParams.get('utm_source')}/${target.searchParams.get('utm_campaign')}`.slice(0, 120);
+      for (let i = 0; i < 5; i++) {
+        const id = Array.from(randomBytes(6), b => B62[b % B62.length]).join('');
+        const r = await store.run('INSERT INTO links(site,id,target,label,expires) VALUES(?,?,?,?,NULL) ON CONFLICT(site,id) DO NOTHING', site, id, target.href, label);
+        if (r.changes) return json({ id, short: `https://l.${site}/${id}`, target: target.href }, 201);
+      }
+      fail(503, 'Could not allocate a link id');
     }
     const base = u.pathname === '/api/content' ? null : u.pathname.match(/^\/api\/content\/([a-z0-9-]{1,60})(\/status)?$/);
     if (req.method === 'GET' && u.pathname === '/api/content') {

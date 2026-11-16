@@ -78,7 +78,7 @@ async function readJSON(req) {
 export function createService({store,sites,enabled=false,clickCounting=false,now=()=>Date.now(),managementHTML='',managementAssets={},dashboard=null,publicPerMinute=600,modern=false,content=null,analytics=null,gaData=null}) {
   const domains=Object.keys(sites);
   // Only the exact verified hostname config selects the tenant, never a URL/body site value.
-  const hosts=new Map(domains.flatMap(site=>['db','analytics','static','link',...(modern?['l','blog','lp']:[])].map(role=>[`${role}.${site}`,{site,role}])));
+  const hosts=new Map(domains.flatMap(site=>['db','analytics','static','link',...(modern?['l','blog','lp','ads']:[])].map(role=>[`${role}.${site}`,{site,role}])));
   async function session(req,site) {
     const s=await readSession(req,store,site,now());if(!s)fail(401,'Sign in required');return s;
   }
@@ -97,7 +97,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       const role=rawRole==='l'?'link':rawRole;
       const consoleRoute=u.pathname.startsWith('/api/') || u.pathname==='/manage' || u.pathname==='/upload' || !!managementAssets[u.pathname];
       if(modern && !consoleRoute && role==='analytics' && analytics) return analytics(req);
-      if(modern && !u.pathname.startsWith('/api/') && ['blog','lp'].includes(role) && content) return content(req,role);
+      if(modern && !u.pathname.startsWith('/api/') && ['blog','lp','ads'].includes(role) && content) return content(req,role);
       const linkHost=modern?'l':'link';
       if(modern && ((u.pathname==='/' && ['static','link'].includes(role)) || u.pathname==='/upload')) {
         return response(200,managementHTML,{'content-type':'text/html; charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"});
@@ -178,7 +178,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       }
       if(modern) {
         if(u.pathname==='/api/content' || u.pathname.startsWith('/api/content/') || u.pathname==='/api/assets' || u.pathname==='/api/vpaths') {
-          if(!['blog','lp'].includes(role) || !content)return response(404);
+          if(!['blog','lp','ads'].includes(role) || !content)return response(404);
           return content(req,role);
         }
         if(u.pathname.startsWith('/api/files') && role!=='static')return response(404);

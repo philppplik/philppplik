@@ -17,6 +17,14 @@
 <section class="card" id="files-card" hidden><div class="section-title"><h2>Dateipfade</h2><a id="open-static" href="#" target="_blank" rel="noopener">static. öffnen ↗</a></div>
 <p class="muted">Virtueller Pfad auf dieser Domain → freigegebene Datei von static. Solange die Datei freigegeben ist, antwortet der Pfad mit einer Weiterleitung.</p>
 <form id="new-vpath" class="inline"><input id="vp-path" placeholder="/bilder/cover.jpg" maxlength="160"><select id="vp-file" required></select><button type="submit">Verknüpfen</button></form><div id="vpaths" class="items"></div></section>
+<section class="card" id="track-card" hidden><div class="section-title"><h2>Tracking-Link</h2></div>
+<p class="muted">Erzeugt einen Kurzlink auf l. mit UTM-Parametern für eine veröffentlichte Seite. Klicks werden dort gezählt.</p>
+<form id="track-form"><div class="field"><label for="t-slug">Seite</label><select id="t-slug" required></select></div>
+<div class="inline"><div class="field"><label for="t-source">utm_source *</label><input id="t-source" maxlength="100" required placeholder="newsletter, google, meta"></div><div class="field"><label for="t-medium">utm_medium</label><input id="t-medium" maxlength="100" placeholder="email, cpc, social"></div></div>
+<div class="inline"><div class="field"><label for="t-campaign">utm_campaign *</label><input id="t-campaign" maxlength="100" required placeholder="herbst-2026"></div><div class="field"><label for="t-term">utm_term</label><input id="t-term" maxlength="100"></div></div>
+<div class="field"><label for="t-content">utm_content</label><input id="t-content" maxlength="100"></div>
+<div class="actions"><button type="submit" id="t-create">Kurzlink erstellen</button></div></form>
+<div id="t-result" class="items"></div></section>
 <section class="card"><h2>Inhalte</h2><div id="items" class="items"></div></section>
 </div>
 <footer><a href="https://philipp-paulik.de/datenschutz/">Datenschutz</a> · <a href="https://philipp-paulik.de/impressum/">Impressum</a></footer></main></body></html>
