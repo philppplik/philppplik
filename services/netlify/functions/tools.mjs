@@ -4,7 +4,8 @@ import {join} from 'node:path';
 import pg from 'pg';
 import {PostgresStore} from '../../src/postgres.mjs';
 import {createService} from '../../src/service.mjs';
-import {analyticsProxy} from '../../src/analytics-proxy.mjs';
+import {analyticsProxy,setUnlockEnabled} from '../../src/analytics-proxy.mjs';
+import {createGaData} from '../../src/ga-data.mjs';
 import {createContentService} from '../../src/content.mjs';
 import {maintain} from '../../src/maintenance.mjs';
 let service,lastMaintenance=0,store;
@@ -18,7 +19,8 @@ async function initialize(){
  for(const [name,type]of [['content.css','text/css'],['content.js','text/javascript']])contentAssets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
  const content=createContentService({store,site:'philipp-paulik.de',authenticate:async req=>!!await readSession(req,store,'philipp-paulik.de'),managementHTML:readFileSync(join(process.cwd(),'public/content.html'),'utf8'),managementAssets:contentAssets,vendorDir:join(process.cwd(),'public','vendor')});
  for(const [name,type]of [['manage.css','text/css'],['manage.js','text/javascript']])assets['/'+name]={body:readFileSync(join(process.cwd(),'public',name),'utf8'),type};
- service=createService({store,enabled:true,modern:true,clickCounting:true,sites:{'philipp-paulik.de':{enabled:true,verifier:JSON.parse(verifier)}},managementHTML:readFileSync(join(process.cwd(),'public/manage.html'),'utf8'),managementAssets:assets,analytics:analyticsProxy,content});
+ const gaData=createGaData({password:process.env.GA_DASHBOARD_PASSWORD});setUnlockEnabled(!!gaData);
+ service=createService({store,enabled:true,modern:true,clickCounting:true,sites:{'philipp-paulik.de':{enabled:true,verifier:JSON.parse(verifier)}},managementHTML:readFileSync(join(process.cwd(),'public/manage.html'),'utf8'),managementAssets:assets,analytics:analyticsProxy,gaData,content});
  return service;
 }
 export default async function(req){

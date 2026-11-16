@@ -75,7 +75,7 @@ async function readJSON(req) {
   if(!req.headers.get('content-type')?.startsWith('application/json')) fail(415,'JSON required');
   try {return JSON.parse((await body(req,8192)).toString());}catch(e){if(e instanceof HttpError)throw e;fail(400,'Invalid JSON');}
 }
-export function createService({store,sites,enabled=false,clickCounting=false,now=()=>Date.now(),managementHTML='',managementAssets={},dashboard=null,publicPerMinute=600,modern=false,content=null,analytics=null}) {
+export function createService({store,sites,enabled=false,clickCounting=false,now=()=>Date.now(),managementHTML='',managementAssets={},dashboard=null,publicPerMinute=600,modern=false,content=null,analytics=null,gaData=null}) {
   const domains=Object.keys(sites);
   // Only the exact verified hostname config selects the tenant, never a URL/body site value.
   const hosts=new Map(domains.flatMap(site=>['db','analytics','static','link',...(modern?['l','blog','lp']:[])].map(role=>[`${role}.${site}`,{site,role}])));
@@ -169,6 +169,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
         return response(200,JSON.stringify({csrf}),{'content-type':'application/json; charset=utf-8','set-cookie':`__Host-console=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=3600`});
       }
       const s=await session(req,site);
+      if(req.method==='GET' && u.pathname==='/api/ga' && role==='analytics' && gaData){try{return json(await gaData());}catch{return response(503,'GA4 data unavailable');}}
       if(req.method==='GET' && u.pathname==='/api/session') return json({csrf:s.csrf,site,role:rawRole,clickCounting,retentionDays:90});
       if(req.method!=='GET') mutation(req,u,s);
       if(req.method==='POST' && u.pathname==='/api/logout') {
