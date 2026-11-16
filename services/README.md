@@ -27,7 +27,7 @@ The tools keep their own host. No wildcard tenant selection or client-supplied f
 
 Files: 4 MiB each, 100 MiB total. Formats: PDF, ZIP, UTF-8 text/CSV, PNG/JPEG/WebP. Raster images are decoded and recoded to PNG; other files are opaque download attachments. No virus scanner is included. Sharing makes a file downloadable by anyone who has its link; withdrawing a link cannot revoke downloaded copies.
 
-Links: 1,000 per site. Content: 100 entries per role, title 200 characters, up to 40 paragraphs of 4,000 characters. Landing pages are a slim manager, not Autonnel's commerce/funnel builder: no payments, forms, automations, arbitrary HTML/JS or ad integrations.
+Links: 1,000 per site. Content: 100 entries per role, title 200 characters, up to 40 paragraphs of 4,000 characters. Landing pages stay a slim manager by default (text, CTA, own-host hero image), not Autonnel's commerce/funnel builder: no payments, forms, automations or ad integrations. Owners can additionally opt a landing page into custom HTML/CSS/JS, edited with locally vendored Monaco or CodeMirror. Custom pages are always served inside a sandboxed iframe wrapper (no same-origin), so custom code never runs in the manager's origin. Virtual file paths (for example `/bilder/cover.jpg`) redirect to shared files on the tenant's own `static.*` host.
 
 Free provider quotas are hard limits, not an uptime promise. Netlify can pause the whole team when credits run out, including other projects in that team. Neon can pause compute/transfer at quota. Cold starts are expected. The free six-hour database history is not an independent long-term backup. Do not enable paid overages or upgrades without approval.
 
@@ -41,6 +41,8 @@ npm run check
 npm test
 node test/integrated-visual.mjs
 ```
+
+The code editors are vendored build artifacts under `public/vendor/`, served same-origin. `codemirror.js` is an esbuild bundle of the CodeMirror 6 packages; `monaco/` is an esbuild bundle of monaco-editor (editor API + HTML/CSS/JS language services) plus its four workers. Monaco's internally vendored DOMPurify copy was replaced with the current upstream release at bundle time (verify `version="…"` in `public/vendor/monaco/monaco.js` after any rebuild). Rebuild both with esbuild when upgrading; no CDN is involved at runtime.
 
 Tests use explicitly local fixtures. The central-router integration test verifies authentication, CSRF, host isolation and draft-preview protection. The native PostgreSQL test selects an ephemeral port and uses four worker processes to verify atomic counts, rollback and restart persistence. Runtime dependencies should be audited with `npm audit --omit=dev`.
 

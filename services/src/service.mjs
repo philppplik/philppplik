@@ -171,7 +171,7 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
         return response(204,null,{'set-cookie':'__Host-console=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0'});
       }
       if(modern) {
-        if(u.pathname==='/api/content' || u.pathname.startsWith('/api/content/')) {
+        if(u.pathname==='/api/content' || u.pathname.startsWith('/api/content/') || u.pathname==='/api/assets' || u.pathname==='/api/vpaths') {
           if(!['blog','lp'].includes(role) || !content)return response(404);
           return content(req,role);
         }

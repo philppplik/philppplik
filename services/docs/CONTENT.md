@@ -67,7 +67,25 @@ Landing pages (`lp` role) optionally carry a call-to-action and a hero image; bl
 
 ## Content model and rendering
 
-Content is a title plus an array of plain-text paragraphs - never HTML or JS. Public pages escape every character, carry `default-src 'none'; style-src 'unsafe-inline'` CSP, set no cookies and do no visitor tracking (no counterpart to autonnel's tracking; the only write on public reads is the shared per-minute rate-limit bucket in `public_limits`, which the hourly `maintain()` already prunes). Line breaks inside a paragraph render as line breaks (`white-space: pre-line`). Public pages omit `x-robots-tag` so posts and landing pages can be indexed; `/manage` and all API responses are `noindex, nofollow`. Public pages link the site's `/impressum/` and `/datenschutz/` paths, matching the existing manage page.
+Default content is a title plus an array of plain-text paragraphs - never HTML or JS. Structured public pages escape every character, carry `default-src 'none'; style-src 'unsafe-inline'` CSP, set no cookies and do no visitor tracking. Line breaks inside a paragraph render as line breaks (`white-space: pre-line`). Public pages omit `x-robots-tag` so posts and landing pages can be indexed; `/manage` and all API responses are `noindex, nofollow`. Public pages link the site's `/impressum/` and `/datenschutz/` paths, matching the existing manage page.
+
+### Custom-code landing pages (lp only)
+
+A landing page can opt into owner-authored custom code via `custom: { html, css, js }` on create/update (`custom: null` clears it; CSS/JS require HTML; blog rejects custom fields). Paragraphs become optional in custom mode and only feed the meta description. Serving model:
+
+- `GET /<slug>` returns a fixed wrapper page (title/meta only) with a sandboxed iframe (`allow-scripts allow-forms allow-popups allow-top-navigation`, **no** `allow-same-origin`) pointing at `/frame/<slug>`. The frame document runs in an opaque origin: it cannot reach the manager's DOM, and credentialed same-origin API calls are impossible (HttpOnly cookie plus CORS-less cross-origin fetch from an opaque origin).
+- `GET /frame/<slug>` serves the assembled custom document (HTML as-is when it is a full document, otherwise wrapped; CSS injected before `</head>`, JS before `</body>`) for published pages. It answers 404 when the browser reports a `Sec-Fetch-Dest` other than `iframe`, so the code does not run unwrapped on the manager origin in modern browsers. CSP: `default-src https: data: blob: 'unsafe-inline' 'unsafe-eval'; base-uri 'none'`.
+- Authenticated drafts use `/preview/<slug>` (wrapper with note, noindex) + `/preview-frame/<slug>` (same document rules, any status).
+
+Size caps: HTML 100k, CSS 50k, JS 100k characters; JSON bodies up to 400 KB.
+
+### Virtual file paths (lp only)
+
+`vpaths` maps pretty public paths to files of the same tenant: `POST /api/vpaths { path, file_id }`, `DELETE /api/vpaths { path }`, `GET /api/assets` lists the site's files and mappings. Paths are lowercase, file-like (a single segment must contain a dot, so they can never shadow a slug), and the first segment must not be reserved. A mapped path answers `302` to `https://static.<site>/<id>` only while the file is shared; private or deleted files answer 404. Public routes only ever read the shared flag - file bytes are served exclusively by the static host.
+
+### Vendored editor assets
+
+`GET /vendor/*` serves the locally vendored Monaco/CodeMirror bundles from `public/vendor` (lazy reads, in-memory cache, extension allowlist, no path traversal). The management shell CSP allows same-origin scripts/workers/fonts and inline styles for the editors.
 
 Slugs: `^[a-z0-9]([a-z0-9-]{0,58}[a-z0-9])?$`; `manage`, `api`, `content`, `preview` are reserved. Empty database = empty blog ("Noch keine Beiträge veröffentlicht."); no seed or example content is shipped.
 
@@ -75,7 +93,8 @@ The public and management palettes reuse the package's design tokens (`#0c2340/#
 
 ## Tests and visual verification
 
-- `node --test test/content.test.mjs` - 10 tests: idempotent schema, empty states, full draft→publish→edit→unpublish→delete lifecycle, HTML/JS escaping proof, slug rules (reserved/derived/unique/immutable), validation caps and item cap, CTA/hero validation incl. tenant-only hero host and clearing, LP root shell + blog manage link + gated draft preview, methods/HEAD/rate limit/role guard/`authenticate` hook, management-shell meta + noindex, and a PostgreSQL-dialect run of the schema and lifecycle through `PostgresStore` (PGlite).
+- `node --test test/content.test.mjs` - schema idempotency, empty states, full draft→publish→edit→unpublish→delete lifecycle, HTML/JS escaping proof, slug rules, validation caps, CTA/hero validation, gated draft preview, rate limit, role guard, and a PostgreSQL-dialect run through `PostgresStore` (PGlite).
+- `node --test test/custom-code.test.mjs` - custom-code lifecycle (wrapper, sandboxed frame, iframe-destination guard, draft/preview rules, clearing back to structured mode), size caps, blog rejection, virtual-path CRUD/redirect/share gating/reserved paths, `has_custom` list flag.
 - `node test/content-visual.mjs` - loopback harness (stubbed session endpoint and `authenticate`; auth is the router's job) plus Playwright: gate, console, editor, mobile widths (no horizontal overflow at 390px), public blog index/post, LP manager at `/manage` and `/`, public LP with CTA + hero (static.* image intercepted with an SVG fixture), draft preview. Screenshots land in `/downloads/content-*.png`; the script exits non-zero on any page error.
 - The full existing suite (`npm test`, `npm run check`) still passes: 31 tests total.
 

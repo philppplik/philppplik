@@ -7,6 +7,7 @@
 - File upload/recode/private-sharing lifecycle.
 - Short-code creation, target/label editing, disable/reactivate/delete and daily aggregate counts.
 - Blog and landing-page CRUD, drafts, publication and authenticated previews.
+- Custom-code landing pages (owner opt-in on lp) with locally vendored Monaco/CodeMirror editors, always served inside a sandboxed iframe wrapper (opaque origin, iframe-destination guard); virtual file paths redirecting to shared files on the tenant's own static host.
 - LP call-to-action and own-static-host hero image validation.
 - Fixed-upstream encrypted GA4 view, without changing the existing publisher.
 - SQLite, PGlite and native PostgreSQL tests, including concurrency/restart/rollback.
@@ -40,3 +41,5 @@ The existing GA4 password successfully decrypted the proxied view in-browser. It
 The local native database fixture needs its platform package's normal install script (`npm rebuild @embedded-postgres/linux-x64` on Linux x64) if dependencies were installed with `--ignore-scripts`. Runtime dependency packaging must use a real `node_modules` directory, not a symlink: the latter produced an invalid deployment archive and was replaced before acceptance.
 
 This accepts the initial service deployment, not an uptime guarantee or legal audit. The project is manually deployed; a PR merge in the portfolio repository does not automatically deploy these services.
+
+The custom-code editor release above is implemented and tested locally but not yet part of the accepted production deployment; it needs its own production acceptance after deploy.
