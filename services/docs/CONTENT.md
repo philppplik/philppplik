@@ -77,6 +77,6 @@ The public and management palettes reuse the package's design tokens (`#0c2340/#
 
 - `node --test test/content.test.mjs` - 10 tests: idempotent schema, empty states, full draft→publish→edit→unpublish→delete lifecycle, HTML/JS escaping proof, slug rules (reserved/derived/unique/immutable), validation caps and item cap, CTA/hero validation incl. tenant-only hero host and clearing, LP root shell + blog manage link + gated draft preview, methods/HEAD/rate limit/role guard/`authenticate` hook, management-shell meta + noindex, and a PostgreSQL-dialect run of the schema and lifecycle through `PostgresStore` (PGlite).
 - `node test/content-visual.mjs` - loopback harness (stubbed session endpoint and `authenticate`; auth is the router's job) plus Playwright: gate, console, editor, mobile widths (no horizontal overflow at 390px), public blog index/post, LP manager at `/manage` and `/`, public LP with CTA + hero (static.* image intercepted with an SVG fixture), draft preview. Screenshots land in `/downloads/content-*.png`; the script exits non-zero on any page error.
-- The full existing suite (`npm test`, `npm run check`) still passes: 29 tests total.
+- The full existing suite (`npm test`, `npm run check`) still passes: 31 tests total.
 
 Fixture slugs and screenshots marked "BEISPIEL" are generated locally by the harness only; nothing is seeded into any real database.
