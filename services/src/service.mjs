@@ -97,9 +97,10 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       const role=rawRole==='l'?'link':rawRole;
       const consoleRoute=u.pathname.startsWith('/api/') || u.pathname==='/manage' || u.pathname==='/upload' || !!managementAssets[u.pathname];
       if(modern && role==='news' && newsletter && !u.pathname.startsWith('/api/')) { const r=await newsletter.publicRoute(req,u); if(r) return r; }
-      // Public double-opt-in confirm and unsubscribe stay reachable on the studio host even
-      // while the dedicated news host has no DNS; /subscribe stays off there.
-      if(modern && role==='m' && newsletter && !u.pathname.startsWith('/api/') && (u.pathname==='/confirm'||u.pathname==='/unsubscribe')) { const r=await newsletter.publicRoute(req,u); if(r) return r; }
+      // Public unsubscribe stays reachable on the studio host even while the dedicated news
+      // host has no DNS. /confirm and /subscribe stay off there: double opt-in is a separate,
+      // explicitly approved activation, not a side effect of the unsubscribe mandate.
+      if(modern && role==='m' && newsletter && !u.pathname.startsWith('/api/') && u.pathname==='/unsubscribe') { const r=await newsletter.publicRoute(req,u); if(r) return r; }
       if(modern && !consoleRoute && role==='analytics' && analytics) return analytics(req);
       if(modern && !u.pathname.startsWith('/api/') && ['blog','lp','ads','news'].includes(role) && content) return content(req,role);
       // Central studio: private newsletter draft management lives on the m host as role 'news'.

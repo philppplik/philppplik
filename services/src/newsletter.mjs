@@ -65,10 +65,18 @@ export function createNewsletter({ store, site, mailer = null, allowSend = false
     let event; try { event = JSON.parse(body); } catch { return json(400, { error: 'Ungültige Anfrage.' }); }
     const status = { 'email.bounced': 'bounced', 'email.complained': 'complained' }[event?.type];
     if (!status) return json(200, { ok: true, ignored: event?.type || 'unknown' });
+    // The Resend account hosts other projects and the signature is no project filter: only
+    // events from this project's approved sender are applied. With a configured sender the
+    // address must match exactly; without one the verified sending domain gates it.
+    const addr = v => { const m = /<([^>]+)>/.exec(String(v || '')); return (m ? m[1] : String(v || '')).trim().toLowerCase(); };
+    const evFrom = addr(event?.data?.from), wantFrom = addr(from);
+    const own = wantFrom ? evFrom === wantFrom : evFrom.endsWith('@news.' + site);
+    if (!own) return json(200, { ok: true, ignored: 'foreign-sender' });
     await init();
     const to = event?.data?.to;
-    for (const addr of Array.isArray(to) ? to : [to].filter(Boolean)) {
-      const email = String(addr).trim().toLowerCase();
+    // UPDATE only: unknown addresses are never created from provider events.
+    for (const addr_ of Array.isArray(to) ? to : [to].filter(Boolean)) {
+      const email = String(addr_).trim().toLowerCase();
       if (EMAIL.test(email)) await store.run("UPDATE subscribers SET status=?,unsubscribed=? WHERE site=? AND email=? AND status<>'unsubscribed'", status, now(), site, email);
     }
     return json(200, { ok: true });
