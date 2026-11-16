@@ -75,10 +75,10 @@ async function readJSON(req) {
   if(!req.headers.get('content-type')?.startsWith('application/json')) fail(415,'JSON required');
   try {return JSON.parse((await body(req,8192)).toString());}catch(e){if(e instanceof HttpError)throw e;fail(400,'Invalid JSON');}
 }
-export function createService({store,sites,enabled=false,clickCounting=false,now=()=>Date.now(),managementHTML='',managementAssets={},dashboard=null,publicPerMinute=600,modern=false,content=null,analytics=null,gaData=null}) {
+export function createService({store,sites,enabled=false,clickCounting=false,now=()=>Date.now(),managementHTML='',studioHTML='',managementAssets={},dashboard=null,publicPerMinute=600,modern=false,content=null,analytics=null,gaData=null}) {
   const domains=Object.keys(sites);
   // Only the exact verified hostname config selects the tenant, never a URL/body site value.
-  const hosts=new Map(domains.flatMap(site=>['db','analytics','static','link',...(modern?['l','blog','lp','ads']:[])].map(role=>[`${role}.${site}`,{site,role}])));
+  const hosts=new Map(domains.flatMap(site=>['db','analytics','static','link',...(modern?['l','blog','lp','ads','m']:[])].map(role=>[`${role}.${site}`,{site,role}])));
   async function session(req,site) {
     const s=await readSession(req,store,site,now());if(!s)fail(401,'Sign in required');return s;
   }
@@ -98,6 +98,9 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
       const consoleRoute=u.pathname.startsWith('/api/') || u.pathname==='/manage' || u.pathname==='/upload' || !!managementAssets[u.pathname];
       if(modern && !consoleRoute && role==='analytics' && analytics) return analytics(req);
       if(modern && !u.pathname.startsWith('/api/') && ['blog','lp','ads'].includes(role) && content) return content(req,role);
+      if(modern && role==='m' && studioHTML && ['GET','HEAD'].includes(req.method) && (u.pathname==='/' || u.pathname==='/manage') && !u.search) {
+        return response(200,req.method==='HEAD'?null:studioHTML,{'content-type':'text/html; charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"});
+      }
       const linkHost=modern?'l':'link';
       if(modern && ((u.pathname==='/' && ['static','link'].includes(role)) || u.pathname==='/upload')) {
         return response(200,managementHTML,{'content-type':'text/html; charset=utf-8','content-security-policy':"default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"});
@@ -169,6 +172,13 @@ export function createService({store,sites,enabled=false,clickCounting=false,now
         return response(200,JSON.stringify({csrf}),{'content-type':'application/json; charset=utf-8','set-cookie':`__Host-console=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=3600`});
       }
       const s=await session(req,site);
+      if(role==='m' && req.method==='GET' && u.pathname==='/api/overview') {
+        const n=async(q,...a)=>Number((await store.get(q,...a)).total);
+        const content=async role=>{try{return await contentCounts(role);}catch{return {published:0,drafts:0};}};const contentCounts=async role=>({published:await n("SELECT count(*) AS total FROM content WHERE site=? AND role=? AND status='published'",site,role),drafts:await n("SELECT count(*) AS total FROM content WHERE site=? AND role=? AND status<>'published'",site,role)});
+        const clicks=await store.get("SELECT COALESCE(SUM(requests),0) AS total FROM counts WHERE site=?",site);
+        return json({site,lp:await content('lp'),ads:await content('ads'),blog:await content('blog'),links:await n('SELECT count(*) AS total FROM links WHERE site=?',site),clicks:Number(clicks.total),files:await n('SELECT count(*) AS total FROM files WHERE site=?',site),sharedFiles:await n('SELECT count(*) AS total FROM files WHERE site=? AND shared=1',site),
+          hosts:{lp:`https://lp.${site}/`,ads:`https://ads.${site}/`,blog:`https://blog.${site}/manage`,links:`https://l.${site}/`,files:`https://static.${site}/`,analytics:`https://analytics.${site}/`}});
+      }
       if(req.method==='GET' && u.pathname==='/api/ga' && role==='analytics' && gaData){try{return json(await gaData());}catch{return response(503,'GA4 data unavailable');}}
       if(req.method==='GET' && u.pathname==='/api/session') return json({csrf:s.csrf,site,role:rawRole,clickCounting,retentionDays:90});
       if(req.method!=='GET') mutation(req,u,s);

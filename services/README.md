@@ -21,11 +21,13 @@ The tools keep their own host. No wildcard tenant selection or client-supplied f
 - All content APIs and draft previews require a valid session. Public routes return only published content. No sample posts or pages are seeded.
 - No visitor identifiers, marketing beacons or visitor cookies are added. Short-link counts are redirect requests, not unique people; UTC daily counts are retained for 90 days. Bots/previews are filtered heuristically, not perfectly.
 - Provider access logs may still process network information. This is not a claim that the hosting providers collect no IP data. Existing legal notices should be reviewed for the new Neon/US data flow before sensitive or third-party data is used.
-- Public GA4 assets/ciphertext are fetched only from the fixed existing db host, with a five-minute in-memory cache. Decrypted statistics and dashboard passwords are never proxied. If the source is unavailable, analytics returns 503 rather than stale invented metrics.
+- Public GA4 assets/ciphertext are fetched only from the fixed existing db host, with a five-minute in-memory cache. After a signed-in session, the Netlify function (US region) decrypts the snapshot server-side with `GA_DASHBOARD_PASSWORD` (a secret Netlify variable, set with Philipp's approval on 2026-11-16) and returns it only to that session at `/api/ga`; the ciphertext on db. is unchanged and the password is never sent to the browser. If the source is unavailable, analytics returns 503 rather than stale invented metrics.
 
 ## Limits and availability
 
 Files: 4 MiB each, 100 MiB total. Formats: PDF, ZIP, UTF-8 text/CSV, PNG/JPEG/WebP. Raster images are decoded and recoded to PNG; other files are opaque download attachments. No virus scanner is included. Sharing makes a file downloadable by anyone who has its link; withdrawing a link cannot revoke downloaded copies.
+
+Hosts: analytics, static, l, blog, lp, ads (custom-code ads, sandboxed exactly like lp) and m (login-gated overview). Tracking links: `POST /api/tracking-link` on lp/ads creates an `l.` short link with validated UTM parameters for a published page.
 
 Links: 1,000 per site. Content: 100 entries per role, title 200 characters, up to 40 paragraphs of 4,000 characters. Landing pages stay a slim manager by default (text, CTA, own-host hero image), not Autonnel's commerce/funnel builder: no payments, forms, automations or ad integrations. Owners can additionally opt a landing page into custom HTML/CSS/JS, edited with locally vendored Monaco or CodeMirror. Custom pages are always served inside a sandboxed iframe wrapper (no same-origin), so custom code never runs in the manager's origin. Virtual file paths (for example `/bilder/cover.jpg`) redirect to shared files on the tenant's own `static.*` host.
 
