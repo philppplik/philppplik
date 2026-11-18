@@ -239,5 +239,5 @@
   window.addEventListener('storage', function (e) { if (e.key === key) { if (loaded) window['ga-disable-' + cfg.analytics.measurementId] = true; location.reload(); } });
   document.addEventListener('visibilitychange', function () { if (!document.hidden && state && !permitted() && loaded) { window['ga-disable-' + cfg.analytics.measurementId] = true; location.reload(); } });
   loadAnalytics();
-  if (!state) open();
+  // First visits stay opted out. The footer opens the preferences on demand.
 }());
