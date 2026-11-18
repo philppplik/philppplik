@@ -183,7 +183,7 @@
       "sites": {
         "kicker": "Eigene Seiten",
         "title": "Seiten, die ich betreibe",
-        "note": "Ich betreibe und verantworte diese Seiten. Redaktionelle Inhalte entstehen mit KI-Unterstützung und werden von mir geprüft und freigegeben.",
+        "note": "Drei Fachportale und die gemeinsame Autorenseite mit Maximilian Reisch.",
         "items": [
           {
             "name": "KI Fachblatt",
@@ -202,6 +202,12 @@
             "url": "https://finanz-adjust.de",
             "logo": "assets/sites-finanz-adjust.svg",
             "desc": "Aktuelle Kurse zu DAX, S&P 500, Nasdaq, Aktien, Gold, Bitcoin und Devisen plus Finanznachrichten und PDF-Tagesberichte."
+          },
+          {
+            "name": "Paulik & Reisch",
+            "url": "https://paulikreisch.de",
+            "logo": "assets/sites-paulikreisch.svg",
+            "desc": "Bücher, Satire und Wortspiele von Maximilian Reisch und mir."
           }
         ]
       }
@@ -371,7 +377,7 @@
       "sites": {
         "kicker": "My sites",
         "title": "Sites I run",
-        "note": "I run and take responsibility for these sites. Editorial content is created with AI assistance and reviewed and approved by me.",
+        "note": "Three editorial sites and the author website I run with Maximilian Reisch.",
         "items": [
           {
             "name": "KI Fachblatt",
@@ -390,6 +396,12 @@
             "url": "https://finanz-adjust.de",
             "logo": "assets/sites-finanz-adjust.svg",
             "desc": "Current quotes for DAX, S&P 500, Nasdaq, stocks, gold, bitcoin and currencies plus financial news and daily PDF reports."
+          },
+          {
+            "name": "Paulik & Reisch",
+            "url": "https://paulikreisch.de",
+            "logo": "assets/sites-paulikreisch.svg",
+            "desc": "Books, satire and word games by Maximilian Reisch and me."
           }
         ]
       }
