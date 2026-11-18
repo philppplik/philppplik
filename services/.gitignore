@@ -1,0 +1,10 @@
+node_modules/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+.env
+.env.*
+
+# Local Netlify folder
+.netlify
+test/fixtures/*.pem

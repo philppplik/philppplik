@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Portfolio Tools | Philipp Paulik</title><link rel="stylesheet" href="/manage.css"><script type="module" src="/manage.js"></script></head>
+<body><header><a href="https://philipp-paulik.de">Philipp Paulik <span>PRIVATE TOOLS</span></a><nav><a id="overview" href="/">Übersicht</a><button id="logout" hidden>Abmelden</button></nav></header>
+<main>
+<p id="status" role="status" aria-live="polite"></p>
+<section id="gate" class="card"><form id="login"><label for="email">E-Mail</label><input id="email" type="email" autocomplete="username" required maxlength="320"><label for="password">Passwort</label><input id="password" type="password" autocomplete="current-password" required maxlength="512"><button type="submit">Anmelden</button></form></section>
+<div id="console" hidden>
+<section id="link-panel" class="card"><div class="section-title"><h2>Kurzlinks</h2><span class="pill" id="counting">Statistik aus</span></div>
+<p class="muted" id="link-note">Aufrufe sind Weiterleitungsanfragen, keine eindeutigen Personen. Tageswerte nach UTC, 90 Tage.</p>
+<form id="new-link" class="form-grid"><div><label for="label">Bezeichnung</label><input id="label" maxlength="120"></div><div><label for="target">Zieladresse (HTTPS)</label><input id="target" type="url" required placeholder="https://…"></div><div><label for="expires">Ablauf (optional, lokale Zeit)</label><input id="expires" type="datetime-local"></div><div><label for="slug">Kurzcode (optional)</label><input id="slug" pattern="[a-zA-Z0-9][a-zA-Z0-9_-]{2,63}" maxlength="64"></div><button type="submit">Erstellen</button></form><div id="links" class="items"></div></section>
+<section id="file-panel" class="card"><h2>Dateien</h2>
+<p class="muted">Bis 4 MiB pro Datei, 100 MiB gesamt. PDF, Text/CSV, ZIP, PNG/JPG/WebP. Keine Virenprüfung - nur eigene, vertrauenswürdige Dateien. Eine Freigabe macht die Datei für alle mit dem Link abrufbar; zurückziehen blockiert neue Abrufe, heruntergeladene Kopien nicht.</p>
+<form id="upload"><label for="file">Datei auswählen</label><input id="file" type="file" accept=".pdf,.txt,.csv,.zip,.png,.jpg,.jpeg,.webp" required><button type="submit">Privat hochladen</button></form><div id="files" class="items"></div></section>
+</div>
+<footer><a href="https://philipp-paulik.de/datenschutz/">Datenschutz</a> · <a href="https://philipp-paulik.de/impressum/">Impressum</a></footer></main></body></html>
