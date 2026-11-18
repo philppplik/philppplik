@@ -183,7 +183,7 @@
       "sites": {
         "kicker": "Eigene Seiten",
         "title": "Seiten, die ich betreibe",
-        "note": "Drei Fachportale und die gemeinsame Autorenseite mit Maximilian Reisch.",
+        "note": "Fachmagazine, Webprojekte und die gemeinsame Autorenseite mit Maximilian Reisch.",
         "items": [
           {
             "name": "KI Fachblatt",
@@ -208,6 +208,18 @@
             "url": "https://paulikreisch.de",
             "logo": "assets/sites-paulikreisch.svg",
             "desc": "Bücher, Satire und Wortspiele von Maximilian Reisch und mir."
+          },
+          {
+            "name": "Gogure",
+            "url": "https://gogure.de",
+            "initial": "G",
+            "desc": ""
+          },
+          {
+            "name": "xlpm.de",
+            "url": "https://xlpm.de",
+            "initial": "xl",
+            "desc": "Plattform für Entwickler."
           }
         ]
       }
@@ -377,7 +389,7 @@
       "sites": {
         "kicker": "My sites",
         "title": "Sites I run",
-        "note": "Three editorial sites and the author website I run with Maximilian Reisch.",
+        "note": "Editorial sites, web projects and the author website I run with Maximilian Reisch.",
         "items": [
           {
             "name": "KI Fachblatt",
@@ -402,6 +414,18 @@
             "url": "https://paulikreisch.de",
             "logo": "assets/sites-paulikreisch.svg",
             "desc": "Books, satire and word games by Maximilian Reisch and me."
+          },
+          {
+            "name": "Gogure",
+            "url": "https://gogure.de",
+            "initial": "G",
+            "desc": ""
+          },
+          {
+            "name": "xlpm.de",
+            "url": "https://xlpm.de",
+            "initial": "xl",
+            "desc": "Developer platform."
           }
         ]
       }
